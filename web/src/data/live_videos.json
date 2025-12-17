@@ -2,30 +2,31 @@
     "live_status": true,
     "live_video": {
         "id": "live-1",
-        "title": "Evening Aarti from Shirdi",
-        "description": "Join us live for the divine evening Aarti.",
-        "youtube_id": "live_stream_mock_id"
+        "title": "Live Darshan from Shirdi",
+        "description": "Watch the continuous live feed from the Shirdi Saibaba Temple.",
+        "youtube_id": "",
+        "stream_url": "https://cam3.pc.cdn.bitgravity.com/cam/live/feed006/Saibaba/temple/feed/playlist.m3u8?e=1765976662&h=38f815ca2818495337260cbb33366cc1"
     },
     "past_streams": [
         {
             "id": "past-1",
-            "title": "Guru Purnima Celebration 2024",
-            "date": "2024-07-21",
-            "youtube_id": "dQw4w9WgXcQ",
+            "title": "|| 🅻🅸🆅🅴🔴3 || श्री साई सत्संग भजन संध्या || गीता भवन मंदिर || सोनीपत",
+            "date": "Streamed 2 weeks ago",
+            "youtube_id": "9fLqsJFpaqI",
             "thumbnail": ""
         },
         {
             "id": "past-2",
-            "title": "Thursday Special Satsang",
-            "date": "2024-07-18",
-            "youtube_id": "dQw4w9WgXcQ",
+            "title": "|| 🅻🅸🆅🅴🔴2 || श्री साई सत्संग भजन संध्या || गीता भवन मंदिर || सोनीपत",
+            "date": "Streamed 2 weeks ago",
+            "youtube_id": "AQTYzr5iea4",
             "thumbnail": ""
         },
         {
             "id": "past-3",
-            "title": "Morning Kakad Aarti",
-            "date": "2024-07-15",
-            "youtube_id": "dQw4w9WgXcQ",
+            "title": "|| 🅻🅸🆅🅴🔴 || श्री साई सत्संग भजन संध्या एवं भव्य पालकी शोभा यात्रा || गीता भवन मंदिर || सोनीपत",
+            "date": "Streamed 2 weeks ago",
+            "youtube_id": "-Ha-vIpRJlE",
             "thumbnail": ""
         }
     ]

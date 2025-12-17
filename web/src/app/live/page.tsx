@@ -32,13 +32,7 @@ export default function LivePage() {
         <div className="max-w-6xl mx-auto space-y-12 pt-6">
 
             {/* Header */}
-            <div className="text-center space-y-2">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-red-600 animate-pulse">
-                    <Radio className="w-8 h-8" />
-                </div>
-                <h1 className="text-3xl font-bold text-gray-800">Live Darshan</h1>
-                <p className="text-gray-500 font-serif italic">&quot;Experience the divine presence in real-time&quot;</p>
-            </div>
+
 
             {/* Live Banner */}
             {liveData.live_status && (
@@ -49,16 +43,17 @@ export default function LivePage() {
                     </div>
                     <div className="grid lg:grid-cols-3">
                         <div className="lg:col-span-2">
-                            <VideoPlayer videoId={liveData.live_video.youtube_id} />
+                            <VideoPlayer
+                                videoId={liveData.live_video.youtube_id}
+                                streamUrl={liveData.live_video.stream_url}
+                            />
                         </div>
                         <div className="p-6 text-white space-y-4 flex flex-col justify-center">
                             <h2 className="text-2xl font-bold">{liveData.live_video.title}</h2>
                             <p className="text-gray-300 leading-relaxed text-sm">
                                 {liveData.live_video.description}
                             </p>
-                            <button className="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700 transition self-start shadow-lg">
-                                Watch on YouTube
-                            </button>
+
                         </div>
                     </div>
                 </div>
@@ -66,10 +61,21 @@ export default function LivePage() {
 
             {/* Past Streams Library */}
             <div className="space-y-6">
-                <h2 className="text-xl font-bold text-gray-800 flex items-center">
-                    <span className="w-1 h-6 bg-ochre mr-3 rounded-full" />
-                    Past Streams
-                </h2>
+                <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-bold text-gray-800 flex items-center">
+                        <span className="w-1 h-6 bg-ochre mr-3 rounded-full" />
+                        Streams from Sai Leela Rahasya
+                    </h2>
+                    <a
+                        href="https://www.youtube.com/@saileelarahasya/streams"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-red-600 hover:text-red-700 font-semibold flex items-center"
+                    >
+                        View Channel
+                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    </a>
+                </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {liveData.past_streams.map((video) => (
