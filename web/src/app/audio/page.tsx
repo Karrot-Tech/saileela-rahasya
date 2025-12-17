@@ -46,7 +46,18 @@ export default function AudioPage() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 mb-24 pt-6">
+        <div className="max-w-4xl mx-auto space-y-6 mb-24 pt-6">
+            {/* Header */}
+            <div className="flex items-center space-x-4 pb-2 border-b border-gray-100">
+                <div className="w-12 h-12 bg-ochre/10 rounded-full flex items-center justify-center text-ochre flex-none">
+                    <Music className="w-6 h-6" />
+                </div>
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-800">Sai Bhajans</h1>
+                    <p className="text-sm text-gray-500 font-serif italic">"Melodies of devotion"</p>
+                </div>
+            </div>
+
             {/* Mobile Category Filters (Top + Other) */}
             <div className="md:hidden overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
                 <div className="flex space-x-2 min-w-max">

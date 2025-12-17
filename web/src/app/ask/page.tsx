@@ -86,14 +86,16 @@ export default function AskPage() {
     );
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 pt-6">
+        <div className="max-w-4xl mx-auto space-y-6 pt-6">
             {/* Header */}
-            <div className="text-center space-y-2">
-                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600">
-                    <MessageCircleQuestion className="w-8 h-8" />
+            <div className="flex items-center space-x-4 pb-2 border-b border-gray-100">
+                <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 flex-none">
+                    <MessageCircleQuestion className="w-6 h-6" />
                 </div>
-                <h1 className="text-3xl font-bold text-gray-800">My Spiritual Inquiries</h1>
-                <p className="text-gray-500 font-serif italic">&quot;Ask and it shall be given&quot;</p>
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-800">My Spiritual Inquiries</h1>
+                    <p className="text-sm text-gray-500 font-serif italic">"Ask and it shall be given"</p>
+                </div>
             </div>
 
             {/* New Ticket Form */}
