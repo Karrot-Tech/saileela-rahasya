@@ -48,7 +48,7 @@ export default function AudioPage() {
     return (
         <div className="max-w-4xl mx-auto space-y-6 mb-24 pt-6">
             {/* Header */}
-            <div className="flex items-center space-x-4 pb-2 border-b border-gray-100">
+            <div className="flex items-center space-x-4 pb-2 border-b border-gray-100 px-4">
                 <div className="w-12 h-12 bg-ochre/10 rounded-full flex items-center justify-center text-ochre flex-none">
                     <Music className="w-6 h-6" />
                 </div>
@@ -92,7 +92,7 @@ export default function AudioPage() {
             </div>
 
             {/* Desktop Category Filters (All) */}
-            <div className="hidden md:block overflow-x-auto pb-2 scrollbar-hide">
+            <div className="hidden md:block overflow-x-auto pb-2 scrollbar-hide px-4">
                 <div className="flex flex-wrap gap-2">
                     {desktopCategories.map((category) => {
                         const count = category === 'All' ? audioTracks.length : categoryCounts[category];
@@ -115,7 +115,7 @@ export default function AudioPage() {
                 </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mx-4">
                 {filteredTracks.length > 0 ? (
                     filteredTracks.map((track, index) => {
                         const isCurrent = currentTrack?.id === track.id;
