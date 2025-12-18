@@ -134,11 +134,16 @@ export default function UtilityMenu() {
                                 </Link>
                             )}
                             <Link href="/glossary" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-2xl transition-all group">
-                                <div className="flex items-center gap-4 text-gray-500">
-                                    <BookA className="w-5 h-5" />
-                                    <span className="font-bold text-sm tracking-tight">Archives / Glossary</span>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ochre group-hover:bg-ochre/10 transition-colors">
+                                        <BookA className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-sm text-gray-900 tracking-tight text-left">Exhaustive Glossary</p>
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">Spiritual Archives</p>
+                                    </div>
                                 </div>
-                                <ArrowRight className="w-4 h-4 text-gray-300" />
+                                <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
                             </Link>
                             <button
                                 onClick={() => {
@@ -201,7 +206,7 @@ export default function UtilityMenu() {
                     </SignedOut>
 
                     <div className="text-center">
-                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.28</p>
+                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.29</p>
                     </div>
                 </div>
             </div>
