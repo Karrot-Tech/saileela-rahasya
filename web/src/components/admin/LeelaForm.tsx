@@ -110,7 +110,7 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
                             type="button"
                             onClick={handleDelete}
                             disabled={loading}
-                            className="flex-1 sm:flex-none justify-center bg-red-50 text-red-600 px-3 md:px-4 py-2 rounded-lg hover:bg-red-100 transition-colors flex items-center space-x-2 text-xs md:text-sm font-bold border border-red-100"
+                            className="flex-1 sm:flex-none justify-center bg-red-50 text-red-600 px-4 py-2.5 rounded-xl hover:bg-red-100 transition-colors flex items-center space-x-2 text-[10px] md:text-xs font-bold border border-red-100 active:scale-95"
                         >
                             <Trash2 className="w-3.5 h-3.5" />
                             <span>Delete</span>
@@ -119,7 +119,7 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="flex-1 sm:flex-none justify-center bg-ochre text-white px-4 md:px-6 py-2 rounded-lg hover:bg-gold transition-colors flex items-center space-x-2 shadow-lg shadow-ochre/20 text-xs md:text-sm font-black uppercase tracking-widest"
+                        className="flex-1 sm:flex-none justify-center bg-ochre text-white px-6 py-2.5 rounded-xl hover:bg-gold transition-colors flex items-center space-x-2 shadow-lg shadow-ochre/20 text-[10px] md:text-xs font-black uppercase tracking-widest active:scale-95"
                     >
                         <Save className="w-3.5 h-3.5" />
                         <span>{loading ? 'Saving...' : 'Save Leela'}</span>
