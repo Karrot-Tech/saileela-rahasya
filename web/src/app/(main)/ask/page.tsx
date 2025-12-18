@@ -214,7 +214,7 @@ export default function AskPage() {
                                                     <CheckCircle2 className="w-8 h-8" />
                                                 </div>
                                                 <h3 className="text-xl font-bold text-gray-900">Success!</h3>
-                                                <p className="text-gray-500 mt-2 max-w-[250px] mx-auto text-sm">Your request has been sent to Krishnaji.</p>
+                                                <p className="text-gray-500 mt-2 max-w-[250px] mx-auto text-sm">Your inquiry has been shared with Krishnaji.</p>
                                             </div>
                                         ) : (
                                             <form onSubmit={handleSubmit} className="space-y-5 max-w-md mx-auto">
@@ -291,7 +291,7 @@ export default function AskPage() {
                                                         <CheckCircle2 className="w-6 h-6" />
                                                     </div>
                                                     <div>
-                                                        <h3 className="font-bold text-gray-900 leading-tight">Request Received</h3>
+                                                        <h3 className="font-bold text-gray-900 leading-tight">Inquiry Received</h3>
                                                         <p className="text-xs text-gray-500 mt-0.5">Krishnaji will respond to your query soon.</p>
                                                     </div>
                                                 </div>
@@ -423,7 +423,7 @@ export default function AskPage() {
                                                                     {followUpSuccess[ticket.id] ? (
                                                                         <div className="flex items-center space-x-3 py-3 px-4 bg-green-50/50 rounded-xl border border-green-100 animate-in fade-in zoom-in duration-300">
                                                                             <CheckCircle2 className="w-5 h-5 text-green-600" />
-                                                                            <p className="text-xs font-bold text-green-700 uppercase tracking-widest">Guidance shared with Krishnaji</p>
+                                                                            <p className="text-xs font-bold text-green-700 uppercase tracking-widest">Inquiry shared with Krishnaji</p>
                                                                         </div>
                                                                     ) : (
                                                                         <div className="space-y-2">
