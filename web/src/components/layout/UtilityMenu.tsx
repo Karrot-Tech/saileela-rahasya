@@ -90,7 +90,7 @@ export default function UtilityMenu() {
                         <div className="w-8 h-8 md:w-10 md:h-10 bg-ochre/10 rounded-xl flex items-center justify-center text-ochre">
                             <User className="w-5 h-5" />
                         </div>
-                        <h2 className="text-sm font-black uppercase tracking-widest text-gray-900">Account</h2>
+                        <h2 className="text-sm font-black uppercase tracking-widest text-gray-900">Om Sai Ram 🙏</h2>
                     </div>
                     <button onClick={() => setIsOpen(false)} className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all">
                         <X className="w-6 h-6" />
@@ -202,7 +202,7 @@ export default function UtilityMenu() {
                     </SignedOut>
 
                     <div className="text-center">
-                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.31</p>
+                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.33</p>
                     </div>
                 </div>
             </div>
