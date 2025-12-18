@@ -65,8 +65,9 @@ export default async function BodhakathaDetailPage({ params }: { params: Promise
                         <h2 className="text-lg md:text-2xl text-ochre font-serif">{article.title_hindi}</h2>
                     </div>
 
-                    <h3 className="text-lg font-bold text-gray-500 mb-4">Core Teaching</h3>
-                    <ChapterTextViewer text={dummyText} />
+                    <div className="mt-8">
+                        <ChapterTextViewer text={dummyText} />
+                    </div>
 
                     {/* Mobile Only: Reference Videos inside card */}
                     <div className="lg:hidden mt-8 pt-6 border-t border-gray-100">
