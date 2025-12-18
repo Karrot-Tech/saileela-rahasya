@@ -111,8 +111,9 @@ export async function createTicket(subject: string, message: string) {
         revalidatePath('/ask');
         return { success: true, ticket: sanitizedTicket };
     } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         console.error('Error creating ticket:', error);
-        return { success: false, error: 'Failed to create ticket' };
+        return { success: false, error: `Failed to create ticket: ${errorMessage}` };
     }
 }
 
