@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { getAllTickets, replyToTicket, closeTicket } from '@/actions/tickets';
 import { MessageCircle, Send, CheckCircle2, User, Clock, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Modal } from '@/components/common/Modal';
+import { Notification, NotificationType } from '@/components/common/Notification';
 
 type TicketMessage = {
     sender: 'USER' | 'ADMIN';
@@ -32,6 +34,10 @@ export default function AdminTicketsPage() {
     const [replyText, setReplyText] = useState<{ [key: string]: string }>({});
     const [isSubmitting, setIsSubmitting] = useState<{ [key: string]: boolean }>({});
 
+    // UI Feedback State
+    const [notification, setNotification] = useState<{ message: string; type: NotificationType } | null>(null);
+    const [confirmCloseId, setConfirmCloseId] = useState<string | null>(null);
+
     useEffect(() => {
         fetchTickets();
     }, []);
@@ -52,21 +58,22 @@ export default function AdminTicketsPage() {
 
         if (result.success) {
             setReplyText(prev => ({ ...prev, [ticketId]: '' }));
+            setNotification({ message: "Guidance sent successfully!", type: 'success' });
             fetchTickets();
         } else {
-            alert("Error: " + result.error);
+            setNotification({ message: result.error || "Error sending guidance", type: 'error' });
         }
         setIsSubmitting(prev => ({ ...prev, [ticketId]: false }));
     };
 
     const handleClose = async (ticketId: string) => {
-        if (!confirm("Are you sure you want to close this ticket?")) return;
-
+        setConfirmCloseId(null);
         const result = await closeTicket(ticketId);
         if (result.success) {
+            setNotification({ message: "Inquiry closed successfully", type: 'success' });
             fetchTickets();
         } else {
-            alert("Error closing ticket");
+            setNotification({ message: "Error closing inquiry", type: 'error' });
         }
     };
 
@@ -123,7 +130,7 @@ export default function AdminTicketsPage() {
                                         <div className="flex items-center space-x-3">
                                             <h3 className="font-bold text-lg text-gray-900">{ticket.subject}</h3>
                                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${ticket.status === 'OPEN' ? 'bg-green-100 text-green-700' :
-                                                    ticket.status === 'ANSWERED' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+                                                ticket.status === 'ANSWERED' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
                                                 }`}>
                                                 {ticket.status}
                                             </span>
@@ -150,8 +157,8 @@ export default function AdminTicketsPage() {
                                         {ticket.messages.map((msg, idx) => (
                                             <div key={idx} className={`flex ${msg.sender === 'USER' ? 'justify-start' : 'justify-end'}`}>
                                                 <div className={`max-w-[85%] rounded-2xl p-4 shadow-sm ${msg.sender === 'USER'
-                                                        ? 'bg-white border border-gray-200 text-gray-800 rounded-tl-none'
-                                                        : 'bg-ochre text-white rounded-tr-none'
+                                                    ? 'bg-white border border-gray-200 text-gray-800 rounded-tl-none'
+                                                    : 'bg-ochre text-white rounded-tr-none'
                                                     }`}>
                                                     <p className="text-sm leading-relaxed">{msg.text}</p>
                                                     <div className={`text-[10px] mt-2 font-medium ${msg.sender === 'USER' ? 'text-gray-400' : 'text-orange-100'}`}>
@@ -176,7 +183,7 @@ export default function AdminTicketsPage() {
                                             </div>
                                             <div className="flex items-center justify-between">
                                                 <button
-                                                    onClick={() => handleClose(ticket.id)}
+                                                    onClick={() => setConfirmCloseId(ticket.id)}
                                                     className="text-gray-500 hover:text-red-600 text-sm font-medium flex items-center transition-colors px-2 py-1 rounded-md hover:bg-red-50"
                                                 >
                                                     <CheckCircle2 className="w-4 h-4 mr-1.5" /> Close Inquiry
@@ -202,6 +209,40 @@ export default function AdminTicketsPage() {
                     ))
                 )}
             </div>
+
+            {/* Premium UI Components */}
+            <Modal
+                isOpen={!!confirmCloseId}
+                onClose={() => setConfirmCloseId(null)}
+                title="Close Inquiry?"
+                actions={
+                    <>
+                        <button
+                            onClick={() => setConfirmCloseId(null)}
+                            className="w-full py-3 rounded-xl border border-gray-200 font-bold text-gray-600 hover:bg-gray-50 transition"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={() => confirmCloseId && handleClose(confirmCloseId)}
+                            className="w-full py-3 rounded-xl bg-orange-600 text-white font-bold hover:bg-orange-700 transition shadow-lg"
+                        >
+                            Yes, Close
+                        </button>
+                    </>
+                }
+            >
+                Are you sure you want to mark this inquiry as closed? This will prevent further replies.
+            </Modal>
+
+            {notification && (
+                <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => setNotification(null)}
+                    duration={3000}
+                />
+            )}
         </div>
     );
 }
