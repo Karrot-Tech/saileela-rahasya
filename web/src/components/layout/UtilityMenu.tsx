@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useUser, SignInButton, SignOutButton, SignedIn, SignedOut } from '@clerk/nextjs';
+import { useUser, SignInButton, SignOutButton, SignedIn, SignedOut, useClerk } from '@clerk/nextjs';
 import { User, X, BookA, ShieldCheck, ArrowRight, LogOut, Settings, LayoutDashboard, History } from 'lucide-react';
 
 const getAdminEmails = () => {
@@ -14,6 +14,7 @@ const getAdminEmails = () => {
 export default function UtilityMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const { isLoaded, isSignedIn, user } = useUser();
+    const { openUserProfile } = useClerk();
     const pathname = usePathname();
 
     const adminEmails = getAdminEmails();
@@ -96,7 +97,7 @@ export default function UtilityMenu() {
                     </button>
                 </div>
 
-                <div className="p-6 space-y-8 h-[calc(100%-80px)] flex flex-col no-scrollbar overflow-y-auto">
+                <div className="p-6 space-y-8 h-[calc(100%-80px)] flex flex-col no-scrollbar overflow-y-auto pb-32">
                     <SignedIn>
                         {/* User Profile Summary */}
                         <div className="flex items-center gap-4 bg-gray-50 p-6 rounded-[2rem] border border-gray-100">
@@ -136,8 +137,19 @@ export default function UtilityMenu() {
                                 </div>
                                 <ArrowRight className="w-4 h-4 text-gray-300" />
                             </Link>
-                            {/* Clerk Manage Account */}
-                            {/* Note: In a production app you might have a dedicated profile page, for now we can use SignOutButton */}
+                            <button
+                                onClick={() => {
+                                    setIsOpen(false);
+                                    openUserProfile();
+                                }}
+                                className="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-2xl transition-all group"
+                            >
+                                <div className="flex items-center gap-4 text-gray-500">
+                                    <Settings className="w-5 h-5" />
+                                    <span className="font-bold text-sm tracking-tight">Edit Profile</span>
+                                </div>
+                                <ArrowRight className="w-4 h-4 text-gray-300" />
+                            </button>
                         </nav>
 
                         {/* Footer Actions */}
@@ -186,7 +198,7 @@ export default function UtilityMenu() {
                     </SignedOut>
 
                     <div className="text-center">
-                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.25</p>
+                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.26</p>
                     </div>
                 </div>
             </div>
