@@ -9,7 +9,7 @@ const NAV_ITEMS = [
     { label: 'Bodhakatha', href: '/bodhakatha', icon: Lightbulb },
     { label: 'Live', href: '/live', icon: Radio },
     { label: 'Audio', href: '/audio', icon: Music },
-    { label: 'Ask', href: '/ask', icon: MessageCircleQuestion },
+    { label: 'Inquiry', href: '/ask', icon: MessageCircleQuestion },
 ];
 
 export default function BottomNav() {

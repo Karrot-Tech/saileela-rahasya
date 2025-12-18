@@ -1,26 +1,38 @@
+
 'use client';
 
 import { useState, useMemo } from 'react';
-import glossaryData from '@/data/glossary.json';
 import SearchBar from '@/components/features/SearchBar';
 import { useLanguage } from '@/context/LanguageContext';
 
+interface GlossaryItem {
+    id: string;
+    term: string;
+    chapter: string | null;
+    definition_en: string;
+    definition_es: string | null;
+    definition_hi: string | null;
+}
+
+interface GlossaryListProps {
+    initialData: GlossaryItem[];
+}
+
 type SortOrder = 'asc' | 'desc';
 
-export default function GlossaryPage() {
+export default function GlossaryList({ initialData }: GlossaryListProps) {
     const { language } = useLanguage();
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
 
-    // Definition key based on selected language
-    const definitionKey = `definition_${language}` as keyof typeof glossaryData[0];
-    // Fallback to English if specific language definition is missing
-    const getDefinition = (item: typeof glossaryData[0]) => {
-        return (item as any)[definitionKey] || item.definition_en;
+    const getDefinition = (item: GlossaryItem) => {
+        if (language === 'es') return item.definition_es || item.definition_en;
+        if (language === 'hi') return item.definition_hi || item.definition_en;
+        return item.definition_en;
     };
 
     const filteredData = useMemo(() => {
-        let data = glossaryData.filter((item) => {
+        let data = initialData.filter((item) => {
             const termMatch = item.term.toLowerCase().includes(searchQuery.toLowerCase());
             const defMatch = getDefinition(item).toLowerCase().includes(searchQuery.toLowerCase());
             return termMatch || defMatch;
@@ -35,10 +47,10 @@ export default function GlossaryPage() {
         });
 
         return data;
-    }, [searchQuery, sortOrder, language]);
+    }, [searchQuery, sortOrder, language, initialData]);
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 pt-6 px-4">
+        <div className="space-y-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <h1 className="text-3xl font-bold text-ochre">Glossary</h1>
 
@@ -60,14 +72,13 @@ export default function GlossaryPage() {
 
             <div className="grid gap-4">
                 {filteredData.length > 0 ? (
-                    filteredData.map((item, index) => (
+                    filteredData.map((item) => (
                         <div
-                            key={`${item.term}-${item.chapter}-${index}`}
+                            key={item.id}
                             className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:border-gold transition-colors"
                         >
                             <div className="flex justify-between items-start">
                                 <h2 className="text-xl font-bold text-ochre mb-2">{item.term}</h2>
-
                             </div>
                             <p className="text-gray-700 font-serif text-lg leading-relaxed">
                                 {getDefinition(item)}

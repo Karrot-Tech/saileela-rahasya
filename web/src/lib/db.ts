@@ -3,15 +3,17 @@ import { Pool } from 'pg'
 import { PrismaPg } from '@prisma/adapter-pg'
 
 declare global {
-    var prismaGlobalV9: undefined | any
+    var prismaGlobalV10: undefined | any
 }
 
 const prismaClientSingleton = () => {
-    // For pg adapter, use the pooled URL (DATABASE_URL)
-    const connectionString = (process.env.DATABASE_URL || process.env.DATABASE_URL_UNPOOLED || '').trim().replace(/^"(.*)"$/, '$1');
-
-    console.log('--- Prisma Singleton (V9): Using pg adapter ---');
-    console.log('URL Prefix:', connectionString ? connectionString.substring(0, 15) + '...' : 'NONE');
+    // Priority: POSTGRES_PRISMA_URL (Neon/Vercel standard) -> DATABASE_URL
+    const connectionString = (
+        process.env.POSTGRES_PRISMA_URL ||
+        process.env.DATABASE_URL ||
+        process.env.DATABASE_URL_UNPOOLED ||
+        ''
+    ).trim().replace(/^"(.*)"$/, '$1');
 
     if (!connectionString) {
         throw new Error('DATABASE_URL is missing');
@@ -23,8 +25,8 @@ const prismaClientSingleton = () => {
     return new PrismaClient({ adapter })
 }
 
-const prisma = globalThis.prismaGlobalV9 ?? prismaClientSingleton()
+const prisma = globalThis.prismaGlobalV10 ?? prismaClientSingleton()
 
 export default prisma
 
-if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobalV9 = prisma
+if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobalV10 = prisma

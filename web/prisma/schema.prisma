@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,9 +11,9 @@ model User {
   email     String   @unique
   name      String?
   image     String?
-  tickets   Ticket[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  tickets   Ticket[]
 }
 
 model Ticket {
@@ -27,23 +21,62 @@ model Ticket {
   subject   String
   status    Status    @default(OPEN)
   userId    String
-  user      User      @relation(fields: [userId], references: [id])
-  messages  Message[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  messages  Message[]
+  user      User      @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
 model Message {
   id        String   @id @default(cuid())
-  text      String   @db.Text
+  text      String
   sender    Sender
   ticketId  String
-  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 
   @@index([ticketId])
+}
+
+model Leela {
+  id            String   @id @default(cuid())
+  orderId       Int      @default(0)
+  title_english String
+  title_hindi   String
+  chapter       String?
+  youtube_id    String?
+  description   String
+  keywords      String[]
+  social_tags   String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Bodhakatha {
+  id            String   @id @default(cuid())
+  orderId       Int      @default(0)
+  theme         String
+  title_english String
+  title_hindi   String
+  description   String
+  youtube_id    String?
+  keywords      String[]
+  social_tags   String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Glossary {
+  id            String   @id @default(cuid())
+  term          String
+  chapter       String?
+  definition_en String
+  definition_es String?
+  definition_hi String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 enum Status {

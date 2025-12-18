@@ -10,16 +10,19 @@ const NAV_ITEMS = [
     { label: 'Bodhakatha', href: '/bodhakatha', icon: Lightbulb },
     { label: 'Live Stream', href: '/live', icon: Radio },
     { label: 'Bhajan/Audio', href: '/audio', icon: Music },
-    { label: 'Ask Krishnaji', href: '/ask', icon: MessageCircleQuestion },
+    { label: 'Spiritual Inquiry', href: '/ask', icon: MessageCircleQuestion },
 ];
 
-const ADMIN_EMAILS = ['pavankumarpai@gmail.com', 'pavanpaik2025@gmail.com'];
+const getAdminEmails = () => {
+    const emails = process.env.NEXT_PUBLIC_ADMIN_EMAILS || '';
+    return emails.split(',').map(e => e.trim().toLowerCase());
+};
 
 export default function Sidebar() {
     const pathname = usePathname();
     const { user } = useUser();
-    const userEmail = user?.emailAddresses[0]?.emailAddress;
-    const isAdmin = userEmail && ADMIN_EMAILS.includes(userEmail);
+    const email = user?.emailAddresses[0]?.emailAddress;
+    const isAdmin = email && getAdminEmails().includes(email.toLowerCase());
 
     return (
         <aside className="hidden md:flex flex-col w-64 fixed left-0 top-0 bottom-0 bg-white border-r border-gray-100 z-40">
@@ -63,12 +66,6 @@ export default function Sidebar() {
                         <span>Glossary</span>
                     </Link>
 
-                    {isAdmin && (
-                        <Link href="/admin/tickets" className={`flex items-center space-x-3 px-4 py-2 text-sm hover:bg-red-50 rounded-lg transition-colors ${pathname.startsWith('/admin') ? 'text-red-600 font-bold bg-red-50' : 'text-gray-500'}`}>
-                            <ShieldCheck className="w-4 h-4" />
-                            <span>Admin Dashboard</span>
-                        </Link>
-                    )}
                 </div>
             </nav>
 

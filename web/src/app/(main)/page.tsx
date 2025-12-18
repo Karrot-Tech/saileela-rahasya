@@ -25,8 +25,7 @@ export default function Home() {
         <div className="h-px w-24 bg-gold mx-auto my-6 opacity-50" />
 
         <p className="text-gray-500 text-base md:text-lg leading-relaxed max-w-lg mx-auto px-6 md:px-0">
-          We have believed Sai for years, now let&apos;s learn something. <br />
-          <span className="text-ochre font-semibold block mt-1 tracking-wide">It&apos;s not our will, Baba... it&apos;s your choice</span>
+          We have believed Sai for years, now let&apos;s learn something.
         </p>
       </div>
 

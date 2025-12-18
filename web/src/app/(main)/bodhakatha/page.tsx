@@ -1,8 +1,12 @@
 import Link from 'next/link';
-import bodhakathaArticles from '@/data/bodhakatha_articles.json';
+import prisma from '@/lib/db';
 import { Lightbulb } from 'lucide-react';
 
-export default function BodhakathaPage() {
+export default async function BodhakathaPage() {
+    const bodhakathaArticles = await prisma.bodhakatha.findMany({
+        orderBy: { orderId: 'asc' }
+    });
+
     return (
         <div className="max-w-4xl mx-auto space-y-6 pt-6 px-4">
             <div className="flex items-center space-x-4 pb-2 border-b border-gray-100">
@@ -16,10 +20,10 @@ export default function BodhakathaPage() {
             </div>
 
             <div className="grid gap-6">
-                {bodhakathaArticles.map((article) => (
+                {bodhakathaArticles.map((article: any) => (
                     <Link
                         key={article.id}
-                        href={`/bodhakatha/${article.id}`} // We'll reuse the same Detail view structure maybe? Or simple wrapper
+                        href={`/bodhakatha/${article.id}`}
                         className="block p-6 bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-gold transition-all group"
                     >
                         <div className="flex flex-col gap-2">

@@ -90,7 +90,7 @@ export default function AdminTicketsPage() {
         <div className="max-w-6xl mx-auto py-8 px-4 space-y-8">
             <div className="flex items-center justify-between border-b pb-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+                    <h1 className="text-3xl font-bold text-gray-900">Seeker Inquiries Management</h1>
                     <p className="text-gray-500 mt-1">Manage and respond to spiritual inquiries</p>
                 </div>
                 <div className="flex space-x-2">

@@ -87,12 +87,16 @@ export default function RootLayout({
         variables: {
           colorPrimary: '#cc7722',
           colorTextSecondary: '#6b7280',
+          borderRadius: '0.75rem',
         },
         elements: {
-          formButtonPrimary: 'bg-ochre hover:bg-orange-700 transition-all duration-200 shadow-md',
+          formButtonPrimary: 'bg-ochre hover:bg-orange-700 transition-all duration-200 shadow-md py-3 h-12 font-bold text-sm uppercase tracking-wider',
+          socialButtonsBlockButton: 'h-12 border-gray-200 hover:bg-gray-50 transition-all font-semibold text-gray-600',
+          socialButtonsBlockButtonText: 'font-semibold',
+          formFieldInput: 'h-12 border-gray-200 focus:ring-ochre focus:border-ochre',
           card: 'shadow-2xl rounded-3xl border border-gray-100 overflow-hidden',
-          headerTitle: 'text-gray-800 font-bold',
-          headerSubtitle: 'text-gray-500',
+          headerTitle: 'text-gray-800 font-black tracking-tight text-2xl',
+          headerSubtitle: 'text-gray-500 font-medium',
         }
       }}
       localization={{
@@ -115,9 +119,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <LanguageProvider>
-            <Layout>
-              {children}
-            </Layout>
+            {children}
             <UpdateDetector />
             <Analytics />
             <SpeedInsights />

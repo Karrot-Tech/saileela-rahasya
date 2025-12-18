@@ -3,14 +3,7 @@
 import prisma from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 import { currentUser } from '@clerk/nextjs/server';
-
-const ADMIN_EMAILS = ['pavankumarpai@gmail.com', 'pavanpaik2025@gmail.com'];
-
-async function isAdmin() {
-    const clerkUser = await currentUser();
-    const email = clerkUser?.emailAddresses[0]?.emailAddress;
-    return !!email && ADMIN_EMAILS.includes(email);
-}
+import { isAdmin } from '@/lib/auth';
 
 export async function getTickets() {
     try {

@@ -1,13 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { User, X, BookA } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { User, X, BookA, ShieldCheck, ArrowRight } from 'lucide-react';
 import { useUser, SignInButton, UserButton, SignedIn, SignedOut } from '@clerk/nextjs';
+
+const getAdminEmails = () => {
+    const emails = process.env.NEXT_PUBLIC_ADMIN_EMAILS || '';
+    return emails.split(',').map(e => e.trim().toLowerCase());
+};
 
 export default function UtilityMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const { isLoaded, isSignedIn, user } = useUser();
+    const pathname = usePathname();
+
+    const email = user?.emailAddresses[0]?.emailAddress;
+    const isAdmin = email && getAdminEmails().includes(email.toLowerCase());
+
+    useEffect(() => {
+        setIsOpen(false);
+    }, [pathname]);
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -16,7 +30,21 @@ export default function UtilityMenu() {
             {/* Avatar Trigger / Clerk User Button */}
             <div className="flex items-center gap-4">
                 <SignedIn>
-                    <UserButton afterSignOutUrl="/" />
+                    {isAdmin && (
+                        <Link
+                            href="/admin"
+                            className="flex items-center gap-2 bg-gray-900 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-lg border border-white/10 hover:bg-black transition-all group active:scale-95 whitespace-nowrap"
+                        >
+                            <div className="w-4 h-4 md:w-5 md:h-5 bg-ochre rounded-full flex items-center justify-center flex-none">
+                                <ShieldCheck className="w-2.5 h-2.5 md:w-3 h-3 text-white" />
+                            </div>
+                            <span className="text-[8px] md:text-[10px] font-black tracking-widest uppercase">Open Admin Console</span>
+                            <ArrowRight className="w-2.5 h-2.5 md:w-3 h-3 text-white/50 group-hover:translate-x-1 transition-transform hidden sm:block" />
+                        </Link>
+                    )}
+                    <div className="flex-none">
+                        <UserButton afterSignOutUrl="/" />
+                    </div>
                 </SignedIn>
                 <SignedOut>
                     <button

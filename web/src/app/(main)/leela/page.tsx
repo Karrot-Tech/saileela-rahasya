@@ -1,8 +1,12 @@
 import Link from 'next/link';
-import leelaArticles from '@/data/leela_articles.json';
+import prisma from '@/lib/db';
 import { Footprints } from 'lucide-react';
 
-export default function LeelaPage() {
+export default async function LeelaPage() {
+    const leelaArticles = await prisma.leela.findMany({
+        orderBy: { orderId: 'asc' }
+    });
+
     return (
         <div className="max-w-4xl mx-auto space-y-6 pt-6 px-4">
             <div className="flex items-center space-x-4 pb-2 border-b border-gray-100">
@@ -16,7 +20,7 @@ export default function LeelaPage() {
             </div>
 
             <div className="grid gap-6">
-                {leelaArticles.map((article) => (
+                {leelaArticles.map((article: any) => (
                     <Link
                         key={article.id}
                         href={`/leela/${article.id}`}

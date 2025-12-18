@@ -8,6 +8,10 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["POSTGRES_PRISMA_URL"] || process.env["DATABASE_URL"] || process.env["DATABASE_URL_UNPOOLED"],
+    url: (() => {
+      const url = process.env["POSTGRES_PRISMA_URL"] || process.env["DATABASE_URL"] || process.env["DATABASE_URL_UNPOOLED"];
+      console.log('Prisma Config URL:', url ? url.substring(0, 30) + '...' : 'NONE');
+      return url;
+    })(),
   },
 });

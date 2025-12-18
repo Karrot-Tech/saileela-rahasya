@@ -1,4 +1,4 @@
-import bodhakathaArticles from '@/data/bodhakatha_articles.json';
+import prisma from '@/lib/db';
 import ReferenceVideos from '@/components/features/ReferenceVideos';
 import ChapterTextViewer from '@/components/features/ChapterTextViewer';
 
@@ -6,14 +6,19 @@ import { Metadata } from 'next';
 
 // Server Component
 export async function generateStaticParams() {
-    return bodhakathaArticles.map((article) => ({
-        articleId: article.id.toString(),
+    const leelas = await prisma.leela.findMany({
+        select: { id: true }
+    });
+    return leelas.map((article: { id: string }) => ({
+        articleId: article.id,
     }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ articleId: string }> }): Promise<Metadata> {
     const { articleId } = await params;
-    const article = bodhakathaArticles.find((c) => c.id.toString() === articleId);
+    const article = await prisma.leela.findUnique({
+        where: { id: articleId }
+    });
 
     if (!article) return { title: 'Article Not Found' };
 
@@ -31,36 +36,33 @@ export async function generateMetadata({ params }: { params: Promise<{ articleId
 
 
 
-export default async function BodhakathaDetailPage({ params }: { params: Promise<{ articleId: string }> }) {
+export default async function LeelaDetailPage({ params }: { params: Promise<{ articleId: string }> }) {
     const { articleId } = await params;
-    const article = bodhakathaArticles.find((c) => c.id.toString() === articleId);
+    const article = await prisma.leela.findUnique({
+        where: { id: articleId }
+    });
 
     if (!article) {
         return <div>Article not found</div>;
     }
 
-    // Instructional mock text
+    // Reuse the mock text logic
     const dummyText = article.description;
 
     const videos = [{
         id: article.id,
         youtube_id: article.youtube_id,
-        title: "Teaching Narration",
-        description: `Theme: ${article.theme}`
+        title: "Leela Narration",
+        description: article.description
     }];
 
     return (
-        <div className="flex flex-col lg:flex-row gap-8 h-[calc(100vh-8rem)] pt-6">
+        <div className="flex flex-col lg:flex-row gap-8 lg:h-[calc(100vh-8rem)] pt-2 md:pt-6">
             {/* Left: Text Content (Prominent) - First on mobile and desktop */}
-            <div className="w-full lg:w-2/3 flex-1 overflow-y-auto pr-4 custom-scrollbar">
+            <div className="w-full lg:w-2/3 flex-1 lg:overflow-y-auto lg:pr-4 custom-scrollbar">
 
-                <article className="prose prose-ochre max-w-none bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                <article className="prose prose-ochre max-w-none bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
                     <div className="mb-6 border-b border-gray-100 pb-4">
-                        <div className="flex items-center space-x-2 mb-2">
-                            <span className="text-xs font-bold text-white bg-ochre px-2 py-1 rounded">
-                                {article.theme}
-                            </span>
-                        </div>
                         <h1 className="text-xl md:text-3xl font-bold text-gray-800 mb-2">{article.title_english}</h1>
                         <h2 className="text-lg md:text-2xl text-ochre font-serif">{article.title_hindi}</h2>
                     </div>
