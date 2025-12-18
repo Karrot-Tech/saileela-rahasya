@@ -1,10 +1,10 @@
-
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { saveGlossary, deleteGlossary } from '@/actions/content';
-import { Save, Trash2, ArrowLeft } from 'lucide-react';
+import { Save, ArrowLeft } from 'lucide-react';
+import DeleteIconButton from '@/components/admin/DeleteIconButton';
 import Link from 'next/link';
 
 interface GlossaryFormProps {
@@ -38,20 +38,7 @@ export default function GlossaryForm({ glossary }: GlossaryFormProps) {
         }
     };
 
-    const handleDelete = async () => {
-        if (!confirm('Are you sure you want to delete this term?')) return;
-        setLoading(true);
-        try {
-            await deleteGlossary(glossary.id);
-            router.push('/admin/glossary');
-            router.refresh();
-        } catch (error) {
-            console.error('Failed to delete:', error);
-            alert('Failed to delete glossary term');
-        } finally {
-            setLoading(false);
-        }
-    };
+    // handleDelete function is no longer needed as DeleteIconButton handles the action
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
@@ -63,15 +50,7 @@ export default function GlossaryForm({ glossary }: GlossaryFormProps) {
                 </Link>
                 <div className="flex items-center space-x-3 w-full sm:w-auto">
                     {glossary && (
-                        <button
-                            type="button"
-                            onClick={handleDelete}
-                            disabled={loading}
-                            className="flex-1 sm:flex-none justify-center bg-red-50 text-red-600 px-4 py-2.5 rounded-xl hover:bg-red-100 transition-all flex items-center space-x-2 text-[10px] font-black uppercase tracking-widest border border-red-100 active:scale-95 whitespace-nowrap min-h-[42px]"
-                        >
-                            <Trash2 className="w-3.5 h-3.5" />
-                            <span>Delete</span>
-                        </button>
+                        <DeleteIconButton id={glossary.id} type="glossary" />
                     )}
                     <button
                         type="submit"
@@ -124,11 +103,6 @@ export default function GlossaryForm({ glossary }: GlossaryFormProps) {
                         />
                     </div>
                 </div>
-
-                {/* Info Text */}
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center">
-                    Translations are now handled automatically by the system
-                </p>
             </div>
 
             {/* Bottom Save Action */}
