@@ -71,7 +71,7 @@ export default function AskPage() {
             setNotification({ message: "Inquiry closed successfully", type: 'success' });
             fetchTickets();
         } else {
-            setNotification({ message: "Error closing ticket: " + (result as any).error, type: 'error' });
+            setNotification({ message: "Error closing inquiry: " + (result as any).error, type: 'error' });
         }
         setTicketToClose(null);
     };
@@ -90,7 +90,7 @@ export default function AskPage() {
                 setNewTicketSubject('');
                 setNewTicketMessage('');
                 fetchTickets();
-                setNotification({ message: "Ticket Submitted Successfully!", type: 'success' });
+                setNotification({ message: "Guidance Request Submitted!", type: 'success' });
                 setIsSuccess(true);
                 setTimeout(() => {
                     setIsSuccess(false);
@@ -218,7 +218,7 @@ export default function AskPage() {
                                             className="bg-ochre text-white px-6 py-2 rounded-md font-bold hover:bg-orange-700 transition disabled:opacity-50 flex items-center shadow-md active:scale-95"
                                         >
                                             {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                                            {isSubmitting ? 'Submitting...' : 'Submit Ticket'}
+                                            {isSubmitting ? 'Seeking...' : 'Seek Guidance'}
                                         </button>
                                     </div>
                                 </form>
@@ -234,13 +234,13 @@ export default function AskPage() {
                             onClick={() => setActiveTab('open')}
                             className={`py-2 px-4 font-medium text-sm transition-all ${activeTab === 'open' ? 'text-ochre border-b-2 border-ochre' : 'text-gray-500 hover:text-gray-700'}`}
                         >
-                            Active Tickets
+                            Open Inquiries
                         </button>
                         <button
                             onClick={() => setActiveTab('closed')}
                             className={`py-2 px-4 font-medium text-sm transition-all ${activeTab === 'closed' ? 'text-ochre border-b-2 border-ochre' : 'text-gray-500 hover:text-gray-700'}`}
                         >
-                            Closed History
+                            Past Inquiries
                         </button>
                     </div>
 
@@ -252,7 +252,7 @@ export default function AskPage() {
                     ) : filteredTickets.length === 0 ? (
                         <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
                             <MessageCircleQuestion className="w-10 h-10 mx-auto mb-2 opacity-20" />
-                            No tickets found in this category.
+                            No inquiries found in this category.
                         </div>
                     ) : (
                         <div className="space-y-4">
