@@ -37,12 +37,31 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Sai Leela Rahasya",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   twitter: {
     card: "summary_large_image",
     title: "Sai Leela Rahasya",
     description: "Digital study guide for Krishnaji's teachings.",
     images: ["/icon.png"],
   },
+  icons: {
+    apple: "/icon.png",
+  }
+};
+
+export const viewport = {
+  themeColor: "#cc7722",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 import { ClerkProvider } from '@clerk/nextjs'
