@@ -38,6 +38,7 @@ export default function AskPage() {
     const [hasInitialLoaded, setHasInitialLoaded] = useState(false);
     const [followUpText, setFollowUpText] = useState<{ [key: string]: string }>({});
     const [isFollowUpSubmitting, setIsFollowUpSubmitting] = useState<{ [key: string]: boolean }>({});
+    const [followUpSuccess, setFollowUpSuccess] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         if (isLoaded && isSignedIn) {
@@ -94,12 +95,11 @@ export default function AskPage() {
                 setNewTicketSubject('');
                 setNewTicketMessage('');
                 fetchTickets();
-                setNotification({ message: "Guidance Request Submitted!", type: 'success' });
                 setIsSuccess(true);
                 setTimeout(() => {
                     setIsSuccess(false);
                     setIsNewQuestionExpanded(false);
-                }, 3000);
+                }, 4000);
             } else {
                 setNotification({ message: "Error: " + result.error, type: 'error' });
             }
@@ -119,8 +119,11 @@ export default function AskPage() {
             const result = await userReplyToTicket(ticketId, text);
             if (result.success) {
                 setFollowUpText(prev => ({ ...prev, [ticketId]: '' }));
+                setFollowUpSuccess(prev => ({ ...prev, [ticketId]: true }));
                 fetchTickets();
-                setNotification({ message: "Follow-up sent!", type: 'success' });
+                setTimeout(() => {
+                    setFollowUpSuccess(prev => ({ ...prev, [ticketId]: false }));
+                }, 4000);
             } else {
                 setNotification({ message: "Error: " + result.error, type: 'error' });
             }
@@ -233,7 +236,7 @@ export default function AskPage() {
                                                         rows={5}
                                                         value={newTicketMessage}
                                                         onChange={(e) => setNewTicketMessage(e.target.value)}
-                                                        placeholder="Describe your query or spiritual challenge in detail..."
+                                                        placeholder="Please share your spiritual question or request for guidance in detail..."
                                                         className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-sm leading-relaxed resize-none font-medium"
                                                     />
                                                 </div>
@@ -282,33 +285,45 @@ export default function AskPage() {
 
                                     {isNewQuestionExpanded && (
                                         <div className="p-4 border-t border-gray-50 bg-gray-50/30 animate-in slide-in-from-top-2 duration-300">
-                                            <form onSubmit={handleSubmit} className="space-y-4">
-                                                <input
-                                                    type="text"
-                                                    required
-                                                    value={newTicketSubject}
-                                                    onChange={(e) => setNewTicketSubject(e.target.value)}
-                                                    placeholder="Inquiry Topic..."
-                                                    className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-medium"
-                                                />
-                                                <textarea
-                                                    required
-                                                    rows={3}
-                                                    value={newTicketMessage}
-                                                    onChange={(e) => setNewTicketMessage(e.target.value)}
-                                                    placeholder="Briefly describe your request..."
-                                                    className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none resize-none font-medium"
-                                                />
-                                                <div className="flex justify-end">
-                                                    <button
-                                                        type="submit"
-                                                        disabled={isSubmitting}
-                                                        className="bg-ochre text-white px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-50 flex items-center shadow-lg shadow-ochre/20"
-                                                    >
-                                                        {isSubmitting ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : 'Submit Inquiry'}
-                                                    </button>
+                                            {isSuccess ? (
+                                                <div className="flex items-center space-x-4 py-8 px-4 bg-white rounded-2xl shadow-sm border border-green-50 animate-in zoom-in duration-500">
+                                                    <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-600 flex-none">
+                                                        <CheckCircle2 className="w-6 h-6" />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="font-bold text-gray-900 leading-tight">Request Received</h3>
+                                                        <p className="text-xs text-gray-500 mt-0.5">Krishnaji will respond to your query soon.</p>
+                                                    </div>
                                                 </div>
-                                            </form>
+                                            ) : (
+                                                <form onSubmit={handleSubmit} className="space-y-4">
+                                                    <input
+                                                        type="text"
+                                                        required
+                                                        value={newTicketSubject}
+                                                        onChange={(e) => setNewTicketSubject(e.target.value)}
+                                                        placeholder="Topic of Spiritual Inquiry..."
+                                                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-medium"
+                                                    />
+                                                    <textarea
+                                                        required
+                                                        rows={3}
+                                                        value={newTicketMessage}
+                                                        onChange={(e) => setNewTicketMessage(e.target.value)}
+                                                        placeholder="Please share your spiritual question or request for guidance here..."
+                                                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none resize-none font-medium"
+                                                    />
+                                                    <div className="flex justify-end">
+                                                        <button
+                                                            type="submit"
+                                                            disabled={isSubmitting}
+                                                            className="bg-ochre text-white px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-50 flex items-center shadow-lg shadow-ochre/20 active:scale-95"
+                                                        >
+                                                            {isSubmitting ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : 'Submit Inquiry'}
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -405,35 +420,42 @@ export default function AskPage() {
 
                                                             {ticket.status !== 'CLOSED' && (
                                                                 <div className="space-y-4 pt-4 border-t border-gray-100 mt-4">
-                                                                    <div className="space-y-2">
-                                                                        <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 ml-1">Send Follow-up</label>
-                                                                        <textarea
-                                                                            value={followUpText[ticket.id] || ''}
-                                                                            onChange={(e) => setFollowUpText(prev => ({ ...prev, [ticket.id]: e.target.value }))}
-                                                                            placeholder="Type your clarifying question here..."
-                                                                            rows={3}
-                                                                            className="w-full bg-white border border-gray-100 rounded-2xl p-3 text-sm focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all resize-none font-medium"
-                                                                        />
-                                                                        <div className="flex justify-between items-center">
-                                                                            <button
-                                                                                onClick={(e) => {
-                                                                                    e.stopPropagation();
-                                                                                    setTicketToClose(ticket.id);
-                                                                                }}
-                                                                                className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-red-500 transition-colors"
-                                                                            >
-                                                                                Close Inquiry
-                                                                            </button>
-                                                                            <button
-                                                                                onClick={() => handleFollowUp(ticket.id)}
-                                                                                disabled={isFollowUpSubmitting[ticket.id] || !followUpText[ticket.id]?.trim()}
-                                                                                className="bg-ochre text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-30 shadow-lg shadow-ochre/20 flex items-center"
-                                                                            >
-                                                                                {isFollowUpSubmitting[ticket.id] ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : <Send className="w-3 h-3 mr-2" />}
-                                                                                Send
-                                                                            </button>
+                                                                    {followUpSuccess[ticket.id] ? (
+                                                                        <div className="flex items-center space-x-3 py-3 px-4 bg-green-50/50 rounded-xl border border-green-100 animate-in fade-in zoom-in duration-300">
+                                                                            <CheckCircle2 className="w-5 h-5 text-green-600" />
+                                                                            <p className="text-xs font-bold text-green-700 uppercase tracking-widest">Guidance shared with Krishnaji</p>
                                                                         </div>
-                                                                    </div>
+                                                                    ) : (
+                                                                        <div className="space-y-2">
+                                                                            <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 ml-1">Send Follow-up</label>
+                                                                            <textarea
+                                                                                value={followUpText[ticket.id] || ''}
+                                                                                onChange={(e) => setFollowUpText(prev => ({ ...prev, [ticket.id]: e.target.value }))}
+                                                                                placeholder="Type your clarifying question here..."
+                                                                                rows={3}
+                                                                                className="w-full bg-white border border-gray-100 rounded-2xl p-3 text-sm focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all resize-none font-medium"
+                                                                            />
+                                                                            <div className="flex justify-between items-center">
+                                                                                <button
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
+                                                                                        setTicketToClose(ticket.id);
+                                                                                    }}
+                                                                                    className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-red-500 transition-colors"
+                                                                                >
+                                                                                    Close Inquiry
+                                                                                </button>
+                                                                                <button
+                                                                                    onClick={() => handleFollowUp(ticket.id)}
+                                                                                    disabled={isFollowUpSubmitting[ticket.id] || !followUpText[ticket.id]?.trim()}
+                                                                                    className="bg-ochre text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-30 shadow-lg shadow-ochre/20 flex items-center active:scale-95"
+                                                                                >
+                                                                                    {isFollowUpSubmitting[ticket.id] ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : <Send className="w-3 h-3 mr-2" />}
+                                                                                    Send
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             )}
                                                         </div>
