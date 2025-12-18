@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Sai Leela Rahasya",
     description: "Digital study guide for Krishnaji's teachings.",
-    url: "https://saibisa-103.firebaseapp.com", // Assuming this is the canonical URL or update later
+    url: "https://saileelarahasya-web.vercel.app",
     siteName: "Sai Leela Rahasya",
     images: [
       {
