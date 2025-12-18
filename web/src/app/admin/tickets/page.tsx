@@ -37,6 +37,7 @@ export default function AdminTicketsPage() {
     // UI Feedback State
     const [notification, setNotification] = useState<{ message: string; type: NotificationType } | null>(null);
     const [confirmCloseId, setConfirmCloseId] = useState<string | null>(null);
+    const [postReplyActionId, setPostReplyActionId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchTickets();
@@ -58,7 +59,8 @@ export default function AdminTicketsPage() {
 
         if (result.success) {
             setReplyText(prev => ({ ...prev, [ticketId]: '' }));
-            setNotification({ message: "Guidance sent successfully!", type: 'success' });
+            setExpandedTicketId(null); // Close the conversation modal
+            setPostReplyActionId(ticketId); // Show post-reply options
             fetchTickets();
         } else {
             setNotification({ message: result.error || "Error sending guidance", type: 'error' });
@@ -211,6 +213,43 @@ export default function AdminTicketsPage() {
                             </div>
                         </div>
                     )}
+                </div>
+            </Modal>
+
+            {/* Post-Reply Action Modal */}
+            <Modal
+                isOpen={!!postReplyActionId}
+                onClose={() => setPostReplyActionId(null)}
+                title="Guidance Sent"
+                actions={
+                    <>
+                        <button
+                            onClick={() => setPostReplyActionId(null)}
+                            className="bg-gray-100 text-gray-600 px-4 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-gray-200 transition-all"
+                        >
+                            Keep Open
+                        </button>
+                        <button
+                            onClick={() => {
+                                if (postReplyActionId) {
+                                    handleClose(postReplyActionId);
+                                    setPostReplyActionId(null);
+                                }
+                            }}
+                            className="bg-ochre text-white px-4 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-orange-700 transition-all shadow-lg shadow-ochre/20"
+                        >
+                            Close Inquiry
+                        </button>
+                    </>
+                }
+            >
+                <div className="text-center py-2">
+                    <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-100">
+                        <CheckCircle2 className="w-8 h-8 text-green-500" />
+                    </div>
+                    <p className="text-sm font-medium text-gray-600 leading-relaxed">
+                        Your spiritual guidance has been shared. Would you like to mark this inquiry as closed?
+                    </p>
                 </div>
             </Modal>
 
