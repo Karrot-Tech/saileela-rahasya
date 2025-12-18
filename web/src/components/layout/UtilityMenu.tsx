@@ -97,74 +97,74 @@ export default function UtilityMenu() {
                     </button>
                 </div>
 
-                <div className="p-6 space-y-8 h-[calc(100%-80px)] flex flex-col no-scrollbar overflow-y-auto pb-32">
+                <div className="p-5 space-y-4 h-[calc(100%-80px)] flex flex-col no-scrollbar overflow-y-auto pb-24">
                     <SignedIn>
-                        {/* User Profile Summary - Vertical Stack for better handling of long emails */}
-                        <div className="flex flex-col items-center text-center bg-gray-50 p-8 rounded-[2.5rem] border border-gray-100/50 shadow-sm">
-                            <div className="relative mb-4">
+                        {/* User Profile Summary - Compact Vertical Stack */}
+                        <div className="flex flex-col items-center text-center bg-gray-50/50 p-5 rounded-[2rem] border border-gray-100">
+                            <div className="relative mb-3">
                                 {user?.imageUrl ? (
-                                    <img src={user.imageUrl} className="w-20 h-20 rounded-[2rem] object-cover border-4 border-white shadow-md" alt="Profile" />
+                                    <img src={user.imageUrl} className="w-16 h-16 rounded-2xl object-cover border-4 border-white shadow-md" alt="Profile" />
                                 ) : (
-                                    <div className="w-20 h-20 rounded-[2rem] bg-ochre flex items-center justify-center text-white text-3xl font-black shadow-md">{user?.firstName?.charAt(0)}</div>
+                                    <div className="w-16 h-16 rounded-2xl bg-ochre flex items-center justify-center text-white text-2xl font-black shadow-md">{user?.firstName?.charAt(0)}</div>
                                 )}
-                                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-4 border-gray-50 rounded-full shadow-sm" />
+                                <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-green-500 border-[3px] border-gray-50 rounded-full shadow-sm" />
                             </div>
                             <div className="w-full">
-                                <p className="font-black text-gray-900 text-xl leading-tight">{user?.fullName}</p>
-                                <p className="text-[11px] font-bold text-gray-400 mt-2 break-all max-w-[200px] mx-auto leading-relaxed">{user?.primaryEmailAddress?.emailAddress}</p>
+                                <p className="font-black text-gray-900 text-lg leading-tight">{user?.fullName}</p>
+                                <p className="text-[10px] font-bold text-gray-400 mt-1 break-all max-w-[180px] mx-auto leading-tight italic">{user?.primaryEmailAddress?.emailAddress}</p>
                             </div>
                         </div>
 
-                        {/* Navigation Actions */}
-                        <nav className="space-y-2 flex-1">
-                            <Link href="/ask" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-4 hover:bg-ochre/5 rounded-2xl transition-all group border border-transparent hover:border-ochre/10">
-                                <div className="flex items-center gap-4 text-gray-700 group-hover:text-ochre">
-                                    <History className="w-5 h-5" />
-                                    <span className="font-bold text-sm tracking-tight text-gray-500">My Guidance History</span>
+                        {/* Navigation Actions - Compact */}
+                        <nav className="space-y-1.5 flex-1">
+                            <Link href="/ask" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3 hover:bg-ochre/5 rounded-xl transition-all group border border-transparent hover:border-ochre/10">
+                                <div className="flex items-center gap-3 text-gray-700 group-hover:text-ochre">
+                                    <History className="w-4 h-4" />
+                                    <span className="font-bold text-xs tracking-tight text-gray-500">My Guidance History</span>
                                 </div>
-                                <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
+                                <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
                             </Link>
                             {isAdmin && (
-                                <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-4 hover:bg-gray-900 rounded-2xl transition-all group bg-gray-50 border border-gray-100">
-                                    <div className="flex items-center gap-4 text-gray-700 group-hover:text-white">
-                                        <LayoutDashboard className="w-5 h-5 text-ochre" />
-                                        <span className="font-bold text-sm tracking-tight">Admin Console</span>
+                                <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3 hover:bg-gray-900 rounded-xl transition-all group bg-gray-50 border border-gray-100/50">
+                                    <div className="flex items-center gap-3 text-gray-700 group-hover:text-white">
+                                        <LayoutDashboard className="w-4 h-4 text-ochre" />
+                                        <span className="font-bold text-xs tracking-tight">Admin Console</span>
                                     </div>
-                                    <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-white transition-transform group-hover:translate-x-1" />
+                                    <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-white transition-transform group-hover:translate-x-1" />
                                 </Link>
                             )}
-                            <Link href="/glossary" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-2xl transition-all group">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ochre group-hover:bg-ochre/10 transition-colors">
-                                        <BookA className="w-5 h-5" />
+                            <Link href="/glossary" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-all group">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400 group-hover:text-ochre group-hover:bg-ochre/10 transition-colors">
+                                        <BookA className="w-4 h-4" />
                                     </div>
-                                    <div>
-                                        <p className="font-bold text-sm text-gray-900 tracking-tight text-left">Exhaustive Glossary</p>
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">Spiritual Archives</p>
+                                    <div className="text-left">
+                                        <p className="font-bold text-xs text-gray-900 tracking-tight">Exhaustive Glossary</p>
+                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-0.5">Spiritual Archives</p>
                                     </div>
                                 </div>
-                                <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
+                                <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
                             </Link>
                             <button
                                 onClick={() => {
                                     setIsOpen(false);
                                     openUserProfile();
                                 }}
-                                className="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-2xl transition-all group"
+                                className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-all group"
                             >
-                                <div className="flex items-center gap-4 text-gray-500">
-                                    <Settings className="w-5 h-5" />
-                                    <span className="font-bold text-sm tracking-tight">Edit Profile</span>
+                                <div className="flex items-center gap-3 text-gray-500">
+                                    <Settings className="w-4 h-4" />
+                                    <span className="font-bold text-xs tracking-tight">Edit Profile</span>
                                 </div>
-                                <ArrowRight className="w-4 h-4 text-gray-300" />
+                                <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
                             </button>
                         </nav>
 
                         {/* Footer Actions */}
-                        <div className="pt-6 border-t border-gray-100 space-y-3">
+                        <div className="pt-4 border-t border-gray-100 space-y-3">
                             <SignOutButton>
-                                <button className="w-full flex items-center justify-center gap-3 py-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all border border-transparent hover:border-red-100 group">
-                                    <LogOut className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                                <button className="w-full flex items-center justify-center gap-3 py-3.5 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl font-black text-[9px] uppercase tracking-[0.2em] transition-all border border-transparent hover:border-red-100 group shadow-sm">
+                                    <LogOut className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" />
                                     <span>Sign Out Session</span>
                                 </button>
                             </SignOutButton>
@@ -206,7 +206,7 @@ export default function UtilityMenu() {
                     </SignedOut>
 
                     <div className="text-center">
-                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.29</p>
+                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.30</p>
                     </div>
                 </div>
             </div>
