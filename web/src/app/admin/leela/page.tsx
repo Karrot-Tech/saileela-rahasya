@@ -68,31 +68,28 @@ export default async function AdminLeelaPage() {
             </div>
 
             {/* Mobile View: Cards */}
-            <div className="md:hidden space-y-4">
+            <div className="md:hidden space-y-3">
                 {leelas.map((leela: any) => (
-                    <div key={leela.id} className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                    <div key={leela.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-3">
                         <div className="flex justify-between items-start">
-                            <span className="bg-ochre/5 text-ochre text-[10px] font-black uppercase px-2 py-1 rounded-md border border-ochre/10">
+                            <span className="bg-ochre/5 text-ochre text-[10px] font-black uppercase px-2 py-1 rounded-lg border border-ochre/10">
                                 Chapter {leela.chapter || 'N/A'}
                             </span>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center gap-2">
                                 <Link
                                     href={`/admin/leela/${leela.id}`}
-                                    className="p-2 text-blue-500 bg-gray-50 rounded-lg shadow-inner"
+                                    className="p-2 text-blue-500 bg-blue-50 rounded-lg transition-colors border border-blue-100/50"
                                 >
                                     <Edit className="w-4 h-4" />
                                 </Link>
-                                <button className="p-2 text-red-500 bg-gray-50 rounded-lg shadow-inner">
+                                <button className="p-2 text-red-500 bg-red-50 rounded-lg transition-colors border border-red-100/50">
                                     <Trash2 className="w-4 h-4" />
                                 </button>
                             </div>
                         </div>
-                        <div>
-                            <h3 className="font-bold text-gray-900 leading-tight">{leela.title_english}</h3>
-                            <p className="text-sm text-gray-400 font-serif italic mt-1">{leela.title_hindi}</p>
-                        </div>
-                        <div className="flex items-center justify-between pt-3 border-t border-gray-50">
-                            <span className="text-[10px] font-mono text-gray-300">ID: {leela.id.substring(0, 8)}...</span>
+                        <div className="min-w-0">
+                            <h3 className="font-bold text-gray-900 leading-tight text-base">{leela.title_english}</h3>
+                            <p className="text-xs text-gray-400 font-serif italic mt-0.5">{leela.title_hindi}</p>
                         </div>
                     </div>
                 ))}

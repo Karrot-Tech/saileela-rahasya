@@ -59,22 +59,20 @@ export default async function AdminGlossaryPage() {
             </div>
 
             {/* Mobile View: Cards */}
-            <div className="md:hidden grid grid-cols-1 gap-4">
+            <div className="md:hidden grid grid-cols-1 gap-3">
                 {glossaryItems.map((item: any) => (
-                    <div key={item.id} className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col space-y-3">
-                        <div className="flex justify-between items-center">
-                            <h3 className="font-black text-lg text-ochre tracking-tight">{item.term}</h3>
-                            <div className="flex items-center space-x-2">
-                                <Link
-                                    href={`/admin/glossary/${item.id}`}
-                                    className="p-2 text-blue-500 bg-gray-50 rounded-lg"
-                                >
-                                    <Edit className="w-4 h-4" />
-                                </Link>
-                                <button className="p-2 text-red-500 bg-gray-50 rounded-lg">
-                                    <Trash2 className="w-4 h-4" />
-                                </button>
-                            </div>
+                    <div key={item.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between gap-3">
+                        <h3 className="font-black text-base text-ochre tracking-tight truncate flex-1">{item.term}</h3>
+                        <div className="flex items-center gap-2 flex-none">
+                            <Link
+                                href={`/admin/glossary/${item.id}`}
+                                className="p-2 text-blue-500 bg-blue-50 rounded-lg transition-colors border border-blue-100/50"
+                            >
+                                <Edit className="w-4 h-4" />
+                            </Link>
+                            <button className="p-2 text-red-500 bg-red-50 rounded-lg transition-colors border border-red-100/50">
+                                <Trash2 className="w-4 h-4" />
+                            </button>
                         </div>
                     </div>
                 ))}
