@@ -168,7 +168,7 @@ export default function AskPage() {
                     >
                         <h2 className="text-lg font-bold text-gray-800 flex items-center">
                             <Send className="w-5 h-5 mr-2 text-ochre" />
-                            Ask a New Question
+                            Request Guidance
                         </h2>
                         {isNewQuestionExpanded ? (
                             <ChevronUp className="w-5 h-5 text-gray-500" />
@@ -184,7 +184,7 @@ export default function AskPage() {
                                     <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center text-green-600 mb-6 shadow-sm border border-green-100">
                                         <CheckCircle2 className="w-8 h-8" />
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-900">Inquiry Received!</h3>
+                                    <h3 className="text-xl font-bold text-gray-900">Guidance Requested!</h3>
                                     <p className="text-gray-500 mt-2 max-w-[250px] mx-auto text-sm">Krishnaji will provide guidance soon.</p>
                                 </div>
                             ) : (
