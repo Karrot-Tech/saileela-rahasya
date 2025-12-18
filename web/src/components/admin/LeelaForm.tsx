@@ -32,22 +32,33 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
         const textarea = document.getElementById('description-textarea') as HTMLTextAreaElement;
         if (!textarea) return;
 
+        textarea.focus();
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
         const text = textarea.value;
         const selection = text.substring(start, end);
-        const before = text.substring(0, start);
-        const after = text.substring(end);
 
-        const newText = before + prefix + (selection || '') + suffix + after;
-        setFormData({ ...formData, description: newText });
+        const insertion = prefix + selection + suffix;
 
-        // Reset focus and selection
-        setTimeout(() => {
-            textarea.focus();
-            const newCursorPos = start + prefix.length + (selection ? selection.length + suffix.length : 0);
-            textarea.setSelectionRange(newCursorPos, newCursorPos);
-        }, 10);
+        // Try to use execCommand to preserve Undo/Redo buffer
+        try {
+            document.execCommand('insertText', false, insertion);
+        } catch (e) {
+            // Fallback for browsers that don't support execCommand 'insertText'
+            const before = text.substring(0, start);
+            const after = text.substring(end);
+            const newText = before + insertion + after;
+            setFormData({ ...formData, description: newText });
+        }
+
+        // Adjust selection if it was a wrapper (like **bold**)
+        if (selection) {
+            const newEnd = start + insertion.length;
+            textarea.setSelectionRange(start, newEnd);
+        } else {
+            const newPos = start + prefix.length;
+            textarea.setSelectionRange(newPos, newPos);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -141,12 +152,12 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
                             </div>
                         </div>
                         <div className="space-y-3">
-                            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                                <div className="flex bg-gray-100 p-1 rounded-xl">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-100 pb-2 gap-3">
+                                <div className="flex bg-gray-100 p-1 rounded-xl w-fit">
                                     <button
                                         type="button"
                                         onClick={() => setEditorMode('edit')}
-                                        className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all flex items-center space-x-2 ${editorMode === 'edit' ? 'bg-white text-ochre shadow-sm' : 'text-gray-400 hover:text-gray-600'
+                                        className={`px-4 py-1.5 rounded-lg text-[10px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center space-x-2 ${editorMode === 'edit' ? 'bg-white text-ochre shadow-sm' : 'text-gray-400 hover:text-gray-600'
                                             }`}
                                     >
                                         <Edit3 className="w-3 h-3" />
@@ -155,7 +166,7 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
                                     <button
                                         type="button"
                                         onClick={() => setEditorMode('preview')}
-                                        className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all flex items-center space-x-2 ${editorMode === 'preview' ? 'bg-white text-ochre shadow-sm' : 'text-gray-400 hover:text-gray-600'
+                                        className={`px-4 py-1.5 rounded-lg text-[10px] md:text-xs font-black uppercase tracking-widest transition-all flex items-center space-x-2 ${editorMode === 'preview' ? 'bg-white text-ochre shadow-sm' : 'text-gray-400 hover:text-gray-600'
                                             }`}
                                     >
                                         <Eye className="w-3 h-3" />
@@ -164,12 +175,11 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
                                 </div>
 
                                 {editorMode === 'edit' && (
-                                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-1">
-                                        <button type="button" onClick={() => insertMarkdown('### ')} className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 transition-colors" title="Heading"><Heading3 className="w-4 h-4" /></button>
-                                        <button type="button" onClick={() => insertMarkdown('**', '**')} className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 transition-colors" title="Bold"><Bold className="w-4 h-4" /></button>
-                                        <button type="button" onClick={() => insertMarkdown('*', '*')} className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 transition-colors" title="Italic"><Italic className="w-4 h-4" /></button>
-                                        <button type="button" onClick={() => insertMarkdown('\n* ')} className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 transition-colors" title="List"><List className="w-4 h-4" /></button>
-                                        <button type="button" onClick={() => insertMarkdown('[', '](url)')} className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 transition-colors" title="Link"><LinkIcon className="w-4 h-4" /></button>
+                                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-1 pr-2">
+                                        <button type="button" onClick={() => insertMarkdown('### ')} className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 transition-colors shrink-0" title="Heading"><Heading3 className="w-4 h-4" /></button>
+                                        <button type="button" onClick={() => insertMarkdown('**', '**')} className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 transition-colors shrink-0" title="Bold"><Bold className="w-4 h-4" /></button>
+                                        <button type="button" onClick={() => insertMarkdown('*', '*')} className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 transition-colors shrink-0" title="Italic"><Italic className="w-4 h-4" /></button>
+                                        <button type="button" onClick={() => insertMarkdown('\n* ')} className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 transition-colors shrink-0" title="List"><List className="w-4 h-4" /></button>
                                     </div>
                                 )}
                             </div>
