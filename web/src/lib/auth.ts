@@ -5,12 +5,16 @@ export async function isAdmin() {
     if (!clerkUser) return false;
 
     // Read from environment variable (comma-separated list)
-    const adminEmailsStr = process.env.ADMIN_EMAILS || '';
+    // Strip accidental quotes if they exist
+    const adminEmailsStr = (process.env.ADMIN_EMAILS || '').replace(/['"]/g, '');
     const adminEmails = adminEmailsStr.split(',')
         .map(e => e.trim().toLowerCase())
         .filter(e => e !== '');
 
-    return clerkUser.emailAddresses.some(emailObj =>
-        adminEmails.includes(emailObj.emailAddress.toLowerCase())
-    );
+    const userEmails = clerkUser.emailAddresses.map(e => e.emailAddress.toLowerCase());
+    const isAuthorized = userEmails.some(email => adminEmails.includes(email));
+
+    console.log(`[AdminCheck] User: ${userEmails.join(', ')} | Status: ${isAuthorized ? 'GRANTED' : 'DENIED'} | Admins: ${adminEmails.length} configured`);
+
+    return isAuthorized;
 }

@@ -14,8 +14,8 @@ const NAV_ITEMS = [
 ];
 
 const getAdminEmails = () => {
-    const emails = process.env.NEXT_PUBLIC_ADMIN_EMAILS || '';
-    return emails.split(',').map(e => e.trim().toLowerCase());
+    const emails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '').replace(/['"]/g, '');
+    return emails.split(',').map(e => e.trim().toLowerCase()).filter(e => e !== '');
 };
 
 export default function Sidebar() {
