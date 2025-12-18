@@ -134,13 +134,11 @@ export default function UtilityMenu() {
                                 </Link>
                             )}
                             <Link href="/glossary" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-all group">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400 group-hover:text-ochre group-hover:bg-ochre/10 transition-colors">
-                                        <BookA className="w-4 h-4" />
-                                    </div>
+                                <div className="flex items-center gap-3 text-gray-500 group-hover:text-ochre">
+                                    <BookA className="w-4 h-4 flex-none" />
                                     <div className="text-left">
-                                        <p className="font-bold text-xs text-gray-900 tracking-tight">Exhaustive Glossary</p>
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-0.5">Spiritual Archives</p>
+                                        <p className="font-bold text-xs text-gray-900 tracking-tight leading-none group-hover:text-ochre transition-colors">Exhaustive Glossary</p>
+                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-1 group-hover:text-ochre/70">Spiritual Archives</p>
                                     </div>
                                 </div>
                                 <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
@@ -194,19 +192,17 @@ export default function UtilityMenu() {
 
                         <div className="pt-6 border-t border-gray-100">
                             <Link href="/glossary" onClick={() => setIsOpen(false)} className="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-2xl transition-all group">
-                                <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-ochre group-hover:bg-ochre/10 transition-colors">
-                                    <BookA className="w-5 h-5" />
-                                </div>
-                                <div>
-                                    <p className="font-bold text-sm text-gray-900 tracking-tight">Exhaustive Glossary</p>
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Spiritual Archives</p>
+                                <BookA className="w-6 h-6 text-gray-400 group-hover:text-ochre transition-colors flex-none" />
+                                <div className="text-left">
+                                    <p className="font-bold text-sm text-gray-900 tracking-tight group-hover:text-ochre transition-colors">Exhaustive Glossary</p>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Spiritual Archives</p>
                                 </div>
                             </Link>
                         </div>
                     </SignedOut>
 
                     <div className="text-center">
-                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.30</p>
+                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.31</p>
                     </div>
                 </div>
             </div>
