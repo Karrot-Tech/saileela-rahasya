@@ -25,7 +25,7 @@ export default function AskPage() {
     const { isLoaded, isSignedIn } = useUser();
     const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open');
     const [expandedTicketId, setExpandedTicketId] = useState<string | null>(null);
-    const [isNewQuestionExpanded, setIsNewQuestionExpanded] = useState(true);
+    const [isNewQuestionExpanded, setIsNewQuestionExpanded] = useState(false);
 
     const [tickets, setTickets] = useState<Ticket[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -52,8 +52,10 @@ export default function AskPage() {
             const currentData = data as any[];
             setTickets(currentData as unknown as Ticket[]);
 
-            const hasActiveTickets = currentData.some((t: any) => t.status === 'OPEN' || t.status === 'ANSWERED');
-            if (window.innerWidth < 768 && hasActiveTickets) {
+            const hasAnyTickets = currentData.length > 0;
+            if (!hasAnyTickets) {
+                setIsNewQuestionExpanded(true);
+            } else {
                 setIsNewQuestionExpanded(false);
             }
         } catch (err) {
@@ -150,179 +152,257 @@ export default function AskPage() {
                     />
                 )}
                 {/* Header */}
-                <div className="flex items-center space-x-4 pb-2 border-b border-gray-100">
-                    <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 flex-none">
-                        <MessageCircleQuestion className="w-6 h-6" />
-                    </div>
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-800">My Spiritual Inquiries</h1>
-                        <p className="text-sm text-gray-500 font-serif italic">"Ask and it shall be given"</p>
-                    </div>
-                </div>
-
-                {/* New Ticket Form */}
-                <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden ${hasInitialLoaded ? 'transition-all duration-500 ease-in-out' : ''} ${isNewQuestionExpanded ? 'max-h-[1000px]' : 'max-h-[72px]'}`}>
-                    <div
-                        onClick={() => setIsNewQuestionExpanded(!isNewQuestionExpanded)}
-                        className="p-6 bg-white flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
-                    >
-                        <h2 className="text-lg font-bold text-gray-800 flex items-center">
-                            <Send className="w-5 h-5 mr-2 text-ochre" />
-                            Request Guidance
-                        </h2>
-                        {isNewQuestionExpanded ? (
-                            <ChevronUp className="w-5 h-5 text-gray-500" />
-                        ) : (
-                            <ChevronDown className="w-5 h-5 text-gray-500" />
-                        )}
-                    </div>
-
-                    <div className={`transition-opacity duration-300 ${isNewQuestionExpanded ? 'opacity-100' : 'opacity-0 invisible'}`}>
-                        <div className="p-6 border-t border-gray-50">
-                            {isSuccess ? (
-                                <div className="flex flex-col items-center justify-center py-10 text-center animate-in fade-in zoom-in duration-500">
-                                    <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center text-green-600 mb-6 shadow-sm border border-green-100">
-                                        <CheckCircle2 className="w-8 h-8" />
-                                    </div>
-                                    <h3 className="text-xl font-bold text-gray-900">Guidance Requested!</h3>
-                                    <p className="text-gray-500 mt-2 max-w-[250px] mx-auto text-sm">Krishnaji will provide guidance soon.</p>
-                                </div>
-                            ) : (
-                                <form onSubmit={handleSubmit} className="space-y-4">
-                                    {/* ... existing form content ... */}
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Subject / Topic</label>
-                                        <input
-                                            type="text"
-                                            required
-                                            value={newTicketSubject}
-                                            onChange={(e) => setNewTicketSubject(e.target.value)}
-                                            placeholder="e.g., Guidance on Meditation"
-                                            className="w-full border border-gray-300 rounded-md p-2 focus:ring-ochre focus:border-ochre outline-none"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Your Question</label>
-                                        <textarea
-                                            required
-                                            rows={4}
-                                            value={newTicketMessage}
-                                            onChange={(e) => setNewTicketMessage(e.target.value)}
-                                            placeholder="Describe your query in detail..."
-                                            className="w-full border border-gray-300 rounded-md p-2 focus:ring-ochre focus:border-ochre outline-none"
-                                        />
-                                    </div>
-                                    <div className="flex justify-end">
-                                        <button
-                                            type="submit"
-                                            disabled={isSubmitting}
-                                            className="bg-ochre text-white px-6 py-2 rounded-md font-bold hover:bg-orange-700 transition disabled:opacity-50 flex items-center shadow-md active:scale-95"
-                                        >
-                                            {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                                            {isSubmitting ? 'Seeking...' : 'Seek Guidance'}
-                                        </button>
-                                    </div>
-                                </form>
-                            )}
+                <div className="flex flex-col space-y-2 pb-4">
+                    <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-ochre/10 rounded-xl flex items-center justify-center text-ochre flex-none">
+                            <MessageCircleQuestion className="w-5 h-5" />
+                        </div>
+                        <div>
+                            <h1 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Guidance & Inquiry</h1>
+                            <p className="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-widest mt-0.5">Spiritual Support Channel</p>
                         </div>
                     </div>
                 </div>
 
-                {/* Ticket History */}
-                <div className="space-y-4">
-                    <div className="flex border-b border-gray-200">
-                        <button
-                            onClick={() => setActiveTab('open')}
-                            className={`py-2 px-4 font-medium text-sm transition-all ${activeTab === 'open' ? 'text-ochre border-b-2 border-ochre' : 'text-gray-500 hover:text-gray-700'}`}
-                        >
-                            Open Inquiries
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('closed')}
-                            className={`py-2 px-4 font-medium text-sm transition-all ${activeTab === 'closed' ? 'text-ochre border-b-2 border-ochre' : 'text-gray-500 hover:text-gray-700'}`}
-                        >
-                            Past Inquiries
-                        </button>
-                    </div>
+                {/* Conditional Layout: Swap Ask Form and History based on existence of inquiries */}
+                <div className="flex flex-col space-y-8">
+                    {tickets.length === 0 ? (
+                        <>
+                            {/* NEW USER VIEW: Prioritize the Form */}
+                            <div className="bg-white rounded-3xl shadow-xl shadow-ochre/5 border border-gray-100 overflow-hidden">
+                                <div className="p-8 md:p-12 text-center space-y-6">
+                                    <div className="w-20 h-20 bg-ochre/5 rounded-full flex items-center justify-center mx-auto text-ochre">
+                                        <Send className="w-8 h-8" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h2 className="text-2xl font-black text-gray-900">Seek Divine Guidance</h2>
+                                        <p className="text-gray-500 text-sm md:text-base max-w-sm mx-auto leading-relaxed">
+                                            Share your spiritual query or request personal guidance from Krishnaji.
+                                        </p>
+                                    </div>
 
-                    {isLoading ? (
-                        <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-                            <Loader2 className="w-8 h-8 animate-spin mb-2 text-ochre" />
-                            <p>Loading your inquiries...</p>
-                        </div>
-                    ) : filteredTickets.length === 0 ? (
-                        <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                            <MessageCircleQuestion className="w-10 h-10 mx-auto mb-2 opacity-20" />
-                            No inquiries found in this category.
-                        </div>
-                    ) : (
-                        <div className="space-y-4">
-                            {filteredTickets.map((ticket: Ticket) => (
-                                <div key={ticket.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow transition-shadow">
-                                    {/* Ticket Header */}
-                                    <div
-                                        onClick={() => toggleExpand(ticket.id)}
-                                        className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
-                                    >
-                                        <div className="flex items-center space-x-4">
-                                            <div className={`w-2 h-2 rounded-full ${ticket.status === 'OPEN' ? 'bg-green-500 animate-pulse' :
-                                                ticket.status === 'ANSWERED' ? 'bg-blue-500' : 'bg-gray-400'
-                                                }`} />
-                                            <div>
-                                                <h3 className="font-bold text-gray-800">{ticket.subject}</h3>
-                                                <div className="text-xs text-gray-500 flex space-x-2">
-                                                    <span className="font-mono">#{ticket.id.slice(-8)}</span>
-                                                    <span>•</span>
-                                                    <span>{new Date(ticket.createdAt).toLocaleDateString()}</span>
+                                    <div className="pt-4 text-left">
+                                        {isSuccess ? (
+                                            <div className="flex flex-col items-center justify-center py-10 text-center animate-in fade-in zoom-in duration-500">
+                                                <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center text-green-600 mb-6 shadow-sm border border-green-100">
+                                                    <CheckCircle2 className="w-8 h-8" />
                                                 </div>
+                                                <h3 className="text-xl font-bold text-gray-900">Success!</h3>
+                                                <p className="text-gray-500 mt-2 max-w-[250px] mx-auto text-sm">Your request has been sent to Krishnaji.</p>
                                             </div>
+                                        ) : (
+                                            <form onSubmit={handleSubmit} className="space-y-5 max-w-md mx-auto">
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Inquiry Topic</label>
+                                                    <input
+                                                        type="text"
+                                                        required
+                                                        value={newTicketSubject}
+                                                        onChange={(e) => setNewTicketSubject(e.target.value)}
+                                                        placeholder="e.g., Guidance on Meditation Practice"
+                                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-3 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-sm font-medium"
+                                                    />
+                                                </div>
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Your Question</label>
+                                                    <textarea
+                                                        required
+                                                        rows={5}
+                                                        value={newTicketMessage}
+                                                        onChange={(e) => setNewTicketMessage(e.target.value)}
+                                                        placeholder="Describe your query or spiritual challenge in detail..."
+                                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-sm leading-relaxed resize-none font-medium"
+                                                    />
+                                                </div>
+                                                <button
+                                                    type="submit"
+                                                    disabled={isSubmitting}
+                                                    className="w-full bg-ochre text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-50 flex items-center justify-center shadow-xl shadow-ochre/20 active:scale-[0.98]"
+                                                >
+                                                    {isSubmitting ? (
+                                                        <>
+                                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                            Sending...
+                                                        </>
+                                                    ) : (
+                                                        'Seek Guidance'
+                                                    )}
+                                                </button>
+                                            </form>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            {/* RETURNING USER VIEW: Prioritize History/Guidance */}
+                            <div className="space-y-6">
+                                {/* Compact Ask Button (Collapsible) */}
+                                <div className={`group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 ${isNewQuestionExpanded ? 'ring-2 ring-ochre/10' : ''}`}>
+                                    <div
+                                        onClick={() => setIsNewQuestionExpanded(!isNewQuestionExpanded)}
+                                        className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50/80 transition-colors"
+                                    >
+                                        <div className="flex items-center space-x-3">
+                                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${isNewQuestionExpanded ? 'bg-ochre text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-ochre/10 group-hover:text-ochre'}`}>
+                                                <Send className="w-4 h-4" />
+                                            </div>
+                                            <h2 className="text-sm font-black text-gray-900 uppercase tracking-wider">Seek NEW Guidance</h2>
                                         </div>
-                                        <div className="flex items-center space-x-4">
-                                            <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${ticket.status === 'OPEN' ? 'bg-green-100 text-green-700' :
-                                                ticket.status === 'ANSWERED' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
-                                                }`}>
-                                                {ticket.status}
-                                            </span>
-                                            {expandedTicketId === ticket.id ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
-                                        </div>
+                                        {isNewQuestionExpanded ? (
+                                            <ChevronUp className="w-5 h-5 text-gray-400" />
+                                        ) : (
+                                            <ChevronDown className="w-5 h-5 text-gray-400" />
+                                        )}
                                     </div>
 
-                                    {/* Ticket Body (Expanded) */}
-                                    {expandedTicketId === ticket.id && (
-                                        <div className="bg-gray-50 p-4 border-t border-gray-100 space-y-3">
-                                            {ticket.messages.map((msg: any, idx: number) => (
-                                                <div key={idx} className={`flex ${msg.sender === 'USER' ? 'justify-end' : 'justify-start'}`}>
-                                                    <div className={`max-w-[80%] px-4 py-2.5 shadow-sm relative group w-fit ${msg.sender === 'USER'
-                                                        ? 'bg-ochre text-white rounded-[20px] rounded-tr-[4px]'
-                                                        : 'bg-white border border-gray-200 text-gray-800 rounded-[20px] rounded-tl-[4px]'
-                                                        }`}>
-                                                        <p className="text-[15px] leading-snug whitespace-pre-wrap">{msg.text}</p>
-                                                        <div className={`text-[9px] mt-1 font-medium flex items-center ${msg.sender === 'USER' ? 'text-orange-100/80 justify-end' : 'text-gray-400'}`}>
-                                                            {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-
-                                            {ticket.status !== 'CLOSED' && (
-                                                <div className="flex justify-center pt-2 border-t border-gray-200 mt-4">
+                                    {isNewQuestionExpanded && (
+                                        <div className="p-4 border-t border-gray-50 bg-gray-50/30 animate-in slide-in-from-top-2 duration-300">
+                                            <form onSubmit={handleSubmit} className="space-y-4">
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={newTicketSubject}
+                                                    onChange={(e) => setNewTicketSubject(e.target.value)}
+                                                    placeholder="Inquiry Topic..."
+                                                    className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-medium"
+                                                />
+                                                <textarea
+                                                    required
+                                                    rows={3}
+                                                    value={newTicketMessage}
+                                                    onChange={(e) => setNewTicketMessage(e.target.value)}
+                                                    placeholder="Briefly describe your request..."
+                                                    className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none resize-none font-medium"
+                                                />
+                                                <div className="flex justify-end">
                                                     <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setTicketToClose(ticket.id);
-                                                        }}
-                                                        className="flex items-center space-x-2 text-gray-500 hover:text-red-600 transition-colors py-2 px-6 rounded-full bg-white border border-gray-200 shadow-sm text-sm font-bold active:scale-95"
+                                                        type="submit"
+                                                        disabled={isSubmitting}
+                                                        className="bg-ochre text-white px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-50 flex items-center shadow-lg shadow-ochre/20"
                                                     >
-                                                        <CheckCircle2 className="w-4 h-4" />
-                                                        <span>Close this inquiry</span>
+                                                        {isSubmitting ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : 'Submit Inquiry'}
                                                     </button>
                                                 </div>
-                                            )}
+                                            </form>
                                         </div>
                                     )}
                                 </div>
-                            ))}
-                        </div>
+
+                                {/* Guidance History Sections */}
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex bg-gray-100 p-1.5 rounded-2xl w-full md:w-auto">
+                                            <button
+                                                onClick={() => setActiveTab('open')}
+                                                className={`flex-1 md:flex-none py-2 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'open' ? 'bg-white text-ochre shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                                            >
+                                                Active Guidance
+                                            </button>
+                                            <button
+                                                onClick={() => setActiveTab('closed')}
+                                                className={`flex-1 md:flex-none py-2 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'closed' ? 'bg-white text-ochre shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                                            >
+                                                Past Records
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {isLoading ? (
+                                        <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+                                            <Loader2 className="w-10 h-10 animate-spin mb-4 text-ochre/30" />
+                                            <p className="text-xs font-bold uppercase tracking-widest opacity-50">Syncing with server...</p>
+                                        </div>
+                                    ) : filteredTickets.length === 0 ? (
+                                        <div className="text-center py-20 bg-gray-50/50 rounded-3xl border-2 border-dashed border-gray-100 flex flex-col items-center justify-center">
+                                            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-4">
+                                                <MessageCircleQuestion className="w-6 h-6 text-gray-200" />
+                                            </div>
+                                            <p className="text-gray-400 text-sm font-medium">No inquiries found in this category.</p>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-4">
+                                            {filteredTickets.map((ticket: Ticket) => (
+                                                <div key={ticket.id} className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+                                                    {/* Ticket Header */}
+                                                    <div
+                                                        onClick={() => toggleExpand(ticket.id)}
+                                                        className={`p-4 md:p-5 flex items-center justify-between cursor-pointer transition-colors ${expandedTicketId === ticket.id ? 'bg-ochre/5' : 'hover:bg-gray-50/80'}`}
+                                                    >
+                                                        <div className="flex items-center space-x-4 min-w-0">
+                                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-none border transition-all ${ticket.status === 'ANSWERED'
+                                                                ? 'bg-blue-50 text-blue-600 border-blue-100 shadow-sm shadow-blue-500/20'
+                                                                : ticket.status === 'OPEN'
+                                                                    ? 'bg-green-50 text-green-600 border-green-100'
+                                                                    : 'bg-gray-50 text-gray-400 border-gray-100'
+                                                                }`}>
+                                                                <MessageCircleQuestion className={`w-5 h-5 ${ticket.status === 'OPEN' && 'animate-pulse'}`} />
+                                                            </div>
+                                                            <div className="min-w-0">
+                                                                <h3 className={`font-black text-sm md:text-base leading-tight truncate ${ticket.status === 'ANSWERED' ? 'text-blue-900' : 'text-gray-900'}`}>{ticket.subject}</h3>
+                                                                <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5 flex items-center space-x-2">
+                                                                    <span className="bg-gray-100 px-1.5 py-0.5 rounded text-[8px]">#{ticket.id.slice(-6)}</span>
+                                                                    <span>•</span>
+                                                                    <span>{new Date(ticket.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center space-x-3 ml-2">
+                                                            {ticket.status === 'ANSWERED' && (
+                                                                <span className="hidden md:block bg-blue-600 text-white px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest shadow-lg shadow-blue-500/30">
+                                                                    Answered
+                                                                </span>
+                                                            )}
+                                                            <div className={`p-1 rounded-full transition-colors ${expandedTicketId === ticket.id ? 'bg-ochre/20 text-ochre' : 'text-gray-300'}`}>
+                                                                {expandedTicketId === ticket.id ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Ticket Body (Expanded) */}
+                                                    {expandedTicketId === ticket.id && (
+                                                        <div className="bg-gray-50/50 p-4 md:p-6 border-t border-gray-50 space-y-4">
+                                                            {ticket.messages.map((msg: any, idx: number) => (
+                                                                <div key={idx} className={`flex flex-col ${msg.sender === 'USER' ? 'items-end' : 'items-start'}`}>
+                                                                    <div className={`text-[9px] font-black uppercase tracking-[0.15em] mb-1.5 ${msg.sender === 'USER' ? 'text-gray-400' : 'text-ochre'}`}>
+                                                                        {msg.sender === 'USER' ? 'Your Request' : 'Krishnaji Guidance'}
+                                                                    </div>
+                                                                    <div className={`max-w-[90%] px-4 py-3 shadow-sm relative group w-fit ${msg.sender === 'USER'
+                                                                        ? 'bg-white border border-gray-100 text-gray-800 rounded-2xl rounded-tr-none'
+                                                                        : 'bg-ochre text-white rounded-2xl rounded-tl-none font-medium'
+                                                                        }`}>
+                                                                        <p className="text-[14px] leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                                                                        <div className={`text-[10px] mt-2 font-bold opacity-60 flex items-center ${msg.sender === 'USER' ? 'text-gray-400' : 'text-white'}`}>
+                                                                            {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+
+                                                            {ticket.status !== 'CLOSED' && (
+                                                                <div className="flex justify-center pt-6 border-t border-gray-100 mt-4">
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            setTicketToClose(ticket.id);
+                                                                        }}
+                                                                        className="flex items-center space-x-2 text-red-600 hover:text-white hover:bg-red-600 transition-all py-2.5 px-6 rounded-xl border border-red-100 bg-white shadow-sm text-xs font-black uppercase tracking-widest active:scale-95"
+                                                                    >
+                                                                        <CheckCircle2 className="w-4 h-4" />
+                                                                        <span>Close Inquiry</span>
+                                                                    </button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </>
                     )}
                 </div>
             </SignedIn>
@@ -350,6 +430,6 @@ export default function AskPage() {
             >
                 Are you sure you want to close this inquiry? This will move it to your history.
             </Modal>
-        </div>
+        </div >
     );
 }
