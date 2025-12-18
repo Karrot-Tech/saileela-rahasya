@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { MessageCircleQuestion, Send, ChevronDown, ChevronUp, Loader2, CheckCircle2 } from 'lucide-react';
 import { SignedIn, SignedOut, SignInButton, useUser } from '@clerk/nextjs';
-import { getTickets, createTicket, closeTicket } from '@/actions/tickets';
+import { getTickets, createTicket, closeTicket, userReplyToTicket } from '@/actions/tickets';
 import { Notification, NotificationType } from '@/components/common/Notification';
 import { Modal } from '@/components/common/Modal';
 
@@ -36,6 +36,8 @@ export default function AskPage() {
     const [ticketToClose, setTicketToClose] = useState<string | null>(null);
     const [isSuccess, setIsSuccess] = useState(false);
     const [hasInitialLoaded, setHasInitialLoaded] = useState(false);
+    const [followUpText, setFollowUpText] = useState<{ [key: string]: string }>({});
+    const [isFollowUpSubmitting, setIsFollowUpSubmitting] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         if (isLoaded && isSignedIn) {
@@ -106,6 +108,27 @@ export default function AskPage() {
             setNotification({ message: "An unexpected error occurred.", type: 'error' });
         }
         setIsSubmitting(false);
+    };
+
+    const handleFollowUp = async (ticketId: string) => {
+        const text = followUpText[ticketId];
+        if (!text?.trim()) return;
+
+        setIsFollowUpSubmitting(prev => ({ ...prev, [ticketId]: true }));
+        try {
+            const result = await userReplyToTicket(ticketId, text);
+            if (result.success) {
+                setFollowUpText(prev => ({ ...prev, [ticketId]: '' }));
+                fetchTickets();
+                setNotification({ message: "Follow-up sent!", type: 'success' });
+            } else {
+                setNotification({ message: "Error: " + result.error, type: 'error' });
+            }
+        } catch (err) {
+            console.error('Error sending follow-up:', err);
+            setNotification({ message: "An unexpected error occurred.", type: 'error' });
+        }
+        setIsFollowUpSubmitting(prev => ({ ...prev, [ticketId]: false }));
     };
 
     if (!isLoaded) {
@@ -381,17 +404,36 @@ export default function AskPage() {
                                                             ))}
 
                                                             {ticket.status !== 'CLOSED' && (
-                                                                <div className="flex justify-center pt-6 border-t border-gray-100 mt-4">
-                                                                    <button
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            setTicketToClose(ticket.id);
-                                                                        }}
-                                                                        className="flex items-center space-x-2 text-red-600 hover:text-white hover:bg-red-600 transition-all py-2.5 px-6 rounded-xl border border-red-100 bg-white shadow-sm text-xs font-black uppercase tracking-widest active:scale-95"
-                                                                    >
-                                                                        <CheckCircle2 className="w-4 h-4" />
-                                                                        <span>Close Inquiry</span>
-                                                                    </button>
+                                                                <div className="space-y-4 pt-4 border-t border-gray-100 mt-4">
+                                                                    <div className="space-y-2">
+                                                                        <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 ml-1">Send Follow-up</label>
+                                                                        <textarea
+                                                                            value={followUpText[ticket.id] || ''}
+                                                                            onChange={(e) => setFollowUpText(prev => ({ ...prev, [ticket.id]: e.target.value }))}
+                                                                            placeholder="Type your clarifying question here..."
+                                                                            rows={3}
+                                                                            className="w-full bg-white border border-gray-100 rounded-2xl p-3 text-sm focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all resize-none font-medium"
+                                                                        />
+                                                                        <div className="flex justify-between items-center">
+                                                                            <button
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                    setTicketToClose(ticket.id);
+                                                                                }}
+                                                                                className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-red-500 transition-colors"
+                                                                            >
+                                                                                Close Inquiry
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => handleFollowUp(ticket.id)}
+                                                                                disabled={isFollowUpSubmitting[ticket.id] || !followUpText[ticket.id]?.trim()}
+                                                                                className="bg-ochre text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-30 shadow-lg shadow-ochre/20 flex items-center"
+                                                                            >
+                                                                                {isFollowUpSubmitting[ticket.id] ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : <Send className="w-3 h-3 mr-2" />}
+                                                                                Send
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             )}
                                                         </div>

@@ -218,3 +218,56 @@ export async function closeTicket(ticketId: string) {
         return { success: false, error: 'Failed to close ticket' };
     }
 }
+
+export async function userReplyToTicket(ticketId: string, text: string) {
+    try {
+        const clerkUser = await currentUser();
+        const userEmail = clerkUser?.emailAddresses[0]?.emailAddress;
+
+        if (!userEmail) {
+            return { success: false, error: 'Unauthorized' };
+        }
+
+        // Verify ownership
+        const ticket = await prisma.ticket.findUnique({
+            where: { id: ticketId },
+            include: { user: true }
+        });
+
+        if (!ticket || ticket.user.email !== userEmail) {
+            return { success: false, error: 'Unauthorized' };
+        }
+
+        if (ticket.status === 'CLOSED') {
+            return { success: false, error: 'Cannot reply to a closed inquiry' };
+        }
+
+        const message = await prisma.message.create({
+            data: {
+                ticketId,
+                text,
+                sender: 'USER'
+            }
+        });
+
+        // Set status back to OPEN so admin knows there is a follow-up
+        await prisma.ticket.update({
+            where: { id: ticketId },
+            data: { status: 'OPEN' }
+        });
+
+        revalidatePath('/ask');
+        revalidatePath('/admin/tickets');
+
+        return {
+            success: true,
+            message: {
+                ...message,
+                createdAt: message.createdAt.toISOString()
+            }
+        };
+    } catch (error) {
+        console.error('Error posting follow-up:', error);
+        return { success: false, error: 'Failed to send follow-up' };
+    }
+}
