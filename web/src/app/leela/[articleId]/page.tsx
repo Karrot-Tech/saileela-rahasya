@@ -2,11 +2,31 @@ import leelaArticles from '@/data/leela_articles.json';
 import ReferenceVideos from '@/components/features/ReferenceVideos';
 import ChapterTextViewer from '@/components/features/ChapterTextViewer';
 
+import { Metadata } from 'next';
+
 // Server Component
 export async function generateStaticParams() {
     return leelaArticles.map((article) => ({
         articleId: article.id.toString(),
     }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ articleId: string }> }): Promise<Metadata> {
+    const { articleId } = await params;
+    const article = leelaArticles.find((c) => c.id.toString() === articleId);
+
+    if (!article) return { title: 'Article Not Found' };
+
+    return {
+        title: article.title_english,
+        description: article.description.substring(0, 160),
+        keywords: article.keywords,
+        openGraph: {
+            title: article.title_english,
+            description: article.description.substring(0, 160),
+            images: [`https://img.youtube.com/vi/${article.youtube_id}/maxresdefault.jpg`],
+        }
+    };
 }
 
 

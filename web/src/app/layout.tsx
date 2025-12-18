@@ -15,8 +15,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sai Leela Rahasya",
-  description: "Digital study guide for Krishnaji's teachings.",
+  title: {
+    default: "Sai Leela Rahasya",
+    template: "%s | Sai Leela Rahasya",
+  },
+  description: "Digital study guide for Krishnaji's teachings. Explore the secret plays of Sai Baba through Leelas, Bodhakathas, and spiritual guidance.",
+  keywords: ["Sai Baba", "Shirdi Sai Baba", "Sai Leela Rahasya", "Krishnaji", "Spiritual Guidance", "Sai Satcharitra", "Bhajans"],
+  authors: [{ name: "Krishnaji" }],
+  openGraph: {
+    title: "Sai Leela Rahasya",
+    description: "Digital study guide for Krishnaji's teachings.",
+    url: "https://saibisa-103.firebaseapp.com", // Assuming this is the canonical URL or update later
+    siteName: "Sai Leela Rahasya",
+    images: [
+      {
+        url: "/icon.png",
+        width: 512,
+        height: 512,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sai Leela Rahasya",
+    description: "Digital study guide for Krishnaji's teachings.",
+    images: ["/icon.png"],
+  },
 };
 
 import { ClerkProvider } from '@clerk/nextjs'
