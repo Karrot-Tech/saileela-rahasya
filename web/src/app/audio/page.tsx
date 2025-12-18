@@ -124,7 +124,7 @@ export default function AudioPage() {
                             <div
                                 key={track.id}
                                 onClick={() => handleTrackClick(track)}
-                                className={`flex items-center p-3 md:p-4 border-b border-gray-50 last:border-0 cursor-pointer hover:bg-orange-50/50 transition-colors ${isCurrent ? 'bg-orange-50' : ''
+                                className={`flex items-center p-3 md:p-4 border-b border-gray-50 last:border-0 cursor-pointer hover:bg-orange-50/50 transition-colors active:bg-orange-100/50 ${isCurrent ? 'bg-orange-50' : ''
                                     }`}
                             >
                                 {/* Index */}

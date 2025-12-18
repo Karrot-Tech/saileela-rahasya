@@ -3,15 +3,15 @@ import { ArrowRight, Youtube, Facebook, Instagram } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] space-y-12 text-center pt-6">
+    <div className="flex flex-col items-center justify-center min-h-[85vh] md:min-h-[80vh] space-y-8 md:space-y-12 text-center pt-2 md:pt-6">
 
       {/* Hero Section */}
       <div className="space-y-6 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700 w-full px-4">
-        <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white/50 mx-auto">
+        <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white mx-auto max-w-sm md:max-w-none">
           <img
             src="/hero-main.jpg"
             alt="Sai Baba - Meri Bhi Suno"
-            className="w-full h-auto object-cover"
+            className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700"
           />
         </div>
 
@@ -24,9 +24,9 @@ export default function Home() {
 
         <div className="h-px w-24 bg-gold mx-auto my-6 opacity-50" />
 
-        <p className="text-gray-500 text-lg leading-relaxed max-w-lg mx-auto">
+        <p className="text-gray-500 text-base md:text-lg leading-relaxed max-w-lg mx-auto px-6 md:px-0">
           We have believed Sai for years, now let&apos;s learn something. <br />
-          <span className="text-ochre font-medium">It&apos;s not our application, Sai, it&apos;s your choice.</span>
+          <span className="text-ochre font-semibold block mt-1 tracking-wide">It&apos;s not our application, Sai, it&apos;s your choice.</span>
         </p>
       </div>
 

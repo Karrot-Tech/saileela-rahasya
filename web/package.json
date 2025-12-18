@@ -9,17 +9,29 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@clerk/localizations": "^3.31.0",
+    "@clerk/nextjs": "^6.36.3",
+    "@neondatabase/serverless": "^1.0.2",
+    "@prisma/adapter-neon": "^7.2.0",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
+    "@vercel/postgres": "^0.10.0",
     "hls.js": "^1.6.15",
     "lucide-react": "^0.561.0",
     "next": "16.0.10",
+    "pg": "^8.16.3",
+    "prisma": "^7.2.0",
     "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "react-dom": "19.2.1",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/ws": "^8.18.1",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "tailwindcss": "^4",

@@ -20,7 +20,7 @@ export default function LeelaPage() {
                     <Link
                         key={article.id}
                         href={`/leela/${article.id}`}
-                        className="block p-6 bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-gold transition-all group"
+                        className="block p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-gold transition-all group active:scale-[0.98]"
                     >
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="space-y-2">

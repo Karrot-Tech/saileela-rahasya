@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Footprints, Lightbulb, Radio, Music, MessageCircleQuestion, BookA } from 'lucide-react';
+import { Footprints, Lightbulb, Radio, Music, MessageCircleQuestion, BookA, ShieldCheck } from 'lucide-react';
+import { useUser } from '@clerk/nextjs';
 
 const NAV_ITEMS = [
     { label: 'Leela', href: '/leela', icon: Footprints },
@@ -12,8 +13,13 @@ const NAV_ITEMS = [
     { label: 'Ask Krishnaji', href: '/ask', icon: MessageCircleQuestion },
 ];
 
+const ADMIN_EMAILS = ['pavankumarpai@gmail.com', 'pavanpaik2025@gmail.com'];
+
 export default function Sidebar() {
     const pathname = usePathname();
+    const { user } = useUser();
+    const userEmail = user?.emailAddresses[0]?.emailAddress;
+    const isAdmin = userEmail && ADMIN_EMAILS.includes(userEmail);
 
     return (
         <aside className="hidden md:flex flex-col w-64 fixed left-0 top-0 bottom-0 bg-white border-r border-gray-100 z-40">
@@ -57,6 +63,12 @@ export default function Sidebar() {
                         <span>Glossary</span>
                     </Link>
 
+                    {isAdmin && (
+                        <Link href="/admin/tickets" className={`flex items-center space-x-3 px-4 py-2 text-sm hover:bg-red-50 rounded-lg transition-colors ${pathname.startsWith('/admin') ? 'text-red-600 font-bold bg-red-50' : 'text-gray-500'}`}>
+                            <ShieldCheck className="w-4 h-4" />
+                            <span>Admin Dashboard</span>
+                        </Link>
+                    )}
                 </div>
             </nav>
 

@@ -23,29 +23,38 @@ export default function GlossaryOverlay({ term, onClose }: GlossaryOverlayProps)
     const definition = language === 'es' ? term.definition_es : term.definition_en;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-            {/* Backdrop - specific for clicking outside */}
+        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+            {/* Backdrop */}
             <div
-                className="absolute inset-0 pointer-events-auto"
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity pointer-events-auto"
                 onClick={onClose}
             />
 
-            {/* Card */}
-            <div className="bg-white rounded-lg shadow-xl border border-ochre/20 p-6 max-w-sm w-full mx-4 relative animate-in fade-in zoom-in duration-200 pointer-events-auto">
+            {/* Card / Bottom Sheet */}
+            <div className="bg-white rounded-t-3xl md:rounded-2xl shadow-2xl border-t md:border border-ochre/20 p-8 max-w-lg w-full relative animate-in slide-in-from-bottom md:zoom-in duration-300 pointer-events-auto z-10">
+                <div className="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-6 md:hidden" />
+
                 <button
                     onClick={onClose}
-                    className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 p-1"
+                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
-                    <X className="w-5 h-5" />
+                    <X className="w-6 h-6" />
                 </button>
 
-                <h3 className="text-xl font-bold text-ochre mb-2">{term.term}</h3>
-                <p className="text-gray-700 font-serif leading-relaxed">
-                    {definition}
-                </p>
-                <span className="text-xs text-gray-400 mt-4 block">
-                    Source: {term.chapter}
-                </span>
+                <div className="space-y-4">
+                    <div className="inline-block px-3 py-1 bg-ochre/10 text-ochre text-xs font-bold rounded-full uppercase tracking-wider">
+                        Glossary Term
+                    </div>
+                    <h3 className="text-3xl font-bold text-gray-900 leading-tight">{term.term}</h3>
+                    <div className="h-0.5 w-12 bg-gold/50" />
+                    <p className="text-gray-700 text-lg font-serif leading-relaxed">
+                        {definition}
+                    </p>
+                    <div className="pt-4 flex items-center text-sm text-gray-400 font-medium">
+                        <span className="w-6 h-px bg-gray-200 mr-2" />
+                        Source: {term.chapter}
+                    </div>
+                </div>
             </div>
         </div>
     );

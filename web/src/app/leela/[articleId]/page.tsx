@@ -32,11 +32,11 @@ export default async function LeelaDetailPage({ params }: { params: Promise<{ ar
     }];
 
     return (
-        <div className="flex flex-col lg:flex-row gap-8 h-[calc(100vh-8rem)] pt-6">
+        <div className="flex flex-col lg:flex-row gap-8 lg:h-[calc(100vh-8rem)] pt-2 md:pt-6">
             {/* Left: Text Content (Prominent) - First on mobile and desktop */}
-            <div className="w-full lg:w-2/3 flex-1 overflow-y-auto pr-4 custom-scrollbar">
+            <div className="w-full lg:w-2/3 flex-1 lg:overflow-y-auto lg:pr-4 custom-scrollbar">
 
-                <article className="prose prose-ochre max-w-none bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                <article className="prose prose-ochre max-w-none bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100">
                     <div className="mb-6 border-b border-gray-100 pb-4">
                         <h1 className="text-xl md:text-3xl font-bold text-gray-800 mb-2">{article.title_english}</h1>
                         <h2 className="text-lg md:text-2xl text-ochre font-serif">{article.title_hindi}</h2>

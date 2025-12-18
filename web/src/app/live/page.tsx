@@ -6,27 +6,31 @@ import VideoPlayer from '@/components/features/VideoPlayer';
 import { Radio } from 'lucide-react';
 import { useAudio } from '@/context/AudioContext';
 import { useRouter } from 'next/navigation';
+import { Modal } from '@/components/common/Modal';
 
 export default function LivePage() {
     const { isPlaying, closePlayer } = useAudio();
     const router = useRouter();
-    // Use a ref to track if we've already checked on mount to avoid double-firing in strict mode
+    const [showAudioConfirm, setShowAudioConfirm] = React.useState(false);
+    // Use a ref to track if we've already checked on mount
     const hasCheckedAudio = useRef(false);
 
     useEffect(() => {
         if (!hasCheckedAudio.current && isPlaying) {
-            // Use setTimeout to ensure the DOM is fully ready and to avoid blocking the render immediately
-            setTimeout(() => {
-                const shouldStop = window.confirm("Music is currently playing. Would you like to stop it to watch the live stream?");
-                if (shouldStop) {
-                    closePlayer();
-                } else {
-                    router.back();
-                }
-            }, 100);
+            setShowAudioConfirm(true);
             hasCheckedAudio.current = true;
         }
-    }, [isPlaying, closePlayer, router]);
+    }, [isPlaying]);
+
+    const handleConfirmAudioStop = () => {
+        closePlayer();
+        setShowAudioConfirm(false);
+    };
+
+    const handleCancelAudioStop = () => {
+        setShowAudioConfirm(false);
+        router.back();
+    };
 
     return (
         <div className="max-w-6xl mx-auto space-y-6 pt-6 px-4">
@@ -103,6 +107,30 @@ export default function LivePage() {
                     ))}
                 </div>
             </div>
+
+            <Modal
+                isOpen={showAudioConfirm}
+                onClose={handleCancelAudioStop}
+                title="Stop Music?"
+                actions={
+                    <>
+                        <button
+                            onClick={handleCancelAudioStop}
+                            className="w-full py-3 rounded-xl border border-gray-200 font-bold text-gray-600 hover:bg-gray-50 transition"
+                        >
+                            No, Go Back
+                        </button>
+                        <button
+                            onClick={handleConfirmAudioStop}
+                            className="w-full py-3 rounded-xl bg-ochre text-white font-bold hover:bg-orange-700 transition shadow-lg"
+                        >
+                            Yes, Stop Music
+                        </button>
+                    </>
+                }
+            >
+                Music is currently playing. Would you like to stop it to watch the live stream?
+            </Modal>
         </div>
     );
 }
