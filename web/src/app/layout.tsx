@@ -18,6 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://saileelarahasya-web.vercel.app'),
   title: {
     default: "Sai Leela Rahasya",
     template: "%s | Sai Leela Rahasya",
