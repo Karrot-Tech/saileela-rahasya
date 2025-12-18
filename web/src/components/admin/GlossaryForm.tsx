@@ -54,9 +54,9 @@ export default function GlossaryForm({ glossary }: GlossaryFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 md:space-y-10">
+        <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
             {/* Header / Actions */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/90 backdrop-blur-sm p-4 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 sticky top-16 lg:top-0 z-30 gap-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/90 backdrop-blur-sm p-3 md:p-4 rounded-2xl shadow-md border border-gray-100 sticky top-16 lg:top-0 z-30 gap-3">
                 <Link href="/admin/glossary" className="flex items-center text-gray-400 hover:text-ochre text-xs font-black uppercase tracking-widest transition-colors">
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Back to List
@@ -84,93 +84,59 @@ export default function GlossaryForm({ glossary }: GlossaryFormProps) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-10">
-                {/* Side Panel: Basic Info */}
-                <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100 space-y-6">
-                        <div className="space-y-1">
-                            <h2 className="text-lg font-black text-gray-900 tracking-tight">Essential Info</h2>
-                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">Core term details</p>
+            <div className="space-y-4 md:space-y-6 max-w-4xl">
+                {/* Basic Info Card */}
+                <div className="bg-white p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 space-y-4 md:space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div className="space-y-1.5">
+                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">The Term</label>
+                            <input
+                                required
+                                placeholder="e.g. Bhiksha"
+                                className="w-full px-4 py-3 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none text-base font-bold transition-all"
+                                value={formData.term}
+                                onChange={(e) => setFormData({ ...formData, term: e.target.value })}
+                            />
                         </div>
+                        <div className="space-y-1.5">
+                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Reference / Chapter</label>
+                            <input
+                                placeholder="e.g. Chapter 8"
+                                className="w-full px-4 py-3 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none text-base font-medium transition-all"
+                                value={formData.chapter}
+                                onChange={(e) => setFormData({ ...formData, chapter: e.target.value })}
+                            />
+                        </div>
+                    </div>
 
-                        <div className="space-y-4">
-                            <div className="space-y-1.5">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">The Term</label>
-                                <input
-                                    required
-                                    placeholder="e.g. Bhiksha"
-                                    className="w-full px-4 py-3 border border-gray-50 bg-gray-50/50 rounded-2xl focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none text-base font-medium transition-all"
-                                    value={formData.term}
-                                    onChange={(e) => setFormData({ ...formData, term: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-1.5">
-                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Reference</label>
-                                <input
-                                    placeholder="e.g. Chapter 8"
-                                    className="w-full px-4 py-3 border border-gray-50 bg-gray-50/50 rounded-2xl focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none text-base font-medium transition-all"
-                                    value={formData.chapter}
-                                    onChange={(e) => setFormData({ ...formData, chapter: e.target.value })}
-                                />
-                            </div>
+                    <div className="space-y-1.5">
+                        <div className="flex justify-between items-end px-1">
+                            <label className="text-[10px] font-black text-ochre uppercase tracking-widest">English Definition</label>
+                            <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">{formData.definition_en.length} chars</span>
                         </div>
+                        <textarea
+                            required
+                            rows={6}
+                            placeholder="Enter the spiritual meaning or context..."
+                            className="w-full px-4 py-4 border border-gray-100 bg-gray-50/30 rounded-2xl focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none text-[15px] leading-relaxed font-medium transition-all resize-none shadow-inner"
+                            value={formData.definition_en}
+                            onChange={(e) => setFormData({ ...formData, definition_en: e.target.value })}
+                        />
                     </div>
                 </div>
 
-                {/* Main Content: Definitions */}
-                <div className="lg:col-span-3 space-y-6">
-                    <div className="bg-white p-6 md:p-10 rounded-[3rem] shadow-sm border border-gray-100 space-y-8">
-                        <div className="space-y-1">
-                            <h2 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight">Definitions</h2>
-                            <p className="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-widest">Multi-lingual spiritual context</p>
-                        </div>
-
-                        <div className="space-y-8">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-ochre uppercase tracking-widest ml-1">English Definition (Primary)</label>
-                                <textarea
-                                    required
-                                    rows={4}
-                                    placeholder="Enter the English meaning..."
-                                    className="w-full px-5 py-4 border border-gray-50 bg-gray-50/30 rounded-[2rem] focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none text-[15px] leading-relaxed font-medium transition-all resize-none shadow-inner"
-                                    value={formData.definition_en}
-                                    onChange={(e) => setFormData({ ...formData, definition_en: e.target.value })}
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Hindi Translation</label>
-                                    <textarea
-                                        rows={4}
-                                        placeholder="हिन्दी अर्थ..."
-                                        className="w-full px-5 py-4 border border-gray-50 bg-gray-50/30 rounded-[2rem] focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none text-[17px] leading-relaxed font-serif transition-all resize-none shadow-inner"
-                                        value={formData.definition_hi}
-                                        onChange={(e) => setFormData({ ...formData, definition_hi: e.target.value })}
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Spanish Translation</label>
-                                    <textarea
-                                        rows={4}
-                                        placeholder="Definición en español..."
-                                        className="w-full px-5 py-4 border border-gray-50 bg-gray-50/30 rounded-[2rem] focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none text-[15px] leading-relaxed font-medium transition-all resize-none shadow-inner"
-                                        value={formData.definition_es}
-                                        onChange={(e) => setFormData({ ...formData, definition_es: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {/* Info Text */}
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center">
+                    Translations are now handled automatically by the system
+                </p>
             </div>
 
             {/* Bottom Save Action */}
-            <div className="pt-10 pb-6 flex justify-center">
+            <div className="pt-6 pb-6 flex justify-center">
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full md:w-auto bg-ochre text-white px-12 py-4 rounded-3xl hover:bg-gold transition-all flex items-center justify-center space-x-3 shadow-xl shadow-ochre/30 text-xs md:text-sm font-black uppercase tracking-widest active:scale-95"
+                    className="w-full md:w-auto bg-ochre text-white px-10 py-3.5 rounded-2xl hover:bg-gold transition-all flex items-center justify-center space-x-3 shadow-xl shadow-ochre/30 text-xs font-black uppercase tracking-widest active:scale-95"
                 >
                     <Save className="w-5 h-5" />
                     <span>{loading ? 'Saving Changes...' : 'Save Term'}</span>
