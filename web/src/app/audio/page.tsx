@@ -48,7 +48,7 @@ export default function AudioPage() {
     return (
         <div className="max-w-4xl mx-auto space-y-6 mb-24 pt-6">
             {/* Header */}
-            <div className="flex items-center space-x-4 pb-2 border-b border-gray-100 px-4">
+            <div className="flex items-center space-x-4 pb-2 border-b border-gray-100 px-6">
                 <div className="w-12 h-12 bg-ochre/10 rounded-full flex items-center justify-center text-ochre flex-none">
                     <Music className="w-6 h-6" />
                 </div>
@@ -124,7 +124,7 @@ export default function AudioPage() {
                             <div
                                 key={track.id}
                                 onClick={() => handleTrackClick(track)}
-                                className={`flex items-center p-3 md:p-4 border-b border-gray-50 last:border-0 cursor-pointer hover:bg-orange-50/50 transition-colors active:bg-orange-100/50 ${isCurrent ? 'bg-orange-50' : ''
+                                className={`flex items-center py-3 pr-5 pl-2 md:px-6 md:py-4 border-b border-gray-50 last:border-0 cursor-pointer hover:bg-orange-50/50 transition-colors active:bg-orange-100/50 ${isCurrent ? 'bg-orange-50' : ''
                                     }`}
                             >
                                 {/* Index */}

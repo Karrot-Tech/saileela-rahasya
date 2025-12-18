@@ -22,7 +22,7 @@ export default function MiniPlayer() {
                 />
             </div>
 
-            <div className="flex items-center justify-between px-4 py-3">
+            <div className="flex items-center justify-between px-6 py-3">
                 {/* Track Info */}
                 <div className="flex items-center space-x-3 overflow-hidden flex-1 mr-4">
                     <div className="w-10 h-10 bg-ochre/10 rounded flex items-center justify-center flex-shrink-0 text-ochre">
