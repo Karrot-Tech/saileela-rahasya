@@ -21,7 +21,7 @@ export default async function AdminDashboard() {
 
     const panels = [
         {
-            title: 'Leela Management',
+            title: 'Leela',
             count: leelaCount,
             description: 'Add, edit or delete stories of Sai Baba\'s divine plays.',
             href: '/admin/leela',
