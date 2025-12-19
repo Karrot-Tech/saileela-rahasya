@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useUser, SignInButton, SignOutButton, SignedIn, SignedOut, useClerk } from '@clerk/nextjs';
 import { User, X, BookA, ShieldCheck, ArrowRight, LogOut, Settings, LayoutDashboard, History } from 'lucide-react';
+import { useInquiry } from '@/context/InquiryContext';
 
 const getAdminEmails = () => {
     const emails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '').replace(/['"]/g, '');
@@ -16,6 +17,7 @@ export default function UtilityMenu() {
     const { isLoaded, isSignedIn, user } = useUser();
     const { openUserProfile } = useClerk();
     const pathname = usePathname();
+    const { unreadCount } = useInquiry();
 
     const adminEmails = getAdminEmails();
     const isAdmin = user?.emailAddresses.some(emailObj =>
@@ -46,7 +48,7 @@ export default function UtilityMenu() {
                     )}
                     <button
                         onClick={toggleMenu}
-                        className="flex-none transition-transform active:scale-90"
+                        className="flex-none transition-transform active:scale-90 relative"
                     >
                         {user?.imageUrl ? (
                             <img
@@ -58,6 +60,9 @@ export default function UtilityMenu() {
                             <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-ochre border-2 border-white shadow-md flex items-center justify-center text-white font-black text-xs">
                                 {user?.firstName?.charAt(0) || 'U'}
                             </div>
+                        )}
+                        {unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-blue-600 border-2 border-white rounded-full shadow-sm animate-pulse" />
                         )}
                     </button>
                 </SignedIn>
@@ -144,8 +149,13 @@ export default function UtilityMenu() {
 
                             <Link href="/ask" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3.5 hover:bg-ochre/5 rounded-[1.25rem] transition-all group border border-transparent hover:border-ochre/10">
                                 <div className="flex items-center gap-4 text-gray-700 group-hover:text-ochre">
-                                    <div className="w-10 h-10 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 group-hover:bg-ochre/10 group-hover:text-ochre transition-all flex-none">
+                                    <div className="w-10 h-10 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 group-hover:bg-ochre/10 group-hover:text-ochre transition-all flex-none relative">
                                         <History className="w-5 h-5" />
+                                        {unreadCount > 0 && (
+                                            <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-blue-600 px-1 text-[8px] font-bold text-white shadow-md border-2 border-white animate-in zoom-in duration-300">
+                                                {unreadCount}
+                                            </span>
+                                        )}
                                     </div>
                                     <div className="text-left">
                                         <p className="font-black text-xs text-gray-900 tracking-tight leading-none group-hover:text-ochre transition-colors">Guidance History</p>

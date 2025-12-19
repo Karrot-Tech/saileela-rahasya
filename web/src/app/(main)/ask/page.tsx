@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { MessageCircleQuestion, Send, ChevronDown, ChevronUp, Loader2, CheckCircle2, Archive } from 'lucide-react';
 import { useUser, SignInButton } from '@clerk/nextjs';
 import { getTickets, createTicket, closeTicket, userReplyToTicket } from '@/actions/tickets';
+import { useInquiry } from '@/context/InquiryContext';
 import { Notification, NotificationType } from '@/components/common/Notification';
 import { Modal } from '@/components/common/Modal';
 
@@ -23,48 +24,41 @@ type Ticket = {
 };
 
 export default function AskPage() {
-    const { isLoaded, isSignedIn } = useUser();
+    const { user, isLoaded, isSignedIn } = useUser();
+    const {
+        tickets,
+        refreshTickets,
+        isLoading: isContextLoading,
+        readMessages,
+        markAsRead,
+        acknowledgedTickets,
+        acknowledgeTicket
+    } = useInquiry();
+
     const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open');
     const [expandedTicketId, setExpandedTicketId] = useState<string | null>(null);
-    const [isNewQuestionExpanded, setIsNewQuestionExpanded] = useState(false);
-
-    const [tickets, setTickets] = useState<Ticket[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [newTicketSubject, setNewTicketSubject] = useState('');
     const [newTicketMessage, setNewTicketMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [notification, setNotification] = useState<{ message: string; type: NotificationType } | null>(null);
+    const [isNewQuestionExpanded, setIsNewQuestionExpanded] = useState(false);
+    const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
     const [ticketToClose, setTicketToClose] = useState<string | null>(null);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [hasInitialLoaded, setHasInitialLoaded] = useState(false);
     const [followUpText, setFollowUpText] = useState<{ [key: string]: string }>({});
     const [isFollowUpSubmitting, setIsFollowUpSubmitting] = useState<{ [key: string]: boolean }>({});
 
     const [archiveSuccess, setArchiveSuccess] = useState(false);
     const [lastSentMessageId, setLastSentMessageId] = useState<string | null>(null);
-    const [readMessages, setReadMessages] = useState<{ [key: string]: string }>({});
-    const [acknowledgedTickets, setAcknowledgedTickets] = useState<string[]>([]);
+    const [sessionStayIds, setSessionStayIds] = useState<Set<string>>(new Set());
     const scrollRef = useRef<HTMLDivElement>(null);
 
+    // Initial expansion check
     useEffect(() => {
-        const savedRead = localStorage.getItem('krishnasagar_read_messages');
-        if (savedRead) {
-            try {
-                setReadMessages(JSON.parse(savedRead));
-            } catch (e) {
-                console.error('Failed to parse read messages', e);
-            }
+        if (!isContextLoading && tickets.length === 0) {
+            setIsNewQuestionExpanded(true);
+        } else if (!isContextLoading) {
+            setIsNewQuestionExpanded(false);
         }
-
-        const savedAck = localStorage.getItem('krishnasagar_acknowledged_tickets');
-        if (savedAck) {
-            try {
-                setAcknowledgedTickets(JSON.parse(savedAck));
-            } catch (e) {
-                console.error('Failed to parse acknowledged tickets', e);
-            }
-        }
-    }, []);
+    }, [isContextLoading, tickets.length]);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -72,58 +66,32 @@ export default function AskPage() {
         }
     }, [tickets, expandedTicketId]);
 
-    const fetchTickets = async () => {
-        setIsLoading(true);
-        try {
-            const data = await getTickets();
-            const currentData = data as unknown as Ticket[];
-            setTickets(currentData);
-
-            const hasAnyTickets = currentData.length > 0;
-            if (!hasAnyTickets) {
-                setIsNewQuestionExpanded(true);
-            } else {
-                setIsNewQuestionExpanded(false);
-            }
-        } catch (err) {
-            console.error('Failed to fetch tickets:', err);
-        }
-        setIsLoading(false);
-        setHasInitialLoaded(true);
-    };
-
-    useEffect(() => {
-        if (isLoaded && isSignedIn) {
-            fetchTickets();
-        } else if (isLoaded) {
-            setIsLoading(false);
-        }
-    }, [isLoaded, isSignedIn]);
-
     const handleOpenTicket = (ticket: Ticket) => {
         setExpandedTicketId(ticket.id);
+
+        // If this becomes "archive ready" by reading it, keep it sticky in Ongoing for this session
+        if (ticket.status === 'CLOSED') {
+            setSessionStayIds(prev => new Set(prev).add(ticket.id));
+        }
+
         if (ticket.messages.length > 0) {
-            const lastMsgId = ticket.messages[ticket.messages.length - 1].id;
-            const next = { ...readMessages, [ticket.id]: lastMsgId };
-            setReadMessages(next);
-            localStorage.setItem('krishnasagar_read_messages', JSON.stringify(next));
+            markAsRead(ticket.id, ticket.messages[ticket.messages.length - 1].id);
         }
     };
 
     const handleCloseTicket = async () => {
         if (!ticketToClose) return;
 
+        // Keep it sticky in Ongoing so it doesn't vanish immediately
+        setSessionStayIds(prev => new Set(prev).add(ticketToClose));
+
         const result = await closeTicket(ticketToClose);
         if (result.success) {
             setArchiveSuccess(true);
-            // Move to acknowledged immediately so it shifts to Archived tab
-            const next = [...acknowledgedTickets, ticketToClose];
-            setAcknowledgedTickets(next);
-            localStorage.setItem('krishnasagar_acknowledged_tickets', JSON.stringify(next));
-
-            fetchTickets();
+            acknowledgeTicket(ticketToClose);
+            refreshTickets();
             setTimeout(() => setArchiveSuccess(false), 4000);
-            setExpandedTicketId(null); // Close the chat modal if it was open
+            setExpandedTicketId(null);
         } else {
             setNotification({ message: "Error closing inquiry: " + (result.error || "Unknown error"), type: 'error' });
         }
@@ -139,12 +107,9 @@ export default function AskPage() {
             if (result.success) {
                 setNewTicketSubject('');
                 setNewTicketMessage('');
-                fetchTickets();
-                setIsSuccess(true);
-                setTimeout(() => {
-                    setIsSuccess(false);
-                    setIsNewQuestionExpanded(false);
-                }, 4000);
+                setNotification({ message: "Inquiry submitted successfully. Krishnaji will provide guidance soon.", type: 'success' });
+                setIsNewQuestionExpanded(false);
+                refreshTickets();
             } else {
                 setNotification({ message: "Error: " + result.error, type: 'error' });
             }
@@ -167,12 +132,10 @@ export default function AskPage() {
                 if (result.message?.id) {
                     setLastSentMessageId(result.message.id);
                     // Also mark our own reply as read
-                    const next = { ...readMessages, [ticketId]: result.message.id };
-                    setReadMessages(next);
-                    localStorage.setItem('krishnasagar_read_messages', JSON.stringify(next));
+                    markAsRead(ticketId, result.message.id);
                     setTimeout(() => setLastSentMessageId(null), 3000);
                 }
-                fetchTickets();
+                refreshTickets();
             } else {
                 setNotification({ message: "Error: " + result.error, type: 'error' });
             }
@@ -201,9 +164,13 @@ export default function AskPage() {
         // A CLOSED ticket belongs in Archive if it has been read OR explicitly archived
         const belongsInArchive = t.status === 'CLOSED' && (isRead || isAck);
 
+        // STICKY LOGIC: If it became archive-ready during this session, keep it in "open" tab
+        const isSticky = sessionStayIds.has(t.id);
+
         if (activeTab === 'open') {
-            return !belongsInArchive;
+            return !belongsInArchive || isSticky;
         } else {
+            // In the archive tab, show it only if it's truly archive ready
             return belongsInArchive;
         }
     });
@@ -253,7 +220,7 @@ export default function AskPage() {
                         </div>
                     </div>
 
-                    {!hasInitialLoaded ? (
+                    {isContextLoading ? (
                         /* LOADING STATE - Prevents Layout Jump */
                         <div className="flex flex-col items-center justify-center py-32 text-gray-300">
                             <Loader2 className="w-10 h-10 animate-spin mb-4 text-ochre/20" />
@@ -276,54 +243,44 @@ export default function AskPage() {
                                         </div>
 
                                         <div className="pt-4 text-left">
-                                            {isSuccess ? (
-                                                <div className="flex flex-col items-center justify-center py-10 text-center animate-in fade-in zoom-in duration-500">
-                                                    <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center text-green-600 mb-6 shadow-sm border border-green-100">
-                                                        <CheckCircle2 className="w-8 h-8" />
-                                                    </div>
-                                                    <h3 className="text-xl font-bold text-gray-900">Success!</h3>
-                                                    <p className="text-gray-500 mt-2 max-w-[250px] mx-auto text-sm">Your inquiry has been shared with Krishnaji.</p>
+                                            <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto">
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">Inquiry Topic</label>
+                                                    <input
+                                                        type="text"
+                                                        required
+                                                        value={newTicketSubject}
+                                                        onChange={(e) => setNewTicketSubject(e.target.value)}
+                                                        placeholder="e.g., Guidance on Meditation Practice"
+                                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-2.5 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-sm font-medium"
+                                                    />
                                                 </div>
-                                            ) : (
-                                                <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
-                                                    <div className="space-y-1.5">
-                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">Inquiry Topic</label>
-                                                        <input
-                                                            type="text"
-                                                            required
-                                                            value={newTicketSubject}
-                                                            onChange={(e) => setNewTicketSubject(e.target.value)}
-                                                            placeholder="e.g., Guidance on Meditation Practice"
-                                                            className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-2.5 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-sm font-medium"
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-1.5">
-                                                        <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">Your Question</label>
-                                                        <textarea
-                                                            required
-                                                            rows={4}
-                                                            value={newTicketMessage}
-                                                            onChange={(e) => setNewTicketMessage(e.target.value)}
-                                                            placeholder="Please share your spiritual question or request for guidance in detail..."
-                                                            className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-3.5 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-sm leading-relaxed resize-none font-medium"
-                                                        />
-                                                    </div>
-                                                    <button
-                                                        type="submit"
-                                                        disabled={isSubmitting}
-                                                        className="w-full bg-ochre text-white py-3.5 rounded-2xl font-black uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-50 flex items-center justify-center shadow-xl shadow-ochre/20 active:scale-[0.98]"
-                                                    >
-                                                        {isSubmitting ? (
-                                                            <>
-                                                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                                                Sending...
-                                                            </>
-                                                        ) : (
-                                                            'Seek Guidance'
-                                                        )}
-                                                    </button>
-                                                </form>
-                                            )}
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">Your Question</label>
+                                                    <textarea
+                                                        required
+                                                        rows={4}
+                                                        value={newTicketMessage}
+                                                        onChange={(e) => setNewTicketMessage(e.target.value)}
+                                                        placeholder="Please share your spiritual question or request for guidance in detail..."
+                                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-3.5 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-sm leading-relaxed resize-none font-medium"
+                                                    />
+                                                </div>
+                                                <button
+                                                    type="submit"
+                                                    disabled={isSubmitting}
+                                                    className="w-full bg-ochre text-white py-3.5 rounded-2xl font-black uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-50 flex items-center justify-center shadow-xl shadow-ochre/20 active:scale-[0.98]"
+                                                >
+                                                    {isSubmitting ? (
+                                                        <>
+                                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                            Sending...
+                                                        </>
+                                                    ) : (
+                                                        'Seek Guidance'
+                                                    )}
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -350,45 +307,41 @@ export default function AskPage() {
 
                                         {isNewQuestionExpanded && (
                                             <div className="p-4 border-t border-gray-50 bg-gray-50/30 animate-in slide-in-from-top-2 duration-300">
-                                                {isSuccess ? (
-                                                    <div className="flex items-center space-x-4 py-8 px-4 bg-white rounded-2xl shadow-sm border border-green-50 animate-in zoom-in duration-500">
-                                                        <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-600 flex-none">
-                                                            <CheckCircle2 className="w-6 h-6" />
-                                                        </div>
-                                                        <div>
-                                                            <h3 className="font-bold text-gray-900 leading-tight">Inquiry Received</h3>
-                                                            <p className="text-xs text-gray-500 mt-0.5">Krishnaji will respond to your query soon.</p>
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    <form onSubmit={handleSubmit} className="space-y-4">
-                                                        <input
-                                                            type="text"
-                                                            required
-                                                            value={newTicketSubject}
-                                                            onChange={(e) => setNewTicketSubject(e.target.value)}
-                                                            placeholder="Topic of Spiritual Inquiry..."
-                                                            className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-medium"
-                                                        />
-                                                        <textarea
-                                                            required
-                                                            rows={3}
-                                                            value={newTicketMessage}
-                                                            onChange={(e) => setNewTicketMessage(e.target.value)}
-                                                            placeholder="Please share your spiritual question or request for guidance here..."
-                                                            className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none resize-none font-medium"
-                                                        />
-                                                        <div className="flex justify-end">
-                                                            <button
-                                                                type="submit"
-                                                                disabled={isSubmitting}
-                                                                className="bg-ochre text-white px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-50 flex items-center shadow-lg shadow-ochre/20 active:scale-95"
-                                                            >
-                                                                {isSubmitting ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : 'Submit Inquiry'}
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                )}
+                                                <form onSubmit={handleSubmit} className="space-y-4">
+                                                    <input
+                                                        type="text"
+                                                        required
+                                                        value={newTicketSubject}
+                                                        onChange={(e) => setNewTicketSubject(e.target.value)}
+                                                        placeholder="Topic of Spiritual Inquiry..."
+                                                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-medium"
+                                                    />
+                                                    <textarea
+                                                        required
+                                                        rows={3}
+                                                        value={newTicketMessage}
+                                                        onChange={(e) => setNewTicketMessage(e.target.value)}
+                                                        placeholder="Share your spiritual query or request guidance..."
+                                                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-medium resize-none"
+                                                    />
+                                                    <button
+                                                        type="submit"
+                                                        disabled={isSubmitting}
+                                                        className="w-full bg-ochre text-white py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-ochre/20 flex items-center justify-center space-x-2 disabled:opacity-50 active:scale-[0.98] transition-all"
+                                                    >
+                                                        {isSubmitting ? (
+                                                            <>
+                                                                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                                                                <span>Sharing...</span>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Send className="w-3.5 h-3.5 mr-2" />
+                                                                <span>Share Inquiry</span>
+                                                            </>
+                                                        )}
+                                                    </button>
+                                                </form>
                                             </div>
                                         )}
                                     </div>
@@ -424,7 +377,7 @@ export default function AskPage() {
                                             </div>
                                         </div>
 
-                                        {isLoading ? (
+                                        {isContextLoading ? (
                                             <div className="flex flex-col items-center justify-center py-20 text-gray-400">
                                                 <Loader2 className="w-10 h-10 animate-spin mb-4 text-ochre/30" />
                                                 <p className="text-xs font-bold uppercase tracking-widest opacity-50">Syncing with server...</p>

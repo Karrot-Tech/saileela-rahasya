@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Footprints, Lightbulb, Radio, Music, MessageCircleQuestion, BookA, ShieldCheck } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
+import { useInquiry } from '@/context/InquiryContext';
 
 const NAV_ITEMS = [
     { label: 'Leela', href: '/leela', icon: Footprints },
@@ -21,6 +22,7 @@ const getAdminEmails = () => {
 export default function Sidebar() {
     const { user } = useUser();
     const pathname = usePathname();
+    const { unreadCount } = useInquiry();
 
     const adminEmails = getAdminEmails();
     const isAdmin = user?.emailAddresses.some(emailObj =>
@@ -45,18 +47,26 @@ export default function Sidebar() {
                     {NAV_ITEMS.map((item) => {
                         const Icon = item.icon;
                         const isActive = pathname === item.href || pathname.startsWith(item.href);
+                        const isAsk = item.href === '/ask';
 
                         return (
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive
+                                className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${isActive
                                     ? 'bg-orange-50 text-ochre font-bold'
                                     : 'text-gray-600 hover:bg-gray-50'
                                     }`}
                             >
-                                <Icon className="w-5 h-5" />
-                                <span>{item.label}</span>
+                                <div className="flex items-center space-x-3">
+                                    <Icon className="w-5 h-5" />
+                                    <span>{item.label}</span>
+                                </div>
+                                {isAsk && unreadCount > 0 && (
+                                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-bold text-white shadow-lg shadow-blue-500/30 animate-in zoom-in duration-300">
+                                        {unreadCount}
+                                    </span>
+                                )}
                             </Link>
                         );
                     })}
