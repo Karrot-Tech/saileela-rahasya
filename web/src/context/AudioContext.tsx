@@ -36,11 +36,8 @@ export function AudioProvider({ children, allTracks }: { children: React.ReactNo
         if (audioRef.current) {
             setIsLoading(true);
             audioRef.current.src = track.url;
-            audioRef.current.load(); // Explicitly load the audio
+            audioRef.current.load();
             audioRef.current.play()
-                .then(() => {
-                    setIsLoading(false); // Clear loading when play succeeds
-                })
                 .catch(e => {
                     console.error("Playback failed:", e);
                     setIsLoading(false);
