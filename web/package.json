@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && prisma db push --accept-data-loss && next build",
     "start": "next start",
     "lint": "eslint",
     "release": "node -e \"const fs=require('fs'); const v=JSON.parse(fs.readFileSync('./public/version.json')); v.buildTime=new Date().toISOString(); fs.writeFileSync('./public/version.json', JSON.stringify(v, null, 2));\" && npm run build",
