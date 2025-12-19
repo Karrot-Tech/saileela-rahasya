@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MessageCircleQuestion, Send, ChevronDown, ChevronUp, Loader2, CheckCircle2 } from 'lucide-react';
 import { useUser, SignInButton } from '@clerk/nextjs';
 import { getTickets, createTicket, closeTicket, userReplyToTicket } from '@/actions/tickets';
@@ -8,16 +8,17 @@ import { Notification, NotificationType } from '@/components/common/Notification
 import { Modal } from '@/components/common/Modal';
 
 type TicketMessage = {
+    id: string;
     sender: 'USER' | 'ADMIN';
     text: string;
-    createdAt: Date;
+    createdAt: string;
 };
 
 type Ticket = {
     id: string;
     subject: string;
     status: 'OPEN' | 'ANSWERED' | 'CLOSED';
-    createdAt: Date;
+    createdAt: string;
     messages: TicketMessage[];
 };
 
@@ -41,6 +42,14 @@ export default function AskPage() {
     const [followUpSuccess, setFollowUpSuccess] = useState<{ [key: string]: boolean }>({});
 
     const [archiveSuccess, setArchiveSuccess] = useState(false);
+    const [lastSentMessageId, setLastSentMessageId] = useState<string | null>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [tickets, expandedTicketId]);
 
     useEffect(() => {
         if (isLoaded && isSignedIn) {
@@ -119,11 +128,11 @@ export default function AskPage() {
             const result = await userReplyToTicket(ticketId, text);
             if (result.success) {
                 setFollowUpText(prev => ({ ...prev, [ticketId]: '' }));
-                setFollowUpSuccess(prev => ({ ...prev, [ticketId]: true }));
+                if (result.message?.id) {
+                    setLastSentMessageId(result.message.id);
+                    setTimeout(() => setLastSentMessageId(null), 3000);
+                }
                 fetchTickets();
-                setTimeout(() => {
-                    setFollowUpSuccess(prev => ({ ...prev, [ticketId]: false }));
-                }, 4000);
             } else {
                 setNotification({ message: "Error: " + result.error, type: 'error' });
             }
@@ -435,9 +444,13 @@ export default function AskPage() {
             >
                 {expandedTicketId && (
                     <div className="flex flex-col h-[70vh]">
-                        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 no-scrollbar bg-gray-50/50">
+                        {/* Thread Content */}
+                        <div
+                            ref={scrollRef}
+                            className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 no-scrollbar bg-gray-50/50 scroll-smooth"
+                        >
                             {tickets.find(t => t.id === expandedTicketId)?.messages.map((msg: TicketMessage, idx: number) => (
-                                <div key={idx} className={`flex flex-col ${msg.sender === 'USER' ? 'items-end' : 'items-start'}`}>
+                                <div key={msg.id || idx} className={`flex flex-col ${msg.sender === 'USER' ? 'items-end' : 'items-start'}`}>
                                     <div className={`text-[8px] font-black uppercase tracking-[0.15em] mb-1.5 ${msg.sender === 'USER' ? 'text-gray-400' : 'text-ochre'}`}>
                                         {msg.sender === 'USER' ? 'Your Request' : 'Krishnaji Guidance'}
                                     </div>
@@ -446,52 +459,48 @@ export default function AskPage() {
                                         : 'bg-ochre text-white rounded-2xl rounded-tl-none font-medium shadow-ochre/20'
                                         }`}>
                                         <p className="text-[14px] font-medium leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-                                        <div className={`text-[10px] mt-2 font-bold opacity-60 flex items-center ${msg.sender === 'USER' ? 'text-gray-400' : 'text-white'}`}>
+                                        <div className={`text-[10px] mt-2 font-bold opacity-60 flex items-center justify-between gap-4 ${msg.sender === 'USER' ? 'text-gray-400' : 'text-white'}`}>
                                             {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </div>
                                     </div>
+                                    {msg.id === lastSentMessageId && (
+                                        <div className="text-[10px] font-black text-blue-500 uppercase tracking-widest mt-1 animate-in fade-in slide-in-from-top-1 duration-500">
+                                            Delivered
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
 
                         {tickets.find(t => t.id === expandedTicketId)?.status !== 'CLOSED' && (
                             <div className="p-4 md:p-6 bg-white border-t border-gray-100">
-                                {followUpSuccess[expandedTicketId] ? (
-                                    <div className="flex items-center space-x-3 py-4 px-5 bg-green-50/50 rounded-2xl border border-green-100 animate-in zoom-in duration-300">
-                                        <CheckCircle2 className="w-5 h-5 text-green-600" />
-                                        <p className="text-xs font-black text-green-700 uppercase tracking-widest">Inquiry shared with Krishnaji</p>
-                                    </div>
-                                ) : (
-                                    <>
-                                        <textarea
-                                            value={followUpText[expandedTicketId] || ''}
-                                            onChange={(e) => setFollowUpText(prev => ({ ...prev, [expandedTicketId!]: e.target.value }))}
-                                            placeholder="Type your clarifying question here..."
-                                            rows={2}
-                                            className="w-full border-none bg-gray-50 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-ochre/20 outline-none resize-none mb-3"
-                                        />
-                                        <div className="flex items-center justify-between gap-3">
-                                            <button
-                                                onClick={() => setTicketToClose(expandedTicketId)}
-                                                className="text-[10px] font-black text-gray-300 uppercase tracking-widest hover:text-red-500 transition-colors py-2"
-                                            >
-                                                Close Inquiry
-                                            </button>
-                                            <button
-                                                disabled={isFollowUpSubmitting[expandedTicketId] || !followUpText[expandedTicketId]?.trim()}
-                                                onClick={() => handleFollowUp(expandedTicketId!)}
-                                                className="bg-ochre text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-30 shadow-lg shadow-ochre/20 flex items-center active:scale-95"
-                                            >
-                                                {isFollowUpSubmitting[expandedTicketId] ? (
-                                                    <Loader2 className="w-3 h-3 mr-2 animate-spin" />
-                                                ) : (
-                                                    <Send className="w-3 h-3 mr-2" />
-                                                )}
-                                                Send
-                                            </button>
-                                        </div>
-                                    </>
-                                )}
+                                <textarea
+                                    value={followUpText[expandedTicketId] || ''}
+                                    onChange={(e) => setFollowUpText(prev => ({ ...prev, [expandedTicketId!]: e.target.value }))}
+                                    placeholder="Type your clarifying question here..."
+                                    rows={2}
+                                    className="w-full border-none bg-gray-50 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-ochre/20 outline-none resize-none mb-3"
+                                />
+                                <div className="flex items-center justify-between gap-3">
+                                    <button
+                                        onClick={() => setTicketToClose(expandedTicketId)}
+                                        className="text-[10px] font-black text-gray-300 uppercase tracking-widest hover:text-red-500 transition-colors py-2"
+                                    >
+                                        Close Inquiry
+                                    </button>
+                                    <button
+                                        disabled={isFollowUpSubmitting[expandedTicketId] || !followUpText[expandedTicketId]?.trim()}
+                                        onClick={() => handleFollowUp(expandedTicketId!)}
+                                        className="bg-ochre text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-gold transition-all disabled:opacity-30 shadow-lg shadow-ochre/20 flex items-center active:scale-95"
+                                    >
+                                        {isFollowUpSubmitting[expandedTicketId] ? (
+                                            <Loader2 className="w-3 h-3 mr-2 animate-spin" />
+                                        ) : (
+                                            <Send className="w-3 h-3 mr-2" />
+                                        )}
+                                        Send
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
