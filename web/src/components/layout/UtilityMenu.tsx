@@ -36,13 +36,12 @@ export default function UtilityMenu() {
                     {isAdmin && (
                         <Link
                             href="/admin"
-                            className="hidden md:flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-full shadow-lg border border-white/10 hover:bg-black transition-all group active:scale-95 whitespace-nowrap"
+                            className="hidden md:flex items-center gap-2 bg-gray-900 text-white pl-3 pr-5 py-2 rounded-full shadow-lg border border-white/10 hover:bg-black transition-all group active:scale-95 whitespace-nowrap"
                         >
                             <div className="w-5 h-5 bg-ochre rounded-full flex items-center justify-center flex-none">
                                 <ShieldCheck className="w-3 h-3 text-white" />
                             </div>
                             <span className="text-[10px] font-black tracking-widest uppercase">Admin Console</span>
-                            <ArrowRight className="w-3 h-3 text-white/50 group-hover:translate-x-1 transition-transform" />
                         </Link>
                     )}
                     <button
@@ -222,7 +221,7 @@ export default function UtilityMenu() {
                     </SignedOut>
 
                     <div className="text-center">
-                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.38</p>
+                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.39</p>
                     </div>
                 </div>
             </div>
