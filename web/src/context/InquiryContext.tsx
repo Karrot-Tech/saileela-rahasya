@@ -105,6 +105,21 @@ export function InquiryProvider({ children }: { children: React.ReactNode }) {
         return false;
     }).length;
 
+    // Sync with PWA App Badge API
+    useEffect(() => {
+        if (typeof navigator !== 'undefined' && 'setAppBadge' in navigator) {
+            if (unreadCount > 0) {
+                (navigator as any).setAppBadge(unreadCount).catch((err: any) => {
+                    console.error('Failed to set app badge:', err);
+                });
+            } else {
+                (navigator as any).clearAppBadge().catch((err: any) => {
+                    console.error('Failed to clear app badge:', err);
+                });
+            }
+        }
+    }, [unreadCount]);
+
     return (
         <InquiryContext.Provider value={{
             tickets,
