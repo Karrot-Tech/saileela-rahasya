@@ -463,8 +463,16 @@ export default function AskPage() {
                                         </div>
                                     </div>
                                     {msg.id === lastSentMessageId && (
-                                        <div className="text-[10px] font-black text-blue-500 uppercase tracking-widest mt-1 animate-in fade-in slide-in-from-top-1 duration-500">
-                                            Delivered
+                                        <div className="flex items-center space-x-1.5 mt-2 transition-all animate-in fade-in slide-in-from-right-4 duration-1000">
+                                            <div className="flex items-center space-x-0.5 opacity-40">
+                                                <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse delay-0" />
+                                                <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse delay-150" />
+                                                <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse delay-300" />
+                                            </div>
+                                            <span className="text-[8px] font-black text-blue-500/80 uppercase tracking-[0.25em]">Guidance Shared</span>
+                                            <div className="w-4 h-4 bg-blue-50 rounded-full flex items-center justify-center border border-blue-100/50">
+                                                <CheckCircle2 className="w-2.5 h-2.5 text-blue-500" />
+                                            </div>
                                         </div>
                                     )}
                                 </div>

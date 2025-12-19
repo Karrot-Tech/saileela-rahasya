@@ -87,7 +87,7 @@ export default function Sidebar() {
             </nav>
 
             <div className="p-5 text-center border-t border-gray-50 bg-gray-50/30">
-                <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-1">Sai Leela Rahasya v1.1.48</p>
+                <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-1">Sai Leela Rahasya v1.1.49</p>
                 <p className="text-[10px] text-gray-400 font-medium font-serif italic">&copy; {new Date().getFullYear()} Krishnaji</p>
             </div>
         </aside>
