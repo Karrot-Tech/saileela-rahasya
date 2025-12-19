@@ -438,7 +438,7 @@ export default function AskPage() {
                                                     const isUnreadClosed = ticket.status === 'CLOSED' && !acknowledgedTickets.includes(ticket.id) && ticket.messages.length > 0 && readMessages[ticket.id] !== ticket.messages[ticket.messages.length - 1].id;
 
                                                     return (
-                                                        <div key={ticket.id} className={`border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 ${isUnreadAnswered ? 'bg-blue-50/40 border-blue-200 ring-4 ring-blue-50/50' : isUnreadClosed ? 'bg-red-50/20 border-red-100' : 'bg-white border-gray-100'}`}>
+                                                        <div key={ticket.id} className={`border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 ${isUnreadAnswered || isUnreadClosed ? 'bg-blue-50/40 border-blue-200 ring-4 ring-blue-50/50' : 'bg-white border-gray-100'}`}>
                                                             <div
                                                                 onClick={() => handleOpenTicket(ticket)}
                                                                 className={`p-4 md:p-5 flex items-center justify-between cursor-pointer transition-colors hover:bg-gray-50/80 active:scale-[0.99] group`}
@@ -450,13 +450,11 @@ export default function AskPage() {
                                                                     {isUnreadClosed && (
                                                                         <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-red-500 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.5)] border-2 border-white z-10 animate-in fade-in zoom-in duration-500" />
                                                                     )}
-                                                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-none border transition-all ${isUnreadAnswered
+                                                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-none border transition-all ${isUnreadAnswered || isUnreadClosed
                                                                         ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/30'
-                                                                        : ticket.status === 'ANSWERED'
+                                                                        : ticket.status === 'ANSWERED' || ticket.status === 'CLOSED'
                                                                             ? 'bg-gray-50 text-gray-400 border-gray-100'
-                                                                            : ticket.status === 'OPEN'
-                                                                                ? 'bg-green-50 text-green-600 border-green-100'
-                                                                                : 'bg-red-50 text-red-600 border-red-100'
+                                                                            : 'bg-green-50 text-green-600 border-green-100'
                                                                         }`}>
                                                                         {ticket.status === 'CLOSED' ? <Archive className="w-5 h-5" /> : <MessageCircleQuestion className={`w-5 h-5 ${ticket.status === 'OPEN' && 'animate-pulse'}`} />}
                                                                     </div>
@@ -477,11 +475,11 @@ export default function AskPage() {
                                                                         </span>
                                                                     )}
                                                                     {ticket.status === 'CLOSED' && (
-                                                                        <span className="hidden md:block bg-red-50 text-red-600 px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border border-red-100">
-                                                                            Closed
+                                                                        <span className={`hidden md:block px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border transition-all ${isUnreadClosed ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>
+                                                                            {isUnreadClosed ? 'New Update' : 'Finished'}
                                                                         </span>
                                                                     )}
-                                                                    <div className={`px-2 py-1 rounded-lg text-[8px] font-black transition-all border uppercase tracking-widest ${isUnreadAnswered ? 'bg-blue-100 text-blue-700 border-blue-200' : 'bg-gray-50 text-gray-400 border-gray-100 group-hover:bg-ochre group-hover:text-white'}`}>
+                                                                    <div className={`px-2 py-1 rounded-lg text-[8px] font-black transition-all border uppercase tracking-widest ${isUnreadAnswered || isUnreadClosed ? 'bg-blue-100 text-blue-700 border-blue-200' : 'bg-gray-50 text-gray-400 border-gray-100 group-hover:bg-ochre group-hover:text-white'}`}>
                                                                         {ticket.messages.length} <span className="hidden xs:inline">MSG</span>
                                                                     </div>
                                                                 </div>
