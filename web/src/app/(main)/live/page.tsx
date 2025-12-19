@@ -41,7 +41,7 @@ export default function LivePage() {
                     <Radio className="w-6 h-6" />
                 </div>
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">Live Darshan</h1>
+                    <h1 className="text-2xl font-bold text-ochre">Live Darshan</h1>
                     <p className="text-sm text-gray-500 font-serif italic">"Experience the divine presence"</p>
                 </div>
             </div>

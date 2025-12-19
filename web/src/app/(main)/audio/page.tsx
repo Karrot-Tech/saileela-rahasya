@@ -45,7 +45,7 @@ export default function AudioPage() {
                     <Music className="w-6 h-6" />
                 </div>
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">Sai Bhajans</h1>
+                    <h1 className="text-2xl font-bold text-ochre">Sai Bhajans</h1>
                     <p className="text-sm text-gray-500 font-serif italic">"Melodies of devotion"</p>
                 </div>
             </div>

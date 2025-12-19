@@ -180,16 +180,14 @@ export default function AskPage() {
                         onClose={() => setNotification(null)}
                     />
                 )}
-                {/* Compact Header */}
-                <div className="flex flex-col space-y-2">
-                    <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-ochre/10 rounded-xl flex items-center justify-center text-ochre flex-none border border-ochre/5">
-                            <MessageCircleQuestion className="w-4 h-4" />
-                        </div>
-                        <div>
-                            <h1 className="text-lg md:text-xl font-black text-gray-900 tracking-tight leading-tight">Guidance & Inquiry</h1>
-                            <p className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Spiritual Support Channel</p>
-                        </div>
+                {/* Header */}
+                <div className="flex items-center space-x-4 pb-2 border-b border-gray-100">
+                    <div className="w-12 h-12 bg-ochre/10 rounded-full flex items-center justify-center text-ochre flex-none">
+                        <MessageCircleQuestion className="w-6 h-6" />
+                    </div>
+                    <div>
+                        <h1 className="text-2xl font-bold text-ochre">Guidance & Inquiry</h1>
+                        <p className="text-sm text-gray-500 font-serif italic">"Spiritual support channel"</p>
                     </div>
                 </div>
 
