@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { MessageCircleQuestion, Send, ChevronDown, ChevronUp, Loader2, CheckCircle2 } from 'lucide-react';
+import { MessageCircleQuestion, Send, ChevronDown, ChevronUp, Loader2, CheckCircle2, Archive } from 'lucide-react';
 import { useUser, SignInButton } from '@clerk/nextjs';
 import { getTickets, createTicket, closeTicket, userReplyToTicket } from '@/actions/tickets';
 import { Notification, NotificationType } from '@/components/common/Notification';
@@ -494,9 +494,10 @@ export default function AskPage() {
                                 <div className="flex items-center justify-between gap-3">
                                     <button
                                         onClick={() => setTicketToClose(expandedTicketId)}
-                                        className="text-[10px] font-black text-gray-300 uppercase tracking-widest hover:text-red-500 transition-colors py-2"
+                                        className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-red-600 hover:bg-red-50 px-3 md:px-4 py-2.5 rounded-xl transition-all active:scale-95 flex items-center group border border-transparent hover:border-red-100"
                                     >
-                                        Close Inquiry
+                                        <Archive className="w-3 h-3 mr-1.5 md:mr-2 opacity-40 group-hover:opacity-100 transition-opacity" />
+                                        Archive Inquiry
                                     </button>
                                     <button
                                         disabled={isFollowUpSubmitting[expandedTicketId] || !followUpText[expandedTicketId]?.trim()}
