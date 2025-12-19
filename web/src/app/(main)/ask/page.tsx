@@ -107,7 +107,6 @@ export default function AskPage() {
             if (result.success) {
                 setNewTicketSubject('');
                 setNewTicketMessage('');
-                setNotification({ message: "Inquiry submitted successfully. Krishnaji will provide guidance soon.", type: 'success' });
                 setIsNewQuestionExpanded(false);
                 refreshTickets();
             } else {
