@@ -13,7 +13,7 @@ export default async function AdminGlossaryPage() {
         <div className="space-y-6 md:space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-100 pb-4 md:pb-6 gap-4">
                 <div>
-                    <h1 className="text-xl md:text-3xl font-black text-gray-900 tracking-tight">Glossary Archive</h1>
+                    <h1 className="text-xl md:text-3xl font-black text-gray-900 tracking-tight">Glossary</h1>
                     <p className="text-xs md:text-sm text-gray-500 font-medium">Manage terms and spiritual definitions</p>
                 </div>
                 <Link
