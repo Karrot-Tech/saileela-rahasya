@@ -23,7 +23,7 @@ export default function AdminClientWrapper({
             />
 
             {/* Admin Content Area */}
-            <div className="flex-1 flex flex-col lg:ml-72 min-h-screen pb-16 lg:pb-0">
+            <div className="flex-1 flex flex-col lg:ml-72 min-h-screen pb-24 lg:pb-0">
                 {/* Unified Admin Header */}
                 <header className="h-20 lg:h-24 bg-white/80 backdrop-blur-xl border-b border-gray-100 flex items-center justify-between px-6 md:px-10 sticky top-0 z-40 w-full">
                     <div className="flex items-center gap-4 min-w-0 flex-1">
