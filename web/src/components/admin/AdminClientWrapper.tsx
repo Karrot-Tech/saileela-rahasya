@@ -31,7 +31,7 @@ export default function AdminClientWrapper({
                             <ShieldCheck className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                         </div>
                         <div className="min-w-0 flex-1">
-                            <h1 className="text-gray-900 font-extrabold tracking-tight leading-none text-xs lg:text-sm truncate uppercase font-serif italic">SAI LEELA RAHASYA</h1>
+                            <h1 className="text-gray-900 font-extrabold tracking-tight leading-none text-xs lg:text-sm truncate uppercase font-serif italic">SAILEELA RAHASYA</h1>
                             <div className="flex items-center gap-2 mt-1.5 lg:mt-2">
                                 <span className="text-[7px] lg:text-[9px] text-ochre font-black uppercase tracking-[0.2em] bg-ochre/5 px-2 py-0.5 rounded-full border border-ochre/10 truncate">Admin Console</span>
                             </div>
@@ -58,7 +58,7 @@ export default function AdminClientWrapper({
                 <AdminBottomNav />
 
                 <footer className="p-8 text-center text-[10px] md:text-xs text-gray-400 font-medium tracking-tight">
-                    &copy; {new Date().getFullYear()} Sai Leela Rahasya Admin Portal • Strictly Authorized Personnel Only
+                    &copy; {new Date().getFullYear()} Saileela Rahasya Admin Portal • Strictly Authorized Personnel Only
                 </footer>
             </div>
         </div>

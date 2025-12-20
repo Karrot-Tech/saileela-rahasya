@@ -242,7 +242,7 @@ export default function UtilityMenu() {
                     </SignedOut>
 
                     <div className="text-center">
-                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Sai Leela Rahasya v1.1.59</p>
+                        <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.3em]">Saileela Rahasya v1.2.0</p>
                     </div>
                 </div>
             </div>

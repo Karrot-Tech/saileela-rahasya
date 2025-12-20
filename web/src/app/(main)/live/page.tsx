@@ -75,7 +75,7 @@ export default function LivePage() {
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold text-gray-800 flex items-center">
                         <span className="w-1 h-6 bg-ochre mr-3 rounded-full" />
-                        Streams from Sai Leela Rahasya
+                        Streams from Saileela Rahasya
                     </h2>
                     <a
                         href="https://www.youtube.com/@saileelarahasya/streams"

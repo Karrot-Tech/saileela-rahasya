@@ -16,7 +16,7 @@ export default function Home() {
         </div>
 
         {/* <h1 className="text-4xl md:text-6xl font-bold text-ochre tracking-tight">
-          Sai Leela Rahasya
+          Saileela Rahasya
         </h1> */}
         <p className="text-xl md:text-2xl text-gray-600 font-serif italic">
           &quot;The Secret of Sai&apos;s Plays Revealed&quot;

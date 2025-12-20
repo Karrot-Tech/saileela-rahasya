@@ -21,17 +21,17 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://saileelarahasya-web.vercel.app'),
   title: {
-    default: "Sai Leela Rahasya",
-    template: "%s | Sai Leela Rahasya",
+    default: "Saileela Rahasya",
+    template: "%s | Saileela Rahasya",
   },
-  description: "Unveil the secret meanings behind Shirdi Sai Baba's divine plays. Explore the Sai Leela Rahasya through authentic Leelas, Bodhakathas, and curated spiritual guidance from Krishnaji.",
-  keywords: ["Sai Baba", "Shirdi Sai Baba", "Sai Leela Rahasya", "Krishnaji", "Spiritual Guidance", "Sai Satcharitra", "Bhajans"],
-  authors: [{ name: "Krishnaji" }],
+  description: "Unveil the secret meanings behind Shirdi Sai Baba's divine plays. Explore the Saileela Rahasya through authentic Leelas, Bodhakathas, and curated spiritual guidance from Krishnaji.",
+  keywords: ["Sai Baba", "Shirdi Sai Baba", "Saileela Rahasya", "Spiritual Guidance", "Sai Satcharitra", "Bhajans"],
+  authors: [{ name: "Saileela Rahasya" }],
   openGraph: {
-    title: "Sai Leela Rahasya",
-    description: "Digital study guide for Krishnaji's teachings.",
+    title: "Saileela Rahasya",
+    description: "Unlocking the secret spiritual meanings of Shirdi Sai Baba's divine plays.",
     url: "https://saileelarahasya-web.vercel.app",
-    siteName: "Sai Leela Rahasya",
+    siteName: "Saileela Rahasya",
     images: [
       {
         url: "/icon-512.png",
@@ -45,25 +45,26 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Sai Rahasya",
+    title: "Saileela Rahasya",
+    startupImage: ["/splash.png"],
   },
   formatDetection: {
     telephone: false,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sai Rahasya",
-    description: "Digital study guide for Krishnaji's teachings.",
-    images: ["/app-icon.png"],
+    title: "Saileela Rahasya",
+    description: "Unlocking the secret spiritual meanings of Shirdi Sai Baba's divine plays.",
+    images: ["/saileela-logo.png"],
   },
   icons: {
     icon: [
-      { url: "/app-icon.png", sizes: "512x512", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [
-      { url: "/app-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/icon-192.png", sizes: "180x180", type: "image/png" },
     ],
-    shortcut: "/app-icon.png",
+    shortcut: "/saileela-logo.png",
   }
 };
 
@@ -103,13 +104,13 @@ export default function RootLayout({
       localization={{
         signIn: {
           start: {
-            title: 'Sign in to Sai Leela Rahasya',
+            title: 'Sign in to Saileela Rahasya',
             subtitle: 'Welcome back! Please sign in to continue your spiritual journey.',
           }
         },
         signUp: {
           start: {
-            title: 'Create account for Sai Leela Rahasya',
+            title: 'Create account for Saileela Rahasya',
             subtitle: 'Join us to begin your journey of inquiry.',
           }
         }

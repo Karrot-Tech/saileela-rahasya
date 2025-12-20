@@ -7,11 +7,11 @@ export default function Header() {
             <div className="max-w-7xl w-full flex items-center justify-between md:justify-end pointer-events-auto">
                 <Link href="/" className="flex items-center gap-3 md:hidden min-w-0 flex-shrink">
                     <img
-                        src="/app-icon.png"
-                        alt="Sai Leela Rahasya"
+                        src="/saileela-logo.png"
+                        alt="Saileela Rahasya"
                         className="h-10 w-auto object-contain flex-none"
                     />
-                    <span className="text-lg font-bold text-ochre tracking-wide whitespace-nowrap truncate">Sai Leela Rahasya</span>
+                    <span className="text-lg font-bold text-ochre tracking-wide whitespace-nowrap truncate">Saileela Rahasya</span>
                 </Link>
 
                 <UtilityMenu />

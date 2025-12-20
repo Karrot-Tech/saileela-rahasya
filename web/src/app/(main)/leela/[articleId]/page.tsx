@@ -68,7 +68,7 @@ export default async function LeelaDetailPage({ params }: { params: Promise<{ ar
         },
         "publisher": {
             "@type": "Organization",
-            "name": "Sai Leela Rahasya",
+            "name": "Saileela Rahasya",
             "logo": {
                 "@type": "ImageObject",
                 "url": "https://saileelarahasya-web.vercel.app/icon-512.png"

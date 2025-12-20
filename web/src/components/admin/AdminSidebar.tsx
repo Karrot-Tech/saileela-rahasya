@@ -52,7 +52,7 @@ export default function AdminSidebar({
                             <ShieldCheck className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                            <h1 className="text-white font-extrabold tracking-tight leading-none text-xs uppercase font-serif italic">SAI LEELA RAHASYA</h1>
+                            <h1 className="text-white font-extrabold tracking-tight leading-none text-xs uppercase font-serif italic">SAILEELA RAHASYA</h1>
                             <p className="text-[9px] text-ochre font-black uppercase tracking-[0.2em] mt-2">Admin Console</p>
                         </div>
                     </Link>

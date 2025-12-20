@@ -34,11 +34,11 @@ export default function Sidebar() {
             <div className="h-16 flex items-center px-3 border-b border-gray-100">
                 <Link href="/" className="flex items-center gap-3">
                     <img
-                        src="/app-icon.png"
-                        alt="Sai Leela Rahasya"
+                        src="/saileela-logo.png"
+                        alt="Saileela Rahasya"
                         className="h-10 w-auto object-contain"
                     />
-                    <h1 className="text-lg font-bold text-ochre tracking-wide leading-tight">Sai Leela Rahasya</h1>
+                    <h1 className="text-lg font-bold text-ochre tracking-wide leading-tight">Saileela Rahasya</h1>
                 </Link>
             </div>
 
@@ -97,8 +97,8 @@ export default function Sidebar() {
             </nav>
 
             <div className="p-5 text-center border-t border-gray-50 bg-gray-50/30">
-                <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-1">Sai Leela Rahasya v1.1.59</p>
-                <p className="text-[10px] text-gray-400 font-medium font-serif italic">&copy; {new Date().getFullYear()} Krishnaji</p>
+                <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-1">Saileela Rahasya v1.2.0</p>
+                <p className="text-[10px] text-gray-400 font-medium font-serif italic">&copy; {new Date().getFullYear()} Saileela Rahasya</p>
             </div>
         </aside>
     );

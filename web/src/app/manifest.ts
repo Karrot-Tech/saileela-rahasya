@@ -2,8 +2,8 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: 'Sai Leela Rahasya',
-        short_name: 'Sai Rahasya',
+        name: 'Saileela Rahasya',
+        short_name: 'Saileela Rahasya',
         description: "Discover the secret plays and profound teachings of Shirdi Sai Baba through recorded Leelas, Bodhakathas, and spiritual guidance.",
         start_url: '/',
         display: 'standalone',
@@ -11,13 +11,13 @@ export default function manifest(): MetadataRoute.Manifest {
         theme_color: '#cc7722',
         icons: [
             {
-                src: '/app-icon.png',
+                src: '/icon-192.png',
                 sizes: '192x192',
                 type: 'image/png',
                 purpose: 'any',
             },
             {
-                src: '/app-icon.png',
+                src: '/icon-512.png',
                 sizes: '512x512',
                 type: 'image/png',
                 purpose: 'any',

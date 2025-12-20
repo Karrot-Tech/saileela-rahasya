@@ -68,7 +68,7 @@ export default async function BodhakathaDetailPage({ params }: { params: Promise
         },
         "publisher": {
             "@type": "Organization",
-            "name": "Sai Leela Rahasya",
+            "name": "Saileela Rahasya",
             "logo": {
                 "@type": "ImageObject",
                 "url": "https://saileelarahasya-web.vercel.app/icon-512.png"

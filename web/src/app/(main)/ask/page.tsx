@@ -185,7 +185,7 @@ export default function AskPage() {
                     <div className="space-y-2">
                         <h1 className="text-3xl font-black text-gray-900 tracking-tight">Spiritual Inquiry</h1>
                         <p className="text-gray-500 text-base leading-relaxed font-medium">
-                            Please sign in to share your spiritual questions and receive personal guidance from Krishnaji.
+                            Please sign in to share your spiritual questions and receive personal guidance from the Saileela Rahasya team.
                         </p>
                     </div>
                     <SignInButton mode="modal">
@@ -237,7 +237,7 @@ export default function AskPage() {
                                         <div className="space-y-1">
                                             <h2 className="text-xl font-black text-gray-900">Seek Divine Guidance</h2>
                                             <p className="text-gray-400 text-xs md:text-sm max-w-sm mx-auto leading-relaxed">
-                                                Share your spiritual query or request personal guidance from Krishnaji.
+                                                Share your spiritual query or request personal guidance.
                                             </p>
                                         </div>
 
@@ -470,7 +470,7 @@ export default function AskPage() {
                             {tickets.find(t => t.id === expandedTicketId)?.messages.map((msg: TicketMessage, idx: number) => (
                                 <div key={msg.id || idx} className={`flex flex-col ${msg.sender === 'USER' ? 'items-end' : 'items-start'}`}>
                                     <div className={`text-[8px] font-black uppercase tracking-[0.15em] mb-1.5 ${msg.sender === 'USER' ? 'text-gray-400' : 'text-ochre'}`}>
-                                        {msg.sender === 'USER' ? 'Your Request' : 'Krishnaji Guidance'}
+                                        {msg.sender === 'USER' ? 'Your Request' : 'Guidance Response'}
                                     </div>
                                     <div className={`max-w-[85%] px-4 py-3 shadow-sm relative group w-fit ${msg.sender === 'USER'
                                         ? 'bg-white border border-gray-100 text-gray-800 rounded-2xl rounded-tr-none'
