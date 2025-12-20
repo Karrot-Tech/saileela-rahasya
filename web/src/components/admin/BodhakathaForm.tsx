@@ -135,7 +135,7 @@ export default function BodhakathaForm({ bodhakatha }: BodhakathaFormProps) {
                             <label className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest">Theme</label>
                             <input
                                 required
-                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-sm md:text-base transition-all"
+                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-base transition-all"
                                 value={formData.theme}
                                 onChange={(e) => setFormData({ ...formData, theme: e.target.value })}
                             />
@@ -145,7 +145,7 @@ export default function BodhakathaForm({ bodhakatha }: BodhakathaFormProps) {
                                 <label className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest">Title (English)</label>
                                 <input
                                     required
-                                    className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-sm md:text-base transition-all"
+                                    className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-base transition-all"
                                     value={formData.title_english}
                                     onChange={(e) => setFormData({ ...formData, title_english: e.target.value })}
                                 />
@@ -154,7 +154,7 @@ export default function BodhakathaForm({ bodhakatha }: BodhakathaFormProps) {
                                 <label className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest">Title (Hindi)</label>
                                 <input
                                     required
-                                    className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-serif text-sm md:text-base transition-all"
+                                    className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-serif text-base transition-all"
                                     value={formData.title_hindi}
                                     onChange={(e) => setFormData({ ...formData, title_hindi: e.target.value })}
                                 />
@@ -198,7 +198,7 @@ export default function BodhakathaForm({ bodhakatha }: BodhakathaFormProps) {
                                     id="description-textarea"
                                     required
                                     rows={14}
-                                    className="w-full px-3 py-4 md:p-3 border-none bg-gray-50/30 rounded-xl focus:ring-0 outline-none text-sm leading-relaxed transition-all resize-none font-mono"
+                                    className="w-full px-3 py-4 md:p-3 border-none bg-gray-50/30 rounded-xl focus:ring-0 outline-none text-base leading-relaxed transition-all resize-none font-mono"
                                     placeholder="Type the spiritual story here... Use Markdown for styling."
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
