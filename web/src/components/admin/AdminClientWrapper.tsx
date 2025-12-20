@@ -41,6 +41,7 @@ export default function AdminClientWrapper({
                     <div className="flex items-center gap-3">
                         <Link
                             href="/"
+                            prefetch={false}
                             className="flex items-center gap-3 bg-gray-900 text-white px-4 lg:px-6 py-2.5 lg:py-3 rounded-2xl shadow-xl shadow-gray-200 border border-white/10 hover:bg-black transition-all group active:scale-95 whitespace-nowrap"
                         >
                             <Home className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-white/70 group-hover:text-ochre transition-colors" />

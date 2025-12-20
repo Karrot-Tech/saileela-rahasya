@@ -48,7 +48,7 @@ export default function AdminBottomNav() {
                             key={item.href}
                             href={item.href}
                             prefetch={false}
-                            className={`flex flex-col items-center justify-center w-full h-full space-y-1 relative transition-colors touch-auto select-none ${isActive ? 'text-ochre' : 'text-gray-500'
+                            className={`flex flex-col items-center justify-center w-full h-full space-y-1 relative transition-colors select-none ${isActive ? 'text-ochre' : 'text-gray-500'
                                 }`}
                             style={{ touchAction: 'manipulation' }}
                         >

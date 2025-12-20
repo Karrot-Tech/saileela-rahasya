@@ -62,7 +62,7 @@ export default function AdminSidebar({
                 }`}>
                 {/* Admin Brand */}
                 <div className="h-20 flex items-center justify-between px-8 border-b border-white/5 bg-gray-900/50 backdrop-blur-xl sticky top-0 z-10">
-                    <Link href="/admin" className="flex items-center gap-3 group" onClick={onClose}>
+                    <Link href="/admin" prefetch={false} className="flex items-center gap-3 group" onClick={onClose}>
                         <div className="w-10 h-10 bg-ochre rounded-xl flex items-center justify-center shadow-lg shadow-ochre/20 group-hover:rotate-12 transition-transform duration-300">
                             <ShieldCheck className="w-6 h-6 text-white" />
                         </div>
@@ -97,6 +97,7 @@ export default function AdminSidebar({
                                     <Link
                                         key={item.href}
                                         href={item.href}
+                                        prefetch={false}
                                         onClick={onClose}
                                         className={`flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-300 group ${isActive
                                             ? 'bg-ochre text-white shadow-lg shadow-ochre/20'
@@ -142,6 +143,7 @@ export default function AdminSidebar({
                         </div>
                         <Link
                             href="/"
+                            prefetch={false}
                             className="p-2 text-gray-500 hover:text-white hover:bg-white/10 rounded-xl transition-all"
                             title="Return to App"
                             onClick={onClose}
