@@ -44,6 +44,13 @@ export default function manifest(): MetadataRoute.Manifest {
                 type: 'image/png',
                 label: 'Home Screen (Desktop)',
                 form_factor: 'wide'
+            },
+            {
+                src: '/screenshots/audio.png',
+                sizes: '390x844',
+                type: 'image/png',
+                label: 'Sai Bhajans Player',
+                form_factor: 'narrow'
             }
         ],
     };
