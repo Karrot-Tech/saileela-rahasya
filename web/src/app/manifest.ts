@@ -23,5 +23,28 @@ export default function manifest(): MetadataRoute.Manifest {
                 purpose: 'any',
             },
         ],
+        screenshots: [
+            {
+                src: '/screenshots/home.png',
+                sizes: '390x844',
+                type: 'image/png',
+                label: 'Home Screen',
+                form_factor: 'narrow'
+            },
+            {
+                src: '/screenshots/leela.png',
+                sizes: '390x844',
+                type: 'image/png',
+                label: 'Leela Library',
+                form_factor: 'narrow'
+            },
+            {
+                src: '/screenshots/home-desktop.png',
+                sizes: '1280x800',
+                type: 'image/png',
+                label: 'Home Screen (Desktop)',
+                form_factor: 'wide'
+            }
+        ],
     };
 }
