@@ -72,8 +72,6 @@ export const viewport = {
   themeColor: "#cc7722",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 };
 
 import { ClerkProvider } from '@clerk/nextjs'
