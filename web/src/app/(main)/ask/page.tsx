@@ -108,6 +108,7 @@ export default function AskPage() {
                 setNewTicketSubject('');
                 setNewTicketMessage('');
                 setIsNewQuestionExpanded(false);
+                setNotification({ message: "Inquiry submitted successfully! The team will review it soon.", type: 'success' });
                 refreshTickets();
             } else {
                 setNotification({ message: "Error: " + result.error, type: 'error' });
@@ -488,7 +489,7 @@ export default function AskPage() {
                                                 <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse delay-150" />
                                                 <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse delay-300" />
                                             </div>
-                                            <span className="text-[8px] font-black text-blue-500/80 uppercase tracking-[0.25em]">Guidance Shared</span>
+                                            <span className="text-[8px] font-black text-blue-500/80 uppercase tracking-[0.25em]">Message Sent</span>
                                             <div className="w-4 h-4 bg-blue-50 rounded-full flex items-center justify-center border border-blue-100/50">
                                                 <CheckCircle2 className="w-2.5 h-2.5 text-blue-500" />
                                             </div>
