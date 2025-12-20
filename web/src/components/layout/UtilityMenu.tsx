@@ -38,6 +38,7 @@ export default function UtilityMenu() {
                     {isAdmin && (
                         <Link
                             href="/admin"
+                            prefetch={false}
                             className="hidden md:flex items-center gap-2 bg-gray-900 text-white pl-3 pr-5 py-2 rounded-full shadow-lg border border-white/10 hover:bg-black transition-all group active:scale-95 whitespace-nowrap"
                         >
                             <div className="w-5 h-5 bg-ochre rounded-full flex items-center justify-center flex-none">
@@ -133,7 +134,7 @@ export default function UtilityMenu() {
                         {/* Navigation Actions - Standardized Premium Style */}
                         <nav className="space-y-2 flex-1">
                             {isAdmin && (
-                                <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3.5 hover:bg-gray-900 rounded-[1.25rem] transition-all group bg-gray-50/50 border border-gray-100/50 hover:border-gray-900">
+                                <Link href="/admin" prefetch={false} onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3.5 hover:bg-gray-900 rounded-[1.25rem] transition-all group bg-gray-50/50 border border-gray-100/50 hover:border-gray-900">
                                     <div className="flex items-center gap-4 text-gray-700 group-hover:text-white">
                                         <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-ochre shadow-sm group-hover:bg-ochre group-hover:text-white transition-all flex-none">
                                             <LayoutDashboard className="w-5 h-5" />
@@ -147,7 +148,7 @@ export default function UtilityMenu() {
                                 </Link>
                             )}
 
-                            <Link href="/ask" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3.5 hover:bg-ochre/5 rounded-[1.25rem] transition-all group border border-transparent hover:border-ochre/10">
+                            <Link href="/ask" prefetch={false} onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3.5 hover:bg-ochre/5 rounded-[1.25rem] transition-all group border border-transparent hover:border-ochre/10">
                                 <div className="flex items-center gap-4 text-gray-700 group-hover:text-ochre">
                                     <div className="w-10 h-10 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 group-hover:bg-ochre/10 group-hover:text-ochre transition-all flex-none relative">
                                         <History className="w-5 h-5" />
@@ -165,7 +166,7 @@ export default function UtilityMenu() {
                                 <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
                             </Link>
 
-                            <Link href="/glossary" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3.5 hover:bg-ochre/5 rounded-[1.25rem] transition-all group border border-transparent hover:border-ochre/10">
+                            <Link href="/glossary" prefetch={false} onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3.5 hover:bg-ochre/5 rounded-[1.25rem] transition-all group border border-transparent hover:border-ochre/10">
                                 <div className="flex items-center gap-4 text-gray-700 group-hover:text-ochre">
                                     <div className="w-10 h-10 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 group-hover:bg-ochre/10 group-hover:text-ochre transition-all flex-none">
                                         <BookA className="w-5 h-5 flex-none" />
@@ -231,7 +232,7 @@ export default function UtilityMenu() {
                         </div>
 
                         <div className="pt-6 border-t border-gray-100">
-                            <Link href="/glossary" onClick={() => setIsOpen(false)} className="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-2xl transition-all group">
+                            <Link href="/glossary" prefetch={false} onClick={() => setIsOpen(false)} className="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-2xl transition-all group">
                                 <BookA className="w-6 h-6 text-gray-400 group-hover:text-ochre transition-colors flex-none" />
                                 <div className="text-left">
                                     <p className="font-bold text-base text-gray-900 tracking-tight group-hover:text-ochre transition-colors">Exhaustive Glossary</p>

@@ -44,6 +44,7 @@ export default function Sidebar() {
                             <Link
                                 key={item.href}
                                 href={item.href}
+                                prefetch={false}
                                 className={`flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${isActive
                                     ? 'bg-orange-50 text-ochre font-bold'
                                     : 'text-gray-600 hover:bg-gray-50'
@@ -67,6 +68,7 @@ export default function Sidebar() {
                     <p className="px-4 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-3">Resources</p>
                     <Link
                         href="/glossary"
+                        prefetch={false}
                         className={`flex items-center gap-3 px-3 py-3 rounded-2xl transition-all group mx-1 ${pathname === '/glossary'
                             ? 'bg-ochre/5 border border-ochre/10'
                             : 'hover:bg-gray-50 border border-transparent'

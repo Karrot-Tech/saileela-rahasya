@@ -35,7 +35,7 @@ export default function AdminBottomNav() {
     }, []);
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-white/10 z-[100] lg:hidden backdrop-blur-md bg-gray-900/90">
+        <nav className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-white/10 z-[120] lg:hidden backdrop-blur-md bg-gray-900/90">
             <div className="flex justify-around items-center h-16 pb-safe">
                 {ADMIN_NAV_ITEMS.map((item) => {
                     const Icon = item.icon;
@@ -47,6 +47,7 @@ export default function AdminBottomNav() {
                         <Link
                             key={item.href}
                             href={item.href}
+                            prefetch={false}
                             className={`flex flex-col items-center justify-center w-full h-full space-y-1 relative transition-colors touch-auto select-none ${isActive ? 'text-ochre' : 'text-gray-500'
                                 }`}
                             style={{ touchAction: 'manipulation' }}

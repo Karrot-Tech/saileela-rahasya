@@ -18,7 +18,7 @@ export default function BottomNav() {
     const { unreadCount } = useInquiry();
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-100 z-50 md:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-100 z-[120] md:hidden">
             <div className="flex justify-around items-center h-16 pb-safe">
                 {NAV_ITEMS.map((item) => {
                     const Icon = item.icon;
@@ -29,6 +29,7 @@ export default function BottomNav() {
                         <Link
                             key={item.href}
                             href={item.href}
+                            prefetch={false}
                             className={`flex flex-col items-center justify-center w-full h-full space-y-1 relative transition-colors select-none ${isActive ? 'text-ochre' : 'text-gray-400'
                                 }`}
                             style={{ touchAction: 'manipulation' }}

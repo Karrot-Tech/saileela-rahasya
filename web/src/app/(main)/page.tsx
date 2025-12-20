@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Youtube, Facebook, Instagram } from 'lucide-react';
 
 export default function Home() {
@@ -7,11 +8,14 @@ export default function Home() {
 
       {/* Hero Section */}
       <div className="space-y-4 max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700 w-full px-4">
-        <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white mx-auto max-w-sm md:max-w-none">
-          <img
+        <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white mx-auto max-w-sm md:max-w-none relative aspect-[4/3] md:aspect-auto">
+          <Image
             src="/hero-main.jpg"
             alt="Sai Baba - Meri Bhi Suno"
-            className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700"
+            fill
+            priority
+            className="object-cover transform hover:scale-105 transition-transform duration-700"
+            sizes="(max-width: 768px) 100vw, 1200px"
           />
         </div>
 
