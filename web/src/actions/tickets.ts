@@ -271,3 +271,66 @@ export async function userReplyToTicket(ticketId: string, text: string) {
         return { success: false, error: 'Failed to send follow-up' };
     }
 }
+
+export async function updateTicketReadStatus(ticketId: string, messageId: string) {
+    try {
+        const clerkUser = await currentUser();
+        const userEmail = clerkUser?.emailAddresses[0]?.emailAddress;
+
+        if (!userEmail) {
+            return { success: false, error: 'Unauthorized' };
+        }
+
+        // Verify ownership
+        const ticket = await prisma.ticket.findUnique({
+            where: { id: ticketId },
+            include: { user: true }
+        });
+
+        if (!ticket || ticket.user.email !== userEmail) {
+            return { success: false, error: 'Unauthorized' };
+        }
+
+        await prisma.ticket.update({
+            where: { id: ticketId },
+            data: { lastReadMessageId: messageId }
+        });
+
+        return { success: true };
+    } catch (error) {
+        console.error('Error updating read status:', error);
+        return { success: false, error: 'Failed to update' };
+    }
+}
+
+export async function archiveTicket(ticketId: string) {
+    try {
+        const clerkUser = await currentUser();
+        const userEmail = clerkUser?.emailAddresses[0]?.emailAddress;
+
+        if (!userEmail) {
+            return { success: false, error: 'Unauthorized' };
+        }
+
+        // Verify ownership
+        const ticket = await prisma.ticket.findUnique({
+            where: { id: ticketId },
+            include: { user: true }
+        });
+
+        if (!ticket || ticket.user.email !== userEmail) {
+            return { success: false, error: 'Unauthorized' };
+        }
+
+        await prisma.ticket.update({
+            where: { id: ticketId },
+            data: { isArchived: true }
+        });
+
+        revalidatePath('/ask');
+        return { success: true };
+    } catch (error) {
+        console.error('Error archiving ticket:', error);
+        return { success: false, error: 'Failed to archive' };
+    }
+}

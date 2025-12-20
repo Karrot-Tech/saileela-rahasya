@@ -23,8 +23,10 @@ model Ticket {
   userId    String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  messages  Message[]
-  user      User      @relation(fields: [userId], references: [id])
+  messages          Message[]
+  user              User      @relation(fields: [userId], references: [id])
+  lastReadMessageId String?
+  isArchived        Boolean   @default(false)
 
   @@index([userId])
 }

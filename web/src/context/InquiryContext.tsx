@@ -53,7 +53,26 @@ export function InquiryProvider({ children }: { children: React.ReactNode }) {
 
         try {
             const data = await getTickets();
-            setTickets(data as Ticket[]);
+            const ticketsData = data as Ticket[];
+            setTickets(ticketsData);
+
+            // Populate state from DB persistence
+            const dbReadMessages: { [key: string]: string } = {};
+            const dbAcknowledgedTickets: string[] = [];
+
+            ticketsData.forEach((t: any) => {
+                if (t.lastReadMessageId) {
+                    dbReadMessages[t.id] = t.lastReadMessageId;
+                }
+                if (t.isArchived) {
+                    dbAcknowledgedTickets.push(t.id);
+                }
+            });
+
+            // Merge with local state to avoid race conditions/glitches, prioritizing DB if present
+            setReadMessages(prev => ({ ...prev, ...dbReadMessages }));
+            setAcknowledgedTickets(prev => Array.from(new Set([...prev, ...dbAcknowledgedTickets])));
+
         } catch (error) {
             console.error('Failed to fetch tickets in context:', error);
         } finally {
@@ -89,17 +108,28 @@ export function InquiryProvider({ children }: { children: React.ReactNode }) {
         }
     }, [isLoaded, isSignedIn, fetchTickets]);
 
-    const markAsRead = (ticketId: string, messageId: string) => {
+    const markAsRead = async (ticketId: string, messageId: string) => {
+        // Optimistic update
         const next = { ...readMessages, [ticketId]: messageId };
         setReadMessages(next);
         localStorage.setItem('krishnasagar_read_messages', JSON.stringify(next));
+
+        // Server update
+        // Dynamically import to avoid circular dependency issues if any
+        const { updateTicketReadStatus } = await import('@/actions/tickets');
+        await updateTicketReadStatus(ticketId, messageId);
     };
 
-    const acknowledgeTicket = (ticketId: string) => {
+    const acknowledgeTicket = async (ticketId: string) => {
         if (!acknowledgedTickets.includes(ticketId)) {
+            // Optimistic update
             const next = [...acknowledgedTickets, ticketId];
             setAcknowledgedTickets(next);
             localStorage.setItem('krishnasagar_acknowledged_tickets', JSON.stringify(next));
+
+            // Server update
+            const { archiveTicket } = await import('@/actions/tickets');
+            await archiveTicket(ticketId);
         }
     };
 
