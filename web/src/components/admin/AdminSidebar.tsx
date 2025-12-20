@@ -16,12 +16,15 @@ import {
 } from 'lucide-react';
 import { UserButton } from '@clerk/nextjs';
 
+import { useState, useEffect } from 'react';
+import { getOpenTicketsCount } from '@/actions/tickets';
+
 const ADMIN_NAV = [
     { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { label: 'Leela Stories', href: '/admin/leela', icon: Footprints },
     { label: 'Bodhakatha', href: '/admin/bodhakatha', icon: Lightbulb },
     { label: 'Glossary', href: '/admin/glossary', icon: Book },
-    { label: 'Seeker Inquiries', href: '/admin/tickets', icon: Ticket },
+    { label: 'Seeker Inquiries', href: '/admin/tickets', icon: Ticket, isTickets: true },
 ];
 
 export default function AdminSidebar({
@@ -32,6 +35,18 @@ export default function AdminSidebar({
     onClose?: () => void;
 }) {
     const pathname = usePathname();
+    const [openCount, setOpenCount] = useState(0);
+
+    useEffect(() => {
+        getOpenTicketsCount().then(setOpenCount);
+
+        // Refresh every 2 mins
+        const interval = setInterval(() => {
+            getOpenTicketsCount().then(setOpenCount);
+        }, 120000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <>
@@ -92,7 +107,14 @@ export default function AdminSidebar({
                                             <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-ochre'} transition-colors`} />
                                             <span className="font-semibold text-sm">{item.label}</span>
                                         </div>
-                                        {isActive && <ChevronRight className="w-4 h-4 opacity-50" />}
+                                        <div className="flex items-center gap-2">
+                                            {item.isTickets && openCount > 0 && (
+                                                <span className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-black shadow-lg animate-in zoom-in duration-300 ${isActive ? 'bg-white text-ochre shadow-white/20' : 'bg-red-600 text-white shadow-red-500/30'}`}>
+                                                    {openCount}
+                                                </span>
+                                            )}
+                                            {isActive && <ChevronRight className="w-4 h-4 opacity-50" />}
+                                        </div>
                                     </Link>
                                 );
                             })}

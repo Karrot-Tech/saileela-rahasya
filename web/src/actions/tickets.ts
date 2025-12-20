@@ -334,3 +334,13 @@ export async function archiveTicket(ticketId: string) {
         return { success: false, error: 'Failed to archive' };
     }
 }
+export async function getOpenTicketsCount() {
+    try {
+        if (!await isAdmin()) return 0;
+        return await prisma.ticket.count({
+            where: { status: 'OPEN' }
+        });
+    } catch (error) {
+        return 0;
+    }
+}
