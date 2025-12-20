@@ -7,7 +7,7 @@ This project, originally architected in `ARCHITECTURE.md`, has evolved into a fu
 ---
 
 > **Current Status:**
-> - **Web App:** v1.2.1 (Production Release)
+> - **Web App:** v1.2.2 (Production Release)
 > - **Backend:** Next.js Server Actions + Prisma + Neon (Postgres)
 > - **Authentication:** Clerk
 > - **Infrastructure:** Vercel
