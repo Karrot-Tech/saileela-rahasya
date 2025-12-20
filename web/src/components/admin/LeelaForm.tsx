@@ -209,7 +209,7 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
                         <div className="space-y-1.5">
                             <label className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest">Chapter</label>
                             <input
-                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-sm transition-all"
+                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-base transition-all"
                                 value={formData.chapter}
                                 onChange={(e) => setFormData({ ...formData, chapter: e.target.value })}
                             />
@@ -217,7 +217,7 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
                         <div className="space-y-1.5">
                             <label className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest">YouTube ID</label>
                             <input
-                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-sm transition-all"
+                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-base transition-all"
                                 value={formData.youtube_id}
                                 onChange={(e) => setFormData({ ...formData, youtube_id: e.target.value })}
                             />
@@ -226,7 +226,7 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
                             <label className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest">Order ID (Weight)</label>
                             <input
                                 type="number"
-                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-sm transition-all"
+                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-base transition-all"
                                 value={formData.orderId}
                                 onChange={(e) => setFormData({ ...formData, orderId: parseInt(e.target.value) || 0 })}
                             />
@@ -238,7 +238,7 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
                         <div className="space-y-1.5">
                             <label className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest">Keywords</label>
                             <input
-                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-sm transition-all"
+                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-base transition-all"
                                 placeholder="guru, dev, sai"
                                 value={formData.keywords}
                                 onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
@@ -247,7 +247,7 @@ export default function LeelaForm({ leela }: LeelaFormProps) {
                         <div className="space-y-1.5">
                             <label className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-widest">Social Tags</label>
                             <input
-                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-sm transition-all"
+                                className="w-full px-3 py-2.5 md:p-2 border border-gray-100 bg-gray-50/50 rounded-xl focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none text-base transition-all"
                                 placeholder="spiritual, faith"
                                 value={formData.social_tags}
                                 onChange={(e) => setFormData({ ...formData, social_tags: e.target.value })}

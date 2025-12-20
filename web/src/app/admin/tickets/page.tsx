@@ -263,7 +263,7 @@ export default function AdminTicketsPage() {
                                 onChange={(e) => setReplyText(prev => ({ ...prev, [expandedTicketId!]: e.target.value }))}
                                 placeholder="Type spiritual guidance..."
                                 rows={2}
-                                className="w-full border-none bg-gray-50 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-ochre/20 outline-none resize-none mb-3"
+                                className="w-full border-none bg-gray-50 rounded-xl p-3 text-base font-medium focus:ring-2 focus:ring-ochre/20 outline-none resize-none mb-3"
                             />
                             <div className="flex items-center justify-between gap-3">
                                 <button
