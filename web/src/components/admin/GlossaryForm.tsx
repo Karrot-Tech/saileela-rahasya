@@ -97,7 +97,7 @@ export default function GlossaryForm({ glossary }: GlossaryFormProps) {
                             required
                             rows={6}
                             placeholder="Enter the spiritual meaning or context..."
-                            className="w-full px-4 py-4 border border-gray-100 bg-gray-50/30 rounded-2xl focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none text-[15px] leading-relaxed font-medium transition-all resize-none shadow-inner"
+                            className="w-full px-4 py-4 border border-gray-100 bg-gray-50/30 rounded-2xl focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none text-base leading-relaxed font-medium transition-all resize-none shadow-inner"
                             value={formData.definition_en}
                             onChange={(e) => setFormData({ ...formData, definition_en: e.target.value })}
                         />

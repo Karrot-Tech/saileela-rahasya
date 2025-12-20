@@ -252,7 +252,7 @@ export default function AskPage() {
                                                         value={newTicketSubject}
                                                         onChange={(e) => setNewTicketSubject(e.target.value)}
                                                         placeholder="e.g., Guidance on Meditation Practice"
-                                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-2.5 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-sm font-medium"
+                                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-2.5 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-base font-medium"
                                                     />
                                                 </div>
                                                 <div className="space-y-1.5">
@@ -263,7 +263,7 @@ export default function AskPage() {
                                                         value={newTicketMessage}
                                                         onChange={(e) => setNewTicketMessage(e.target.value)}
                                                         placeholder="Please share your spiritual question or request for guidance in detail..."
-                                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-3.5 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-sm leading-relaxed resize-none font-medium"
+                                                        className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-3.5 focus:ring-4 focus:ring-ochre/10 focus:border-ochre outline-none transition-all text-base leading-relaxed resize-none font-medium"
                                                     />
                                                 </div>
                                                 <button
@@ -314,7 +314,7 @@ export default function AskPage() {
                                                         value={newTicketSubject}
                                                         onChange={(e) => setNewTicketSubject(e.target.value)}
                                                         placeholder="Topic of Spiritual Inquiry..."
-                                                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-medium"
+                                                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-base focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-medium"
                                                     />
                                                     <textarea
                                                         required
@@ -322,7 +322,7 @@ export default function AskPage() {
                                                         value={newTicketMessage}
                                                         onChange={(e) => setNewTicketMessage(e.target.value)}
                                                         placeholder="Share your spiritual query or request guidance..."
-                                                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-medium resize-none"
+                                                        className="w-full bg-white border border-gray-100 rounded-xl px-3 py-2 text-base focus:ring-2 focus:ring-ochre/20 focus:border-ochre outline-none font-medium resize-none"
                                                     />
                                                     <button
                                                         type="submit"
@@ -506,7 +506,7 @@ export default function AskPage() {
                                     onChange={(e) => setFollowUpText(prev => ({ ...prev, [expandedTicketId!]: e.target.value }))}
                                     placeholder="Type your clarifying question here..."
                                     rows={2}
-                                    className="w-full border-none bg-gray-50 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-ochre/20 outline-none resize-none mb-3"
+                                    className="w-full border-none bg-gray-50 rounded-xl p-3 text-base font-medium focus:ring-2 focus:ring-ochre/20 outline-none resize-none mb-3"
                                 />
                                 <div className="flex items-center justify-between gap-3">
                                     <button

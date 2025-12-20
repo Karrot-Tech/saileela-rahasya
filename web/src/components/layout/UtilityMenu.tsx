@@ -48,16 +48,16 @@ export default function UtilityMenu() {
                     )}
                     <button
                         onClick={toggleMenu}
-                        className="flex-none transition-transform active:scale-90 relative"
+                        className="flex-none transition-transform active:scale-95 cursor-pointer relative"
                     >
                         {user?.imageUrl ? (
                             <img
                                 src={user.imageUrl}
                                 alt={user.fullName || 'User'}
-                                className="w-9 h-9 md:w-10 md:h-10 rounded-full border-2 border-white shadow-md object-cover"
+                                className="w-9 h-9 md:w-10 md:h-10 rounded-xl border border-white shadow-md object-cover"
                             />
                         ) : (
-                            <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-ochre border-2 border-white shadow-md flex items-center justify-center text-white font-black text-xs">
+                            <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-ochre border border-white shadow-md flex items-center justify-center text-white font-black text-xs">
                                 {user?.firstName?.charAt(0) || 'U'}
                             </div>
                         )}
@@ -69,7 +69,7 @@ export default function UtilityMenu() {
                 <SignedOut>
                     <button
                         onClick={toggleMenu}
-                        className="p-2 text-gray-600 hover:bg-gray-50 rounded-full border border-gray-200 bg-white shadow-sm transition-all active:scale-90"
+                        className="w-9 h-9 md:w-10 md:h-10 bg-ochre/5 text-ochre rounded-xl border border-ochre/10 shadow-sm flex items-center justify-center transition-all active:scale-95 hover:bg-ochre/10 cursor-pointer"
                         aria-label="User Menu"
                     >
                         <User className="w-5 h-5" />
@@ -99,20 +99,20 @@ export default function UtilityMenu() {
                                     alt="Profile"
                                 />
                             ) : (
-                                <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-ochre/10 flex items-center justify-center text-ochre border border-ochre/5">
-                                    <User className="w-5 h-5 md:w-6 md:h-6" />
+                                <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-ochre flex items-center justify-center text-white font-black text-xs">
+                                    {user?.firstName?.charAt(0) || 'U'}
                                 </div>
                             )}
                         </SignedIn>
                         <SignedOut>
-                            <div className="w-9 h-9 md:w-10 md:h-10 bg-ochre/10 rounded-xl flex items-center justify-center text-ochre border border-ochre/5">
+                            <div className="w-9 h-9 md:w-10 md:h-10 bg-ochre/5 rounded-xl flex items-center justify-center text-ochre border border-ochre/10">
                                 <User className="w-5 h-5 md:w-6 md:h-6" />
                             </div>
                         </SignedOut>
                         <div className="flex flex-col">
-                            <h2 className="text-[10px] md:text-xs font-black uppercase tracking-widest text-gray-900 leading-none">Om Sai Ram 🙏</h2>
+                            <h2 className="text-xs font-black uppercase tracking-widest text-gray-900 leading-none">Om Sai Ram 🙏</h2>
                             <SignedIn>
-                                <p className="text-[9px] font-bold text-ochre uppercase tracking-tight mt-1 leading-none">
+                                <p className="text-[10px] font-bold text-ochre uppercase tracking-tight mt-1.5 leading-none">
                                     {user?.firstName || 'Devotee'}
                                 </p>
                             </SignedIn>
@@ -139,8 +139,8 @@ export default function UtilityMenu() {
                                             <LayoutDashboard className="w-5 h-5" />
                                         </div>
                                         <div className="text-left">
-                                            <p className="font-black text-xs text-gray-900 tracking-tight leading-none group-hover:text-white transition-colors">Admin Console</p>
-                                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-1.5 group-hover:text-white/50">System Management</p>
+                                            <p className="font-black text-sm text-gray-900 tracking-tight leading-none group-hover:text-white transition-colors">Admin Console</p>
+                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-2 group-hover:text-white/50">System Management</p>
                                         </div>
                                     </div>
                                     <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-white transition-transform group-hover:translate-x-1" />
@@ -158,8 +158,8 @@ export default function UtilityMenu() {
                                         )}
                                     </div>
                                     <div className="text-left">
-                                        <p className="font-black text-xs text-gray-900 tracking-tight leading-none group-hover:text-ochre transition-colors">Guidance History</p>
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-1.5 group-hover:text-ochre/70">Personal Inquiry Log</p>
+                                        <p className="font-black text-sm text-gray-900 tracking-tight leading-none group-hover:text-ochre transition-colors">Guidance History</p>
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-2 group-hover:text-ochre/70">Personal Inquiry Log</p>
                                     </div>
                                 </div>
                                 <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
@@ -171,8 +171,8 @@ export default function UtilityMenu() {
                                         <BookA className="w-5 h-5 flex-none" />
                                     </div>
                                     <div className="text-left">
-                                        <p className="font-black text-xs text-gray-900 tracking-tight leading-none group-hover:text-ochre transition-colors">Exhaustive Glossary</p>
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-1.5 group-hover:text-ochre/70">Spiritual Archives</p>
+                                        <p className="font-black text-sm text-gray-900 tracking-tight leading-none group-hover:text-ochre transition-colors">Exhaustive Glossary</p>
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-2 group-hover:text-ochre/70">Spiritual Archives</p>
                                     </div>
                                 </div>
                                 <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
@@ -190,8 +190,8 @@ export default function UtilityMenu() {
                                         <Settings className="w-5 h-5" />
                                     </div>
                                     <div className="text-left">
-                                        <p className="font-black text-xs text-gray-900 tracking-tight leading-none group-hover:text-ochre transition-colors">Profile Settings</p>
-                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-1.5 group-hover:text-ochre/70">Account Preferences</p>
+                                        <p className="font-black text-sm text-gray-900 tracking-tight leading-none group-hover:text-ochre transition-colors">Profile Settings</p>
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-2 group-hover:text-ochre/70">Account Preferences</p>
                                     </div>
                                 </div>
                                 <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-ochre transition-transform group-hover:translate-x-1" />
@@ -201,7 +201,7 @@ export default function UtilityMenu() {
                         {/* Footer Actions */}
                         <div className="pt-4 border-t border-gray-100 space-y-3">
                             <SignOutButton>
-                                <button className="w-full flex items-center justify-center gap-3 py-3.5 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl font-black text-[9px] uppercase tracking-[0.2em] transition-all border border-transparent hover:border-red-100 group shadow-sm">
+                                <button className="w-full flex items-center justify-center gap-3 py-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all border border-transparent hover:border-red-100 group shadow-sm">
                                     <LogOut className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" />
                                     <span>Sign Out Session</span>
                                 </button>
@@ -211,7 +211,7 @@ export default function UtilityMenu() {
 
                     <SignedOut>
                         <div className="text-center space-y-6 flex-1 flex flex-col justify-center">
-                            <div className="w-20 h-20 bg-ochre/5 rounded-full flex items-center justify-center mx-auto text-ochre">
+                            <div className="w-20 h-20 bg-ochre/5 rounded-[2rem] border border-ochre/10 shadow-inner flex items-center justify-center mx-auto text-ochre">
                                 <User className="w-10 h-10" />
                             </div>
                             <div className="space-y-2">
@@ -234,15 +234,15 @@ export default function UtilityMenu() {
                             <Link href="/glossary" onClick={() => setIsOpen(false)} className="flex items-center space-x-4 p-4 hover:bg-gray-50 rounded-2xl transition-all group">
                                 <BookA className="w-6 h-6 text-gray-400 group-hover:text-ochre transition-colors flex-none" />
                                 <div className="text-left">
-                                    <p className="font-bold text-sm text-gray-900 tracking-tight group-hover:text-ochre transition-colors">Exhaustive Glossary</p>
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Spiritual Archives</p>
+                                    <p className="font-bold text-base text-gray-900 tracking-tight group-hover:text-ochre transition-colors">Exhaustive Glossary</p>
+                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1.5">Spiritual Archives</p>
                                 </div>
                             </Link>
                         </div>
                     </SignedOut>
 
                     <div className="text-center">
-                        <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.3em]">Saileela Rahasya v1.2.2</p>
+                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Saileela Rahasya v1.2.2</p>
                     </div>
                 </div>
             </div>

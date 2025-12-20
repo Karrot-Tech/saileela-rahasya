@@ -109,28 +109,37 @@ export async function createTicket(subject: string, message: string) {
     }
 }
 
-export async function getAllTickets() {
+export async function getAllTickets(page: number = 1, pageSize: number = 20, status?: 'OPEN' | 'ANSWERED' | 'CLOSED' | 'ALL') {
     try {
         if (!await isAdmin()) {
             throw new Error('Unauthorized');
         }
 
-        const tickets = await prisma.ticket.findMany({
-            include: {
-                user: true,
-                messages: {
-                    orderBy: {
-                        createdAt: 'asc'
+        const skip = (page - 1) * pageSize;
+        const where = status && status !== 'ALL' ? { status } : {};
+
+        const [tickets, total] = await Promise.all([
+            prisma.ticket.findMany({
+                where,
+                skip,
+                take: pageSize,
+                include: {
+                    user: true,
+                    messages: {
+                        orderBy: {
+                            createdAt: 'asc'
+                        }
                     }
+                },
+                orderBy: {
+                    createdAt: 'desc'
                 }
-            },
-            orderBy: {
-                createdAt: 'desc'
-            }
-        });
+            }),
+            prisma.ticket.count({ where })
+        ]);
 
         // Serialization
-        return tickets.map((ticket: any) => ({
+        const serializedTickets = tickets.map((ticket: any) => ({
             ...ticket,
             createdAt: ticket.createdAt.toISOString(),
             updatedAt: ticket.updatedAt.toISOString(),
@@ -139,9 +148,32 @@ export async function getAllTickets() {
                 createdAt: msg.createdAt.toISOString()
             }))
         }));
+
+        return {
+            tickets: serializedTickets,
+            total,
+            hasMore: total > skip + tickets.length
+        };
     } catch (error) {
         console.error('Error fetching all tickets:', error);
-        return [];
+        return { tickets: [], total: 0, hasMore: false };
+    }
+}
+
+export async function getTicketStats() {
+    try {
+        if (!await isAdmin()) return { OPEN: 0, ANSWERED: 0, CLOSED: 0 };
+
+        const [open, answered, closed] = await Promise.all([
+            prisma.ticket.count({ where: { status: 'OPEN' } }),
+            prisma.ticket.count({ where: { status: 'ANSWERED' } }),
+            prisma.ticket.count({ where: { status: 'CLOSED' } })
+        ]);
+
+        return { OPEN: open, ANSWERED: answered, CLOSED: closed };
+    } catch (error) {
+        console.error('Error fetching ticket stats:', error);
+        return { OPEN: 0, ANSWERED: 0, CLOSED: 0 };
     }
 }
 

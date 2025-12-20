@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getAllTickets, replyToTicket, closeTicket } from '@/actions/tickets';
-import { MessageCircle, Send, CheckCircle2, User, Clock, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import { getAllTickets, replyToTicket, closeTicket, getTicketStats } from '@/actions/tickets';
+import { MessageCircle, Send, CheckCircle2, User, Loader2 } from 'lucide-react';
 import { Modal } from '@/components/common/Modal';
 import { Notification, NotificationType } from '@/components/common/Notification';
 
@@ -30,10 +30,14 @@ type Ticket = {
 export default function AdminTicketsPage() {
     const [tickets, setTickets] = useState<Ticket[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(false);
+    const [stats, setStats] = useState({ OPEN: 0, ANSWERED: 0, CLOSED: 0 });
+    const [filter, setFilter] = useState<'OPEN' | 'ANSWERED' | 'CLOSED' | 'ALL'>('OPEN');
+
     const [expandedTicketId, setExpandedTicketId] = useState<string | null>(null);
     const [replyText, setReplyText] = useState<{ [key: string]: string }>({});
     const [isSubmitting, setIsSubmitting] = useState<{ [key: string]: boolean }>({});
-    const [filter, setFilter] = useState<'OPEN' | 'ANSWERED' | 'CLOSED' | 'ALL'>('OPEN');
 
     // UI Feedback State
     const [notification, setNotification] = useState<{ message: string; type: NotificationType } | null>(null);
@@ -41,14 +45,37 @@ export default function AdminTicketsPage() {
     const [postReplyActionId, setPostReplyActionId] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchTickets();
-    }, []);
+        setPage(1);
+        fetchTickets(1, true);
+        fetchStats();
+    }, [filter]);
 
-    const fetchTickets = async () => {
+    const fetchStats = async () => {
+        const counts = await getTicketStats();
+        setStats(counts);
+    };
+
+    const fetchTickets = async (pageNum: number, isReset: boolean = false) => {
         setIsLoading(true);
-        const data = await getAllTickets();
-        setTickets(data as unknown as Ticket[]);
-        setIsLoading(false);
+        try {
+            const result = await getAllTickets(pageNum, 20, filter);
+            if (isReset) {
+                setTickets(result.tickets as unknown as Ticket[]);
+            } else {
+                setTickets(prev => [...prev, ...(result.tickets as unknown as Ticket[])]);
+            }
+            setHasMore(result.hasMore);
+        } catch (error) {
+            console.error('Error fetching tickets:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const loadMore = () => {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        fetchTickets(nextPage);
     };
 
     const handleReply = async (ticketId: string) => {
@@ -60,9 +87,10 @@ export default function AdminTicketsPage() {
 
         if (result.success) {
             setReplyText(prev => ({ ...prev, [ticketId]: '' }));
-            setExpandedTicketId(null); // Close the conversation modal
-            setPostReplyActionId(ticketId); // Show post-reply options
-            fetchTickets();
+            setExpandedTicketId(null);
+            setPostReplyActionId(ticketId);
+            fetchTickets(1, true);
+            fetchStats();
         } else {
             setNotification({ message: result.error || "Error sending guidance", type: 'error' });
         }
@@ -74,7 +102,8 @@ export default function AdminTicketsPage() {
         const result = await closeTicket(ticketId);
         if (result.success) {
             setNotification({ message: "Inquiry closed successfully", type: 'success' });
-            fetchTickets();
+            fetchTickets(1, true);
+            fetchStats();
         } else {
             setNotification({ message: "Error closing inquiry", type: 'error' });
         }
@@ -105,7 +134,7 @@ export default function AdminTicketsPage() {
                             : 'bg-white text-gray-400 border-gray-100 hover:bg-gray-50'
                             }`}
                     >
-                        <span className="flex-none">{tickets.filter(t => t.status === 'OPEN').length} New</span>
+                        <span className="flex-none">{stats.OPEN} New</span>
                     </button>
                     <button
                         onClick={() => setFilter('ANSWERED')}
@@ -114,7 +143,7 @@ export default function AdminTicketsPage() {
                             : 'bg-white text-gray-400 border-gray-100 hover:bg-gray-50'
                             }`}
                     >
-                        <span className="flex-none">{tickets.filter(t => t.status === 'ANSWERED').length} Answered</span>
+                        <span className="flex-none">{stats.ANSWERED} Answered</span>
                     </button>
                     <button
                         onClick={() => setFilter('CLOSED')}
@@ -123,22 +152,21 @@ export default function AdminTicketsPage() {
                             : 'bg-white text-gray-400 border-gray-100 hover:bg-gray-50'
                             }`}
                     >
-                        <span className="flex-none">Closed</span>
+                        <span className="flex-none">{stats.CLOSED} Closed</span>
                     </button>
                 </div>
             </div>
 
             <div className="grid gap-4 w-full mt-6 md:mt-10">
-                {tickets.filter(t => filter === 'ALL' || t.status === filter).length === 0 ? (
+                {tickets.length === 0 ? (
                     <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200 shadow-sm animate-in fade-in duration-500 mx-1">
                         <MessageCircle className="w-12 h-12 text-gray-200 mx-auto mb-4" />
                         <h3 className="text-xl font-black text-gray-900 tracking-tight">Nothing here</h3>
                         <p className="text-sm text-gray-400 font-medium">No inquiries matching this status.</p>
                     </div>
                 ) : (
-                    tickets
-                        .filter(t => filter === 'ALL' || t.status === filter)
-                        .map((ticket) => (
+                    <>
+                        {tickets.map((ticket) => (
                             <div
                                 key={ticket.id}
                                 onClick={() => setExpandedTicketId(ticket.id)}
@@ -172,11 +200,34 @@ export default function AdminTicketsPage() {
                                 </div>
                                 <div className="flex flex-col items-end gap-1 flex-none">
                                     <div className="bg-gray-100/50 group-hover:bg-ochre group-hover:text-white px-2 md:px-3 py-1 md:py-1.5 rounded-lg md:rounded-xl text-[8px] md:text-[10px] font-black text-gray-500 transition-all border border-gray-100/10 uppercase tracking-widest shadow-sm">
-                                        {ticket.messages.length} <span className="hidden xs:inline">MSG</span>
+                                        {ticket.messages.length} MSG
                                     </div>
                                 </div>
                             </div>
-                        ))
+                        ))}
+
+                        {hasMore && (
+                            <div className="flex justify-center pt-8 pb-12">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        loadMore();
+                                    }}
+                                    disabled={isLoading}
+                                    className="bg-white text-ochre px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-[0.2em] border border-ochre/20 hover:bg-orange-50 transition-all flex items-center shadow-sm disabled:opacity-50"
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                            Loading...
+                                        </>
+                                    ) : (
+                                        "Explore More"
+                                    )}
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
 
@@ -188,7 +239,6 @@ export default function AdminTicketsPage() {
                 flush
             >
                 <div className="flex flex-col h-[70vh]">
-                    {/* Thread Content */}
                     <div className="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar bg-gray-50/50">
                         {tickets.find(t => t.id === expandedTicketId)?.messages.map((msg, idx) => (
                             <div key={idx} className={`flex ${msg.sender === 'USER' ? 'justify-start' : 'justify-end'}`}>
@@ -206,7 +256,6 @@ export default function AdminTicketsPage() {
                         ))}
                     </div>
 
-                    {/* Footer / Reply Area */}
                     {expandedTicketId && tickets.find(t => t.id === expandedTicketId)?.status !== 'CLOSED' && (
                         <div className="p-4 bg-white border-t border-gray-100 pb-8 md:pb-4">
                             <textarea
@@ -278,7 +327,6 @@ export default function AdminTicketsPage() {
                 </div>
             </Modal>
 
-            {/* Premium UI Components */}
             <Modal
                 isOpen={!!confirmCloseId}
                 onClose={() => setConfirmCloseId(null)}
