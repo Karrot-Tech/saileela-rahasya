@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
             --background: #ffffff;
             --text: #1f2937;
         }
+
         body {
             margin: 0;
             padding: 0;
@@ -24,6 +26,7 @@
             text-align: center;
             padding: 20px;
         }
+
         .icon-container {
             width: 80px;
             height: 80px;
@@ -35,17 +38,20 @@
             margin-bottom: 24px;
             box-shadow: 0 10px 25px -5px rgba(204, 119, 34, 0.4);
         }
+
         svg {
             width: 40px;
             height: 40px;
             color: white;
         }
+
         h1 {
             font-size: 24px;
             font-weight: 800;
             margin-bottom: 8px;
             color: #111827;
         }
+
         p {
             font-size: 16px;
             color: #6b7280;
@@ -53,6 +59,7 @@
             line-height: 1.5;
             margin-bottom: 32px;
         }
+
         .retry-button {
             background-color: var(--ochre);
             color: white;
@@ -66,19 +73,26 @@
             letter-spacing: 0.05em;
             font-size: 14px;
         }
+
         .retry-button:active {
             transform: scale(0.95);
         }
     </style>
 </head>
+
 <body>
-    <div class="icon-container">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-        </svg>
-    </div>
-    <h1>Seek Grace in Silence</h1>
-    <p>It seems your connection is resting. Please check your network to continue your spiritual journey.</p>
-    <button class="retry-button" onclick="window.location.reload()">Retry Connection</button>
+    <main>
+        <div class="icon-container">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+            </svg>
+        </div>
+        <h1>Seek Grace in Silence</h1>
+        <p>It seems your connection is resting. Please check your network to continue your spiritual journey.</p>
+        <button class="retry-button" onclick="window.location.reload()">Retry Connection</button>
+    </main>
 </body>
+
 </html>
