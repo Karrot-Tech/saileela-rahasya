@@ -51,7 +51,7 @@ export default function AdminBottomNav() {
                                 }`}
                         >
                             <div className="relative">
-                                <Icon className={`w-5 h-5 ${isActive ? 'animate-pulse' : ''}`} />
+                                <Icon className="w-5 h-5" />
                                 {item.isTickets && openCount > 0 && (
                                     <span className="absolute -top-1.5 -right-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-600 text-[7px] font-black text-white shadow-lg ring-1 ring-gray-900 animate-in zoom-in duration-300">
                                         {openCount}

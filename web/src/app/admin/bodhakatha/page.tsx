@@ -1,20 +1,62 @@
 
-import Link from 'next/link';
-import prisma from '@/lib/db';
-import { Plus, Edit } from 'lucide-react';
-import DeleteIconButton from '@/components/admin/DeleteIconButton';
+'use client';
 
-export default async function AdminBodhakathaPage() {
-    const bodhakathas = await prisma.bodhakatha.findMany({
-        orderBy: { orderId: 'asc' }
-    });
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Plus, Edit, Loader2 } from 'lucide-react';
+import DeleteIconButton from '@/components/admin/DeleteIconButton';
+import { getBodhakathasPaged } from '@/actions/content';
+
+export default function AdminBodhakathaPage() {
+    const [bodhakathas, setBodhakathas] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(false);
+    const [total, setTotal] = useState(0);
+
+    useEffect(() => {
+        fetchBodhakathas(1, true);
+    }, []);
+
+    const fetchBodhakathas = async (pageNum: number, isReset: boolean = false) => {
+        setIsLoading(true);
+        try {
+            const result = await getBodhakathasPaged(pageNum, 20);
+            if (isReset) {
+                setBodhakathas(result.items);
+            } else {
+                setBodhakathas(prev => [...prev, ...result.items]);
+            }
+            setHasMore(result.hasMore);
+            setTotal(result.total);
+        } catch (error) {
+            console.error('Error fetching bodhakathas:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const loadMore = () => {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        fetchBodhakathas(nextPage);
+    };
+
+    if (isLoading && bodhakathas.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] text-gray-400">
+                <Loader2 className="w-10 h-10 animate-spin mb-4 text-ochre" />
+                <p className="text-lg uppercase font-black tracking-widest">Loading Bodhakatha...</p>
+            </div>
+        );
+    }
 
     return (
-        <div className="space-y-6 md:space-y-8">
+        <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500">
             <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-100 pb-4 md:pb-6 gap-4">
                 <div>
                     <h1 className="text-xl md:text-3xl font-black text-gray-900 tracking-tight">Bodhakatha</h1>
-                    <p className="text-xs md:text-sm text-gray-500 font-medium">Manage instructional stories and wisdom teachings</p>
+                    <p className="text-xs md:text-sm text-gray-500 font-medium">Manage {total} instructional stories and wisdom teachings</p>
                 </div>
                 <Link
                     href="/admin/bodhakatha/new"
@@ -92,6 +134,25 @@ export default async function AdminBodhakathaPage() {
                     </div>
                 ))}
             </div>
+
+            {hasMore && (
+                <div className="flex justify-center pt-8 pb-12">
+                    <button
+                        onClick={loadMore}
+                        disabled={isLoading}
+                        className="bg-white text-ochre px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-[0.2em] border border-ochre/20 hover:bg-orange-50 transition-all flex items-center shadow-sm disabled:opacity-50"
+                    >
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                Loading...
+                            </>
+                        ) : (
+                            "Explore More Bodhakatha"
+                        )}
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

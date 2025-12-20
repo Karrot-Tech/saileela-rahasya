@@ -31,6 +31,20 @@ export async function deleteLeela(id: string) {
     revalidatePath('/admin/leela', 'layout');
 }
 
+export async function getLeelasPaged(page: number = 1, pageSize: number = 20) {
+    if (!await isAdmin()) throw new Error('Unauthorized');
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+        prisma.leela.findMany({
+            skip,
+            take: pageSize,
+            orderBy: { orderId: 'asc' }
+        }),
+        prisma.leela.count()
+    ]);
+    return { items, total, hasMore: total > skip + items.length };
+}
+
 // Bodhakatha Actions
 export async function saveBodhakatha(data: any) {
     if (!await isAdmin()) throw new Error('Unauthorized');
@@ -57,6 +71,20 @@ export async function deleteBodhakatha(id: string) {
     revalidatePath('/admin/bodhakatha', 'layout');
 }
 
+export async function getBodhakathasPaged(page: number = 1, pageSize: number = 20) {
+    if (!await isAdmin()) throw new Error('Unauthorized');
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+        prisma.bodhakatha.findMany({
+            skip,
+            take: pageSize,
+            orderBy: { orderId: 'asc' }
+        }),
+        prisma.bodhakatha.count()
+    ]);
+    return { items, total, hasMore: total > skip + items.length };
+}
+
 // Glossary Actions
 export async function saveGlossary(data: any) {
     if (!await isAdmin()) throw new Error('Unauthorized');
@@ -81,4 +109,60 @@ export async function deleteGlossary(id: string) {
     revalidatePath('/glossary');
     revalidatePath('/admin/glossary');
     revalidatePath('/admin/glossary', 'layout');
+}
+
+export async function getGlossaryPaged(page: number = 1, pageSize: number = 20) {
+    if (!await isAdmin()) throw new Error('Unauthorized');
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+        prisma.glossary.findMany({
+            skip,
+            take: pageSize,
+            orderBy: { term: 'asc' }
+        }),
+        prisma.glossary.count()
+    ]);
+    return { items, total, hasMore: total > skip + items.length };
+}
+// Public Fetchers (No Auth Required)
+export async function getPublicLeelas(page: number = 1, pageSize: number = 10) {
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+        prisma.leela.findMany({
+            skip,
+            take: pageSize,
+            orderBy: { orderId: 'asc' }
+        }),
+        prisma.leela.count()
+    ]);
+    return {
+        items: items.map((item: any) => ({
+            ...item,
+            createdAt: item.createdAt?.toISOString(),
+            updatedAt: item.updatedAt?.toISOString()
+        })),
+        total,
+        hasMore: total > skip + items.length
+    };
+}
+
+export async function getPublicBodhakathas(page: number = 1, pageSize: number = 10) {
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+        prisma.bodhakatha.findMany({
+            skip,
+            take: pageSize,
+            orderBy: { orderId: 'asc' }
+        }),
+        prisma.bodhakatha.count()
+    ]);
+    return {
+        items: items.map((item: any) => ({
+            ...item,
+            createdAt: item.createdAt?.toISOString(),
+            updatedAt: item.updatedAt?.toISOString()
+        })),
+        total,
+        hasMore: total > skip + items.length
+    };
 }
