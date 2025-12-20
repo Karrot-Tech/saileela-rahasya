@@ -5,7 +5,7 @@ import { AudioProvider } from '@/context/AudioContext';
 import { InquiryProvider } from '@/context/InquiryContext';
 import MiniPlayer from '@/components/audio/MiniPlayer';
 import audioTracks from '@/data/audio_tracks.json';
-import AdminModeIndicator from '@/components/admin/AdminModeIndicator';
+
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (

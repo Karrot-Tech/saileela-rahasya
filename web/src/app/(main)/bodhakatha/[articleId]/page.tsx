@@ -71,7 +71,7 @@ export default async function BodhakathaDetailPage({ params }: { params: Promise
             "name": "Saileela Rahasya",
             "logo": {
                 "@type": "ImageObject",
-                "url": "https://saileelarahasya-web.vercel.app/icon-512.png"
+                "url": "https://saileelarahasya.com/icon-512.png"
             }
         },
         "description": article.description.substring(0, 160)
@@ -85,19 +85,19 @@ export default async function BodhakathaDetailPage({ params }: { params: Promise
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://saileelarahasya-web.vercel.app"
+                "item": "https://saileelarahasya.com"
             },
             {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Bodhakatha",
-                "item": "https://saileelarahasya-web.vercel.app/bodhakatha"
+                "item": "https://saileelarahasya.com/bodhakatha"
             },
             {
                 "@type": "ListItem",
                 "position": 3,
                 "name": article.title_english,
-                "item": `https://saileelarahasya-web.vercel.app/bodhakatha/${articleId}`
+                "item": `https://saileelarahasya.com/bodhakatha/${articleId}`
             }
         ]
     };

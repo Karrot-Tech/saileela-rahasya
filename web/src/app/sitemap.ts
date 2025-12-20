@@ -3,7 +3,7 @@ import leelaArticles from '@/data/leela_articles.json';
 import bodhakathaArticles from '@/data/bodhakatha_articles.json';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://saileelarahasya-web.vercel.app';
+    const baseUrl = 'https://saileelarahasya.com';
 
     const leelaUrls = leelaArticles.map((article) => ({
         url: `${baseUrl}/leela/${article.id}`,

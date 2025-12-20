@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Footprints, Lightbulb, Radio, Music, MessageCircleQuestion, BookA, ShieldCheck } from 'lucide-react';
-import { useUser } from '@clerk/nextjs';
+import { Footprints, Lightbulb, Radio, Music, MessageCircleQuestion, BookA } from 'lucide-react';
 import { useInquiry } from '@/context/InquiryContext';
 
 const NAV_ITEMS = [
@@ -14,28 +14,19 @@ const NAV_ITEMS = [
     { label: 'Spiritual Inquiry', href: '/ask', icon: MessageCircleQuestion },
 ];
 
-const getAdminEmails = () => {
-    const emails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '').replace(/['"]/g, '');
-    return emails.split(',').map(e => e.trim().toLowerCase()).filter(e => e !== '');
-};
-
 export default function Sidebar() {
-    const { user } = useUser();
     const pathname = usePathname();
     const { unreadCount } = useInquiry();
-
-    const adminEmails = getAdminEmails();
-    const isAdmin = user?.emailAddresses.some(emailObj =>
-        adminEmails.includes(emailObj.emailAddress.toLowerCase())
-    );
 
     return (
         <aside className="hidden md:flex flex-col w-64 fixed left-0 top-0 bottom-0 bg-white border-r border-gray-100 z-40">
             <div className="h-16 flex items-center px-3 border-b border-gray-100">
                 <Link href="/" className="flex items-center gap-3">
-                    <img
+                    <Image
                         src="/saileela-logo.png"
                         alt="Saileela Rahasya"
+                        width={40}
+                        height={40}
                         className="h-10 w-auto object-contain"
                     />
                     <h1 className="text-lg font-bold text-ochre tracking-wide leading-tight">Saileela Rahasya</h1>

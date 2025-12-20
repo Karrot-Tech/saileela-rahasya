@@ -1,28 +1,41 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { RefreshCw } from 'lucide-react';
 
 export default function UpdateDetector() {
     const [updateAvailable, setUpdateAvailable] = useState(false);
-    const [currentVersion, setCurrentVersion] = useState<string | null>(null);
+    const currentVersionRef = useRef<string | null>(null);
 
     useEffect(() => {
         // Only run in production
         if (process.env.NODE_ENV !== 'production') return;
 
-        // Fetch the initial version when the app loads
-        fetch('/version.json')
-            .then(res => res.json())
-            .then(data => {
-                setCurrentVersion(data.version + '-' + data.buildTime);
-            })
-            .catch(() => { });
+        // Function to check for updates
+        const checkForUpdate = async () => {
+            try {
+                const res = await fetch(`/version.json?t=${Date.now()}`, {
+                    cache: 'no-store'
+                });
+                const data = await res.json();
+                const remoteVersion = data.version + '-' + data.buildTime;
+
+                if (currentVersionRef.current && remoteVersion !== currentVersionRef.current) {
+                    setUpdateAvailable(true);
+                } else if (!currentVersionRef.current) {
+                    // First load initialization
+                    currentVersionRef.current = remoteVersion;
+                }
+            } catch (e) {
+                // Ignore fetch errors
+            }
+        };
+
+        // Initial check
+        checkForUpdate();
 
         // Check for updates every 10 minutes
-        const interval = setInterval(() => {
-            checkForUpdate();
-        }, 10 * 60 * 1000);
+        const interval = setInterval(checkForUpdate, 10 * 60 * 1000);
 
         // Also check when the tab becomes focused
         window.addEventListener('focus', checkForUpdate);
@@ -32,22 +45,6 @@ export default function UpdateDetector() {
             window.removeEventListener('focus', checkForUpdate);
         };
     }, []);
-
-    const checkForUpdate = async () => {
-        try {
-            const res = await fetch(`/version.json?t=${Date.now()}`, {
-                cache: 'no-store'
-            });
-            const data = await res.json();
-            const newVersionFingerprint = data.version + '-' + data.buildTime;
-
-            if (currentVersion && newVersionFingerprint !== currentVersion) {
-                setUpdateAvailable(true);
-            }
-        } catch (e) {
-            // Ignore fetch errors
-        }
-    };
 
     if (!updateAvailable) return null;
 
