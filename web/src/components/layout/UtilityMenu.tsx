@@ -216,7 +216,7 @@ export default function UtilityMenu() {
                             </div>
                             <div className="space-y-2">
                                 <h3 className="text-xl font-black text-gray-900">Join the Collective</h3>
-                                <p className="text-sm text-gray-500 leading-relaxed font-medium">Please sign in to share questions and access personalized spiritual guidance.</p>
+                                <p className="text-sm text-gray-500 leading-relaxed font-medium">Please identify yourself to share questions and access personalized spiritual guidance.</p>
                             </div>
                             <div className="pt-4">
                                 <SignInButton mode="modal">

@@ -102,14 +102,14 @@ export default function RootLayout({
       localization={{
         signIn: {
           start: {
-            title: 'Sign in to Saileela Rahasya',
-            subtitle: 'Welcome back! Please sign in to continue your spiritual journey.',
+            title: 'Identify yourself to Saileela Rahasya',
+            subtitle: 'Welcome back! Please identify yourself to continue your spiritual journey.',
           }
         },
         signUp: {
           start: {
-            title: 'Create account for Saileela Rahasya',
-            subtitle: 'Join us to begin your journey of inquiry.',
+            title: 'Identify yourself to Saileela Rahasya',
+            subtitle: 'Join the collective to begin your journey of inquiry.',
           }
         }
       }}
