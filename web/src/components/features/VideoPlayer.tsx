@@ -39,13 +39,26 @@ export default function VideoPlayer({ videoId, streamUrl, poster }: VideoPlayerP
 
   if (streamUrl) {
     return (
-      <div className="relative w-full pb-[56.25%] overflow-hidden rounded-lg shadow-lg bg-black">
+      <div
+        className="relative w-full pb-[56.25%] overflow-hidden rounded-lg shadow-lg bg-black z-10"
+        style={{
+          touchAction: 'manipulation',
+          WebkitTransform: 'translateZ(0)',
+          transform: 'translateZ(0)',
+          isolation: 'isolate'
+        }}
+      >
         <video
           ref={videoRef}
           className="absolute top-0 left-0 w-full h-full object-contain"
           controls
           poster={poster}
           playsInline
+          style={{
+            touchAction: 'manipulation',
+            WebkitTransform: 'translateZ(0)',
+            transform: 'translateZ(0)'
+          }}
         />
       </div>
     );
@@ -53,13 +66,26 @@ export default function VideoPlayer({ videoId, streamUrl, poster }: VideoPlayerP
 
   if (videoId) {
     return (
-      <div className="relative w-full pb-[56.25%] overflow-hidden rounded-lg shadow-lg bg-black">
+      <div
+        className="relative w-full pb-[56.25%] overflow-hidden rounded-lg shadow-lg bg-black z-10"
+        style={{
+          touchAction: 'manipulation',
+          WebkitTransform: 'translateZ(0)',
+          transform: 'translateZ(0)',
+          isolation: 'isolate'
+        }}
+      >
         <iframe
-          className="absolute top-0 left-0 w-full h-full"
+          className="absolute top-0 left-0 w-full h-full pointer-events-none"
           src={`https://www.youtube.com/embed/${videoId}`}
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
+          style={{
+            touchAction: 'manipulation',
+            WebkitTransform: 'translateZ(0)',
+            transform: 'translateZ(0)'
+          }}
         />
       </div>
     );
