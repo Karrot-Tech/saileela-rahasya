@@ -30,11 +30,14 @@ export default function BottomNav() {
                             key={item.href}
                             href={item.href}
                             prefetch={false}
-                            className={`flex flex-col items-center justify-center w-full h-full space-y-1 relative transition-colors select-none ${isActive ? 'text-ochre' : 'text-gray-400'
+                            className={`flex flex-col items-center justify-center w-full h-full space-y-1 relative transition-all select-none active:bg-gray-100/50 ${isActive ? 'text-ochre' : 'text-gray-400'
                                 }`}
                             style={{ touchAction: 'manipulation' }}
                         >
-                            <div className="relative pointer-events-none">
+                            {isActive && (
+                                <div className="absolute inset-x-2 inset-y-1 bg-ochre/5 rounded-xl animate-in fade-in zoom-in duration-300" />
+                            )}
+                            <div className="relative pointer-events-none z-10">
                                 <Icon className={`w-5 h-5 transition-transform ${isActive ? 'scale-110 drop-shadow-sm' : 'scale-100'}`} />
                                 {isAsk && unreadCount > 0 && (
                                     <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-blue-600 px-1 text-[8px] font-bold text-white shadow-md shadow-blue-500/30 animate-in zoom-in duration-300">
@@ -42,10 +45,7 @@ export default function BottomNav() {
                                     </span>
                                 )}
                             </div>
-                            <span className="text-[10px] font-black uppercase tracking-tighter pointer-events-none">{item.label}</span>
-                            {isActive && (
-                                <span className="absolute bottom-1 w-1 h-1 bg-ochre rounded-full" />
-                            )}
+                            <span className="text-[10px] font-black uppercase tracking-tighter pointer-events-none z-10">{item.label}</span>
                         </Link>
                     );
                 })}

@@ -1,7 +1,7 @@
-
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
 import { Menu, ShieldCheck, Home, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -13,6 +13,7 @@ export default function AdminClientWrapper({
     children: React.ReactNode;
 }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const pathname = usePathname();
 
     return (
         <div className="flex min-h-screen bg-gray-50">
@@ -51,7 +52,7 @@ export default function AdminClientWrapper({
                 </header>
 
                 <main className="flex-1 p-6 md:py-10 lg:py-16 px-6 md:px-12 min-w-0 overflow-x-hidden">
-                    <div className="max-w-5xl mx-auto w-full">
+                    <div className="max-w-5xl mx-auto w-full page-fade-in" key={pathname}>
                         {children}
                     </div>
                 </main>

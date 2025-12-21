@@ -1,6 +1,8 @@
+'use client';
 import Header from './Header';
 import BottomNav from './BottomNav';
 import Sidebar from './Sidebar';
+import { usePathname } from 'next/navigation';
 import { AudioProvider } from '@/context/AudioContext';
 import { InquiryProvider } from '@/context/InquiryContext';
 import MiniPlayer from '@/components/audio/MiniPlayer';
@@ -8,6 +10,7 @@ import audioTracks from '@/data/audio_tracks.json';
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
     return (
         <InquiryProvider>
             <AudioProvider allTracks={audioTracks}>
@@ -16,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <div className="flex-1 flex flex-col md:ml-64 transition-all duration-300">
                         <Header />
                         <main className="flex-1 pt-16 md:pt-0 pb-32 md:pb-4 max-w-7xl mx-auto w-full relative">
-                            <div className="md:px-4">
+                            <div className="md:px-4 page-fade-in" key={pathname}>
                                 {children}
                             </div>
                         </main>

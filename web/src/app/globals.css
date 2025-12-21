@@ -24,6 +24,7 @@ html {
   overflow-x: hidden;
   overscroll-behavior-y: none;
   background-color: var(--ochre);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -55,5 +56,21 @@ body {
 
   .pt-safe {
     padding-top: env(safe-area-inset-top);
+  }
+
+  .page-fade-in {
+    animation: pageFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes pageFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
