@@ -18,9 +18,16 @@ export default function LivePage() {
     const hasCheckedAudio = useRef(false);
 
     useEffect(() => {
-        if (!hasCheckedAudio.current && isPlaying) {
-            setShowAudioConfirm(true);
-            hasCheckedAudio.current = true;
+        if (isPlaying) {
+            // If music is playing, we want to show the overlay unless the user
+            // already acknowledged it for this specific session on this page.
+            if (!hasCheckedAudio.current) {
+                setShowAudioConfirm(true);
+                hasCheckedAudio.current = true;
+            }
+        } else {
+            // If music stops, we can reset the check so it works again if music starts
+            hasCheckedAudio.current = false;
         }
     }, [isPlaying]);
 

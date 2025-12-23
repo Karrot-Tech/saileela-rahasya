@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { LanguageProvider } from "@/context/LanguageContext";
+import { Providers } from "@/components/common/Providers";
 import "./globals.css";
 import UpdateDetector from "@/components/common/UpdateDetector";
 import ServiceWorkerRegistration from "@/components/common/ServiceWorkerRegistration";
@@ -119,7 +120,9 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <LanguageProvider>
-            {children}
+            <Providers>
+              {children}
+            </Providers>
             <UpdateDetector />
             <ServiceWorkerRegistration />
             <Analytics />

@@ -32,37 +32,97 @@ export function AudioProvider({ children, allTracks }: { children: React.ReactNo
     const [progress, setProgress] = useState(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
+    // Refs for state to avoid closure issues in event listeners
+    const currentTrackRef = useRef<Track | null>(null);
+    const allTracksRef = useRef<Track[]>(allTracks);
+
+    useEffect(() => {
+        currentTrackRef.current = currentTrack;
+    }, [currentTrack]);
+
+    useEffect(() => {
+        allTracksRef.current = allTracks;
+    }, [allTracks]);
+
+    const playTrack = (track: Track) => {
+        if (audioRef.current) {
+            setIsLoading(true);
+            audioRef.current.src = track.url;
+            audioRef.current.play().catch(e => {
+                console.error("Playback failed:", e);
+                setIsLoading(false);
+            });
+            setCurrentTrack(track);
+            setIsPlaying(true);
+        }
+    };
+
+    const playNext = () => {
+        const track = currentTrackRef.current;
+        const tracks = allTracksRef.current;
+        if (!track || tracks.length === 0) return;
+        const currentIndex = tracks.findIndex(t => t.id === track.id);
+        const nextIndex = (currentIndex + 1) % tracks.length;
+        playTrack(tracks[nextIndex]);
+    };
+
+    const playPrev = () => {
+        const track = currentTrackRef.current;
+        const tracks = allTracksRef.current;
+        if (!track || tracks.length === 0) return;
+        const currentIndex = tracks.findIndex(t => t.id === track.id);
+        const prevIndex = (currentIndex - 1 + tracks.length) % tracks.length;
+        playTrack(tracks[prevIndex]);
+    };
+
     // Initialize Audio
     useEffect(() => {
-        audioRef.current = new Audio();
+        if (!audioRef.current) {
+            audioRef.current = new Audio();
+        }
+        const audio = audioRef.current;
 
         const handleEnded = () => playNext();
         const handleTimeUpdate = () => {
-            if (audioRef.current) {
-                const p = (audioRef.current.currentTime / audioRef.current.duration) * 100;
-                setProgress(isNaN(p) ? 0 : p);
-            }
+            const p = (audio.currentTime / audio.duration) * 100;
+            setProgress(isNaN(p) ? 0 : p);
         };
 
         const handleWaiting = () => setIsLoading(true);
         const handleCanPlay = () => setIsLoading(false);
-        const handlePlaying = () => setIsLoading(false);
+        const handlePlaying = () => {
+            setIsLoading(false);
+            setIsPlaying(true);
+        };
+        const handlePause = () => setIsPlaying(false);
+        const handlePlay = () => setIsPlaying(true);
         const handleLoadStart = () => setIsLoading(true);
+        const handleError = (e: any) => {
+            console.error("Audio error:", e);
+            setIsLoading(false);
+            setIsPlaying(false);
+        };
 
-        audioRef.current.addEventListener('ended', handleEnded);
-        audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
-        audioRef.current.addEventListener('waiting', handleWaiting);
-        audioRef.current.addEventListener('canplay', handleCanPlay);
-        audioRef.current.addEventListener('playing', handlePlaying);
-        audioRef.current.addEventListener('loadstart', handleLoadStart);
+        audio.addEventListener('ended', handleEnded);
+        audio.addEventListener('timeupdate', handleTimeUpdate);
+        audio.addEventListener('waiting', handleWaiting);
+        audio.addEventListener('canplay', handleCanPlay);
+        audio.addEventListener('playing', handlePlaying);
+        audio.addEventListener('pause', handlePause);
+        audio.addEventListener('play', handlePlay);
+        audio.addEventListener('loadstart', handleLoadStart);
+        audio.addEventListener('error', handleError);
 
         return () => {
-            audioRef.current?.removeEventListener('ended', handleEnded);
-            audioRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
-            audioRef.current?.removeEventListener('waiting', handleWaiting);
-            audioRef.current?.removeEventListener('canplay', handleCanPlay);
-            audioRef.current?.removeEventListener('playing', handlePlaying);
-            audioRef.current?.removeEventListener('loadstart', handleLoadStart);
+            audio.removeEventListener('ended', handleEnded);
+            audio.removeEventListener('timeupdate', handleTimeUpdate);
+            audio.removeEventListener('waiting', handleWaiting);
+            audio.removeEventListener('canplay', handleCanPlay);
+            audio.removeEventListener('playing', handlePlaying);
+            audio.removeEventListener('pause', handlePause);
+            audio.removeEventListener('play', handlePlay);
+            audio.removeEventListener('loadstart', handleLoadStart);
+            audio.removeEventListener('error', handleError);
         };
     }, []);
 
@@ -84,8 +144,16 @@ export function AudioProvider({ children, allTracks }: { children: React.ReactNo
             ]
         });
 
-        navigator.mediaSession.setActionHandler('play', () => togglePlay());
-        navigator.mediaSession.setActionHandler('pause', () => togglePlay());
+        navigator.mediaSession.setActionHandler('play', () => {
+            if (audioRef.current && !isPlaying) {
+                audioRef.current.play().catch(console.error);
+            }
+        });
+        navigator.mediaSession.setActionHandler('pause', () => {
+            if (audioRef.current && isPlaying) {
+                audioRef.current.pause();
+            }
+        });
         navigator.mediaSession.setActionHandler('previoustrack', () => playPrev());
         navigator.mediaSession.setActionHandler('nexttrack', () => playNext());
 
@@ -98,43 +166,14 @@ export function AudioProvider({ children, allTracks }: { children: React.ReactNo
     }, [currentTrack, isPlaying]); // Keep in sync with track and state
 
 
-    const playTrack = (track: Track) => {
-        if (audioRef.current) {
-            setIsLoading(true); // Set loading immediately
-            audioRef.current.src = track.url;
-            audioRef.current.play().catch(e => {
-                console.error("Playback failed:", e);
-                setIsLoading(false);
-            });
-            setCurrentTrack(track);
-            setIsPlaying(true);
-        }
-    };
-
     const togglePlay = () => {
         if (audioRef.current) {
             if (isPlaying) {
                 audioRef.current.pause();
-                setIsPlaying(false);
             } else {
                 audioRef.current.play().catch(console.error);
-                setIsPlaying(true);
             }
         }
-    };
-
-    const playNext = () => {
-        if (!currentTrack) return;
-        const currentIndex = allTracks.findIndex(t => t.id === currentTrack.id);
-        const nextIndex = (currentIndex + 1) % allTracks.length;
-        playTrack(allTracks[nextIndex]);
-    };
-
-    const playPrev = () => {
-        if (!currentTrack) return;
-        const currentIndex = allTracks.findIndex(t => t.id === currentTrack.id);
-        const prevIndex = (currentIndex - 1 + allTracks.length) % allTracks.length;
-        playTrack(allTracks[prevIndex]);
     };
 
     const closePlayer = () => {
