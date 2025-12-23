@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Footprints, Lightbulb, Radio, Music, MessageCircleQuestion, BookA } from 'lucide-react';
 import { useInquiry } from '@/context/InquiryContext';
+import { APP_VERSION } from '@/config/version';
 
 const NAV_ITEMS = [
     { label: 'Leela', href: '/leela', icon: Footprints },
@@ -90,7 +91,7 @@ export default function Sidebar() {
             </nav>
 
             <div className="p-5 text-center border-t border-gray-50 bg-gray-50/30">
-                <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">Saileela Rahasya v1.2.5</p>
+                <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] mb-1">Saileela Rahasya v{APP_VERSION}</p>
                 <p className="text-[10px] text-gray-600 font-medium font-serif italic">&copy; {new Date().getFullYear()} Saileela Rahasya</p>
             </div>
         </aside>

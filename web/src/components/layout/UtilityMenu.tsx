@@ -7,6 +7,8 @@ import { useUser, SignInButton, SignOutButton, SignedIn, SignedOut, useClerk } f
 import { User, X, BookA, ShieldCheck, ArrowRight, LogOut, Settings, LayoutDashboard, History } from 'lucide-react';
 import { useInquiry } from '@/context/InquiryContext';
 
+import { APP_VERSION } from '@/config/version';
+
 const getAdminEmails = () => {
     const emails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '').replace(/['"]/g, '');
     return emails.split(',').map(e => e.trim().toLowerCase()).filter(e => e !== '');
@@ -243,7 +245,7 @@ export default function UtilityMenu() {
                     </SignedOut>
 
                     <div className="text-center">
-                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Saileela Rahasya v1.2.5</p>
+                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Saileela Rahasya v{APP_VERSION}</p>
                     </div>
                 </div>
             </div>
