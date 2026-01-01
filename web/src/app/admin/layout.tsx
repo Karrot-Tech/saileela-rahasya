@@ -6,8 +6,10 @@ import { Providers } from "@/components/common/Providers";
 import "../globals.css";
 import { ClerkProvider } from '@clerk/nextjs';
 import { isAdmin } from '@/lib/auth';
+import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import AdminClientWrapper from '@/components/admin/AdminClientWrapper';
+import AdminLoginPrompt from '@/components/admin/AdminLoginPrompt';
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -41,9 +43,35 @@ export default async function AdminRootLayout({
 }>) {
     // Server-side security check
     // Note: Middleware also protects this, but double safety is good.
+    // Server-side security check
+    // Note: Middleware also protects this, but double safety is good.
     const authorized = await isAdmin();
+    const { userId } = await auth();
+
     if (!authorized) {
-        redirect('/');
+        return (
+            <ClerkProvider
+                appearance={{
+                    variables: {
+                        colorPrimary: '#cc7722',
+                        colorTextSecondary: '#6b7280',
+                        borderRadius: '0.75rem',
+                    },
+                }}
+            >
+                <html lang="en">
+                    <body
+                        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
+                    >
+                        <LanguageProvider>
+                            <Providers>
+                                <AdminLoginPrompt isLoggedIn={!!userId} />
+                            </Providers>
+                        </LanguageProvider>
+                    </body>
+                </html>
+            </ClerkProvider>
+        );
     }
 
     return (

@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Plus, Edit, Loader2 } from 'lucide-react';
+import { Plus, Edit, Loader2, Sparkles, ChevronDown, PenLine, Bot } from 'lucide-react';
 import DeleteIconButton from '@/components/admin/DeleteIconButton';
 import { getLeelasPaged } from '@/actions/content';
 
@@ -13,6 +13,7 @@ export default function AdminLeelaPage() {
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(false);
     const [total, setTotal] = useState(0);
+    const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
 
     useEffect(() => {
         fetchLeelas(1, true);
@@ -58,13 +59,51 @@ export default function AdminLeelaPage() {
                     <h1 className="text-xl md:text-3xl font-black text-gray-900 tracking-tight">Leela Stories</h1>
                     <p className="text-xs md:text-sm text-gray-500 font-medium">Manage {total} stories and plays of Sai Baba</p>
                 </div>
-                <Link
-                    href="/admin/leela/new"
-                    className="flex items-center justify-center space-x-2 bg-ochre text-white px-5 py-3 rounded-xl hover:bg-gold transition-all shadow-lg shadow-ochre/20 whitespace-nowrap active:scale-95"
-                >
-                    <Plus className="w-5 h-5" />
-                    <span className="font-black text-xs uppercase tracking-widest">Add New Story</span>
-                </Link>
+                <div className="relative">
+                    <button
+                        onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
+                        className="flex items-center justify-center space-x-2 bg-ochre text-white px-5 py-3 rounded-xl hover:bg-gold transition-all shadow-lg shadow-ochre/20 whitespace-nowrap active:scale-95 z-20 relative"
+                    >
+                        <Plus className="w-5 h-5" />
+                        <span className="font-black text-xs uppercase tracking-widest">Add Story</span>
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isAddMenuOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    {isAddMenuOpen && (
+                        <>
+                            <div
+                                className="fixed inset-0 z-10"
+                                onClick={() => setIsAddMenuOpen(false)}
+                            />
+                            <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 p-2 z-30 animate-in zoom-in-95 duration-200 origin-top-right">
+                                <Link
+                                    href="/admin/leela/new"
+                                    className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 rounded-lg transition-colors group"
+                                >
+                                    <div className="w-8 h-8 rounded-lg bg-ochre/10 flex items-center justify-center group-hover:bg-ochre group-hover:text-white transition-colors text-ochre">
+                                        <PenLine className="w-4 h-4" />
+                                    </div>
+                                    <div className="flex flex-col items-start">
+                                        <span>Manual Entry</span>
+                                        <span className="text-[10px] text-gray-400 font-normal">Write from scratch</span>
+                                    </div>
+                                </Link>
+                                <Link
+                                    href="/admin/leela/generate"
+                                    className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 rounded-lg transition-colors group"
+                                >
+                                    <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors text-purple-600">
+                                        <Bot className="w-4 h-4" />
+                                    </div>
+                                    <div className="flex flex-col items-start">
+                                        <span>AI Generator</span>
+                                        <span className="text-[10px] text-gray-400 font-normal">From YouTube transcript</span>
+                                    </div>
+                                </Link>
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
 
             {/* Desktop View: Table */}
@@ -74,7 +113,6 @@ export default function AdminLeelaPage() {
                         <tr>
                             <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">ID</th>
                             <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Title (English)</th>
-                            <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Chapter</th>
                             <th className="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
@@ -84,12 +122,6 @@ export default function AdminLeelaPage() {
                                 <td className="px-6 py-4 text-sm text-gray-500 font-mono">{leela.id.substring(0, 8)}...</td>
                                 <td className="px-6 py-4">
                                     <div className="text-sm font-bold text-gray-900">{leela.title_english}</div>
-                                    <div className="text-xs text-gray-400 font-serif italic">{leela.title_hindi}</div>
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-500">
-                                    <span className="bg-gray-50 px-2 py-1 rounded border border-gray-100 italic">
-                                        {leela.chapter || 'N/A'}
-                                    </span>
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center space-x-3">
@@ -111,24 +143,18 @@ export default function AdminLeelaPage() {
             {/* Mobile View: Cards */}
             <div className="md:hidden space-y-2.5">
                 {leelas.map((leela: any) => (
-                    <div key={leela.id} className="bg-white py-3 px-4 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-2.5">
-                        <div className="flex justify-between items-start">
-                            <span className="bg-ochre/5 text-ochre text-[10px] font-black uppercase px-2 py-1 rounded-lg border border-ochre/10">
-                                Chapter {leela.chapter || 'N/A'}
-                            </span>
-                            <div className="flex items-center gap-1.5">
-                                <Link
-                                    href={`/admin/leela/${leela.id}`}
-                                    className="p-2 text-blue-500 bg-white rounded-lg transition-all border border-gray-100 shadow-sm active:scale-90"
-                                >
-                                    <Edit className="w-4 h-4" />
-                                </Link>
-                                <DeleteIconButton id={leela.id} type="leela" />
-                            </div>
-                        </div>
-                        <div className="min-w-0">
+                    <div key={leela.id} className="bg-white py-3 px-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center gap-2.5">
+                        <div className="min-w-0 flex-1">
                             <h3 className="font-bold text-gray-900 leading-tight text-sm">{leela.title_english}</h3>
-                            <p className="text-[11px] text-gray-400 font-serif italic mt-0.5">{leela.title_hindi}</p>
+                        </div>
+                        <div className="flex items-center gap-1.5 flex-shrink-0">
+                            <Link
+                                href={`/admin/leela/${leela.id}`}
+                                className="p-2 text-blue-500 bg-white rounded-lg transition-all border border-gray-100 shadow-sm active:scale-90"
+                            >
+                                <Edit className="w-4 h-4" />
+                            </Link>
+                            <DeleteIconButton id={leela.id} type="leela" />
                         </div>
                     </div>
                 ))}

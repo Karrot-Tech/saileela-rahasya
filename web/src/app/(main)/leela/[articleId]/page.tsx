@@ -22,14 +22,25 @@ export async function generateMetadata({ params }: { params: Promise<{ articleId
 
     if (!article) return { title: 'Article Not Found' };
 
+    // Combine keywords and social tags
+    const allKeywords = [
+        ...(article.keywords || []),
+        ...(article.social_tags || [])
+    ];
+
     return {
         title: article.title_english,
         description: article.description.substring(0, 160),
-        keywords: article.keywords,
+        keywords: allKeywords,
         openGraph: {
             title: article.title_english,
             description: article.description.substring(0, 160),
             images: [`https://img.youtube.com/vi/${article.youtube_id}/maxresdefault.jpg`],
+            type: 'article',
+            tags: article.social_tags || [],
+            publishedTime: article.createdAt.toISOString(),
+            modifiedTime: article.updatedAt.toISOString(),
+            authors: ['Saileela Rahasya Team'],
         }
     };
 }

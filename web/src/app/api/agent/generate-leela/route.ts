@@ -83,13 +83,13 @@ export async function POST(req: NextRequest) {
             - **Goal**: Transport the reader to the scene.
 
         2.  **doubt**: "Conflict"
-            - Start with: "❓ **Doubt**"
+            - **DO NOT** start with "❓ Doubt" or any label. The UI adds the header.
             - Provide a clear, one-sentence summary of the skepticism or intellectual question.
             - Follow with a brief context.
             - Use **bold** for key philosophical terms (e.g., **Nirguna**, **Saguna**).
 
         3.  **revelation**: "Revelation"
-            - Start with: "💡 **Revelation**"
+            - **DO NOT** start with "💡 Revelation" or any label.
             - This is the core teaching. Break it down logically.
             - Use **Bullet Points** for distinct logical steps or arguments.
             - Use > blockquotes for any direct words/dialogue from Saibaba or God. This is CRITICAL for impact.

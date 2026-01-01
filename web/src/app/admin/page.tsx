@@ -71,16 +71,7 @@ export default function AdminDashboard() {
             iconColor: 'text-purple-600',
             borderColor: 'hover:border-purple-200'
         },
-        {
-            title: 'AI Generator',
-            count: '✨',
-            description: 'Generate structured Leela content from YouTube transcripts.',
-            href: '/admin/leela/generate',
-            icon: Activity,
-            color: 'bg-ochre/10',
-            iconColor: 'text-ochre',
-            borderColor: 'hover:border-ochre/30'
-        }
+
     ];
     return (
         <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-6 md:space-y-12 animate-in fade-in duration-1000">
