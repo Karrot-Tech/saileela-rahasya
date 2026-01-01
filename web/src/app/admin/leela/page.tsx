@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Plus, Edit, Loader2, Sparkles, ChevronDown, PenLine, Bot } from 'lucide-react';
+import { Edit, Loader2, Bot } from 'lucide-react';
 import DeleteIconButton from '@/components/admin/DeleteIconButton';
 import { getLeelasPaged } from '@/actions/content';
 
@@ -13,7 +13,6 @@ export default function AdminLeelaPage() {
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(false);
     const [total, setTotal] = useState(0);
-    const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
 
     useEffect(() => {
         fetchLeelas(1, true);
@@ -59,51 +58,13 @@ export default function AdminLeelaPage() {
                     <h1 className="text-xl md:text-3xl font-black text-gray-900 tracking-tight">Leela Stories</h1>
                     <p className="text-xs md:text-sm text-gray-500 font-medium">Manage {total} stories and plays of Sai Baba</p>
                 </div>
-                <div className="relative">
-                    <button
-                        onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
-                        className="flex items-center justify-center space-x-2 bg-ochre text-white px-5 py-3 rounded-xl hover:bg-gold transition-all shadow-lg shadow-ochre/20 whitespace-nowrap active:scale-95 z-20 relative"
-                    >
-                        <Plus className="w-5 h-5" />
-                        <span className="font-black text-xs uppercase tracking-widest">Add Story</span>
-                        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isAddMenuOpen ? 'rotate-180' : ''}`} />
-                    </button>
-
-                    {isAddMenuOpen && (
-                        <>
-                            <div
-                                className="fixed inset-0 z-10"
-                                onClick={() => setIsAddMenuOpen(false)}
-                            />
-                            <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 p-2 z-30 animate-in zoom-in-95 duration-200 origin-top-right">
-                                <Link
-                                    href="/admin/leela/new"
-                                    className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 rounded-lg transition-colors group"
-                                >
-                                    <div className="w-8 h-8 rounded-lg bg-ochre/10 flex items-center justify-center group-hover:bg-ochre group-hover:text-white transition-colors text-ochre">
-                                        <PenLine className="w-4 h-4" />
-                                    </div>
-                                    <div className="flex flex-col items-start">
-                                        <span>Manual Entry</span>
-                                        <span className="text-[10px] text-gray-400 font-normal">Write from scratch</span>
-                                    </div>
-                                </Link>
-                                <Link
-                                    href="/admin/leela/generate"
-                                    className="flex items-center gap-3 w-full px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 rounded-lg transition-colors group"
-                                >
-                                    <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors text-purple-600">
-                                        <Bot className="w-4 h-4" />
-                                    </div>
-                                    <div className="flex flex-col items-start">
-                                        <span>AI Generator</span>
-                                        <span className="text-[10px] text-gray-400 font-normal">From YouTube transcript</span>
-                                    </div>
-                                </Link>
-                            </div>
-                        </>
-                    )}
-                </div>
+                <Link
+                    href="/admin/leela/generate"
+                    className="flex items-center justify-center space-x-2 bg-ochre text-white px-5 py-3 rounded-xl hover:bg-gold transition-all shadow-lg shadow-ochre/20 whitespace-nowrap active:scale-95"
+                >
+                    <Bot className="w-5 h-5" />
+                    <span className="font-black text-xs uppercase tracking-widest">AI Generator</span>
+                </Link>
             </div>
 
             {/* Desktop View: Table */}
