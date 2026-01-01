@@ -27,7 +27,10 @@ export default function AdminClientWrapper({
             <div className="flex-1 flex flex-col lg:ml-72 min-h-screen pb-24 lg:pb-0">
                 {/* Unified Admin Header */}
                 <header className="h-20 lg:h-24 bg-white/80 backdrop-blur-xl border-b border-gray-100 flex items-center justify-between px-6 md:px-10 sticky top-0 z-40 w-full">
-                    <div className="flex items-center gap-4 min-w-0 flex-1">
+                    <Link
+                        href="/admin"
+                        className="flex items-center gap-4 min-w-0 flex-1 lg:pointer-events-none"
+                    >
                         <div className="w-10 h-10 lg:w-12 lg:h-12 bg-ochre rounded-2xl flex items-center justify-center shadow-xl shadow-ochre/20 flex-none group hover:rotate-6 transition-transform">
                             <ShieldCheck className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                         </div>
@@ -37,7 +40,7 @@ export default function AdminClientWrapper({
                                 <span className="text-[7px] lg:text-[9px] text-ochre font-black uppercase tracking-[0.2em] bg-ochre/5 px-2 py-0.5 rounded-full border border-ochre/10 truncate">Admin Console</span>
                             </div>
                         </div>
-                    </div>
+                    </Link>
 
                     <div className="flex items-center gap-3">
                         <Link
