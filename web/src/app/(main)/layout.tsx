@@ -1,14 +1,137 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 
+import { LanguageProvider } from "@/context/LanguageContext";
+import { Providers } from "@/components/common/Providers";
 import Layout from "@/components/layout/Layout";
+import "../globals.css";
+import UpdateDetector from "@/components/common/UpdateDetector";
+import ServiceWorkerRegistration from "@/components/common/ServiceWorkerRegistration";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ClerkProvider } from '@clerk/nextjs';
 
-export default function MainAppLayout({
+const geistSans = Geist({
+    variable: "--font-geist-sans",
+    subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+    variable: "--font-geist-mono",
+    subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+    metadataBase: new URL('https://saileelarahasya.com'),
+    title: {
+        default: "Saileela Rahasya",
+        template: "%s | Saileela Rahasya",
+    },
+    description: "Unveil the secret meanings behind Shirdi Sai Baba's divine plays. Explore the Saileela Rahasya through authentic Leelas, Bodhakathas, and curated spiritual guidance from the Saileela Rahasya team.",
+    keywords: ["Sai Baba", "Shirdi Sai Baba", "Saileela Rahasya", "Spiritual Guidance", "Sai Satcharitra", "Bhajans"],
+    authors: [{ name: "Saileela Rahasya" }],
+    openGraph: {
+        title: "Saileela Rahasya",
+        description: "Unlocking the secret spiritual meanings of Shirdi Sai Baba's divine plays.",
+        url: "https://saileelarahasya.com",
+        siteName: "Saileela Rahasya",
+        images: [
+            {
+                url: "/icon-512.png",
+                width: 512,
+                height: 512,
+            },
+        ],
+        locale: "en_US",
+        type: "website",
+    },
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: "black-translucent",
+        title: "Saileela Rahasya",
+        startupImage: ["/splash.png"],
+    },
+    formatDetection: {
+        telephone: false,
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Saileela Rahasya",
+        description: "Unlocking the secret spiritual meanings of Shirdi Sai Baba's divine plays.",
+        images: ["/saileela-logo.png"],
+    },
+    icons: {
+        icon: [
+            { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+        ],
+        apple: [
+            { url: "/icon-192.png", sizes: "180x180", type: "image/png" },
+        ],
+        shortcut: "/saileela-logo.png",
+    }
+};
+
+export const viewport = {
+    themeColor: "#cc7722",
+    width: "device-width",
+    initialScale: 1,
+};
+
+export default function RootLayout({
     children,
-}: {
+}: Readonly<{
     children: React.ReactNode;
-}) {
+}>) {
     return (
-        <Layout>
-            {children}
-        </Layout>
+        <ClerkProvider
+            appearance={{
+                variables: {
+                    colorPrimary: '#cc7722',
+                    colorTextSecondary: '#6b7280',
+                    borderRadius: '0.75rem',
+                },
+                elements: {
+                    formButtonPrimary: 'bg-ochre hover:bg-orange-700 transition-all duration-200 shadow-md py-3 h-12 font-bold text-sm uppercase tracking-wider',
+                    socialButtonsBlockButton: 'h-12 border-gray-200 hover:bg-gray-50 transition-all font-semibold text-gray-600',
+                    socialButtonsBlockButtonText: 'font-semibold',
+                    formFieldInput: 'h-12 border-gray-200 focus:ring-ochre focus:border-ochre',
+                    card: 'shadow-2xl rounded-3xl border border-gray-100 overflow-hidden',
+                    headerTitle: 'text-gray-800 font-black tracking-tight text-2xl',
+                    headerSubtitle: 'text-gray-500 font-medium',
+                }
+            }}
+            localization={{
+                signIn: {
+                    start: {
+                        title: 'Identify yourself to Saileela Rahasya',
+                        subtitle: 'Welcome back! Please identify yourself to continue your spiritual journey.',
+                    }
+                },
+                signUp: {
+                    start: {
+                        title: 'Identify yourself to Saileela Rahasya',
+                        subtitle: 'Join the collective to begin your journey of inquiry.',
+                    }
+                }
+            }}
+        >
+            <html lang="en" suppressHydrationWarning>
+                <body
+                    className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                >
+                    <LanguageProvider>
+                        <Providers>
+                            <Layout>
+                                {children}
+                            </Layout>
+                        </Providers>
+                        <UpdateDetector />
+                        <ServiceWorkerRegistration />
+                        <Analytics />
+                        <SpeedInsights />
+                    </LanguageProvider>
+                </body>
+            </html>
+        </ClerkProvider>
     );
 }

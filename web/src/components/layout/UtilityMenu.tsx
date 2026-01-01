@@ -4,15 +4,12 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useUser, SignInButton, SignOutButton, SignedIn, SignedOut, useClerk } from '@clerk/nextjs';
-import { User, X, BookA, ShieldCheck, ArrowRight, LogOut, Settings, LayoutDashboard, History, Radio } from 'lucide-react';
+import { User, X, BookA, ArrowRight, LogOut, Settings, History, Radio } from 'lucide-react';
 import { useInquiry } from '@/context/InquiryContext';
 
 import { APP_VERSION } from '@/config/version';
 
-const getAdminEmails = () => {
-    const emails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '').replace(/['"]/g, '');
-    return emails.split(',').map(e => e.trim().toLowerCase()).filter(e => e !== '');
-};
+
 
 export default function UtilityMenu() {
     const [isOpen, setIsOpen] = useState(false);
@@ -20,11 +17,6 @@ export default function UtilityMenu() {
     const { openUserProfile } = useClerk();
     const pathname = usePathname();
     const { unreadCount } = useInquiry();
-
-    const adminEmails = getAdminEmails();
-    const isAdmin = user?.emailAddresses.some(emailObj =>
-        adminEmails.includes(emailObj.emailAddress.toLowerCase())
-    );
 
     useEffect(() => {
         setIsOpen(false);
@@ -37,18 +29,6 @@ export default function UtilityMenu() {
             {/* Avatar Trigger / Custom Account Icon */}
             <div className="flex items-center gap-3">
                 <SignedIn>
-                    {isAdmin && (
-                        <Link
-                            href="/admin"
-                            prefetch={false}
-                            className="hidden md:flex items-center gap-2 bg-gray-900 text-white pl-3 pr-5 py-2 rounded-full shadow-lg border border-white/10 hover:bg-black transition-all group active:scale-95 whitespace-nowrap"
-                        >
-                            <div className="w-5 h-5 bg-ochre rounded-full flex items-center justify-center flex-none">
-                                <ShieldCheck className="w-3 h-3 text-white" />
-                            </div>
-                            <span className="text-[10px] font-black tracking-widest uppercase">Admin Console</span>
-                        </Link>
-                    )}
                     <button
                         onClick={toggleMenu}
                         className="flex-none transition-transform active:scale-95 cursor-pointer relative"
@@ -135,20 +115,7 @@ export default function UtilityMenu() {
 
                         {/* Navigation Actions - Standardized Premium Style */}
                         <nav className="space-y-2 flex-1">
-                            {isAdmin && (
-                                <Link href="/admin" prefetch={false} onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3.5 hover:bg-gray-900 rounded-[1.25rem] transition-all group bg-gray-50/50 border border-gray-100/50 hover:border-gray-900">
-                                    <div className="flex items-center gap-4 text-gray-700 group-hover:text-white">
-                                        <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-ochre shadow-sm group-hover:bg-ochre group-hover:text-white transition-all flex-none">
-                                            <LayoutDashboard className="w-5 h-5" />
-                                        </div>
-                                        <div className="text-left">
-                                            <p className="font-black text-sm text-gray-900 tracking-tight leading-none group-hover:text-white transition-colors">Admin Console</p>
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-2 group-hover:text-white/50">System Management</p>
-                                        </div>
-                                    </div>
-                                    <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-white transition-transform group-hover:translate-x-1" />
-                                </Link>
-                            )}
+
 
                             <Link href="/ask" prefetch={false} onClick={() => setIsOpen(false)} className="flex items-center justify-between p-3.5 hover:bg-ochre/5 rounded-[1.25rem] transition-all group border border-transparent hover:border-ochre/10">
                                 <div className="flex items-center gap-4 text-gray-700 group-hover:text-ochre">
