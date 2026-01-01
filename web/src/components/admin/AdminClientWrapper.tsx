@@ -41,7 +41,9 @@ export default function AdminClientWrapper({
 
                     <div className="flex items-center gap-3">
                         <Link
-                            href="/"
+                            href="https://saileelarahasya.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             prefetch={false}
                             className="flex items-center gap-3 bg-gray-900 text-white px-4 lg:px-6 py-2.5 lg:py-3 rounded-2xl shadow-xl shadow-gray-200 border border-white/10 hover:bg-black transition-all group active:scale-95 whitespace-nowrap"
                         >
