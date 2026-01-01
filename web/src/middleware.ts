@@ -14,6 +14,10 @@ export default clerkMiddleware(async (auth, req) => {
     // 1. Admin Subdomain Logic
     // Check for "admin." prefix (works for admin.saileelarahasya.com and admin.localhost)
     if (hostname.startsWith("admin.")) {
+        // Allow API routes to pass through without rewriting
+        if (url.pathname.startsWith('/api')) {
+            return NextResponse.next();
+        }
         // If already on /admin path, don't double-prefix
         if (url.pathname.startsWith('/admin')) {
             return NextResponse.next();

@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
         // Prepare the Chief Editor Prompt with Quality Assessment
         const model = genAI.getGenerativeModel({
-            model: "gemini-3-pro-preview",
+            model: "gemini-2.0-flash-exp",
             generationConfig: { responseMimeType: "application/json" }
         });
 
