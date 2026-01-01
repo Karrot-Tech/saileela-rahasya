@@ -12,6 +12,15 @@ interface LeelaListProps {
     hasMoreInitial: boolean;
 }
 
+// Helper function to strip markdown formatting
+const stripMarkdown = (text: string) => {
+    return text
+        .replace(/\*\*/g, '')  // Remove bold markers
+        .replace(/\*/g, '')    // Remove italic markers
+        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')  // Convert links to plain text
+        .replace(/`/g, '');    // Remove code markers
+};
+
 export default function LeelaList({ initialItems, total, hasMoreInitial }: LeelaListProps) {
     const [items, setItems] = useState(initialItems);
     const [page, setPage] = useState(1);
@@ -78,7 +87,7 @@ export default function LeelaList({ initialItems, total, hasMoreInitial }: Leela
                                 {article.title_hindi}
                             </h3>
                             <p className="text-gray-600 text-sm line-clamp-2">
-                                {article.description}
+                                {stripMarkdown(article.description)}
                             </p>
                         </div>
                     </div>
