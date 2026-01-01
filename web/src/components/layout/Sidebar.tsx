@@ -10,7 +10,7 @@ import { APP_VERSION } from '@/config/version';
 const NAV_ITEMS = [
     { label: 'Leela', href: '/leela', icon: Footprints },
     { label: 'Bodhakatha', href: '/bodhakatha', icon: Lightbulb },
-    { label: 'Live Stream', href: '/live', icon: Radio },
+    { label: 'Glossary', href: '/glossary', icon: BookA },
     { label: 'Bhajan/Audio', href: '/audio', icon: Music },
     { label: 'Spiritual Inquiry', href: '/ask', icon: MessageCircleQuestion },
 ];
@@ -68,23 +68,23 @@ export default function Sidebar() {
                 <div className="mt-auto pt-6 border-t border-gray-100 flex flex-col">
                     <p className="px-4 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-3">Resources</p>
                     <Link
-                        href="/glossary"
+                        href="/live"
                         prefetch={false}
-                        className={`flex items-center gap-3 px-3 py-3 rounded-2xl transition-all group mx-1 ${pathname === '/glossary'
+                        className={`flex items-center gap-3 px-3 py-3 rounded-2xl transition-all group mx-1 ${pathname === '/live'
                             ? 'bg-ochre/5 border border-ochre/10'
                             : 'hover:bg-gray-50 border border-transparent'
                             }`}
                     >
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all flex-none ${pathname === '/glossary'
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all flex-none ${pathname === '/live'
                             ? 'bg-ochre text-white shadow-lg shadow-ochre/20'
                             : 'bg-gray-50 text-gray-400 group-hover:bg-ochre/10 group-hover:text-ochre shadow-inner'
                             }`}>
-                            <BookA className="w-4.5 h-4.5" />
+                            <Radio className="w-4.5 h-4.5" />
                         </div>
                         <div className="min-w-0">
-                            <p className={`font-black text-xs tracking-tight leading-none truncate ${pathname === '/glossary' ? 'text-ochre' : 'text-gray-900'
-                                }`}>Exhaustive Glossary</p>
-                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-1.5 group-hover:text-ochre/70 truncate">Spiritual Archives</p>
+                            <p className={`font-black text-xs tracking-tight leading-none truncate ${pathname === '/live' ? 'text-ochre' : 'text-gray-900'
+                                }`}>Live Darshan</p>
+                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mt-1.5 group-hover:text-ochre/70 truncate">Watch Live</p>
                         </div>
                     </Link>
                 </div>

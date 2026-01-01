@@ -43,10 +43,10 @@ export default function Home() {
           <ArrowRight className="w-5 h-5" />
         </Link>
         <Link
-          href="/live"
+          href="/glossary"
           className="flex items-center justify-center space-x-2 bg-white text-ochre border-2 border-ochre px-8 py-4 rounded-full font-bold hover:bg-orange-50 transition shadow-sm"
         >
-          <span>Watch Live</span>
+          <span>Read Glossary</span>
         </Link>
       </div>
 

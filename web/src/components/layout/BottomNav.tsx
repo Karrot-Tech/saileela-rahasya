@@ -2,13 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Footprints, Lightbulb, Radio, Music, MessageCircleQuestion } from 'lucide-react';
+import { Footprints, Lightbulb, Radio, Music, MessageCircleQuestion, BookA } from 'lucide-react';
 import { useInquiry } from '@/context/InquiryContext';
 
 const NAV_ITEMS = [
     { label: 'Leela', href: '/leela', icon: Footprints },
     { label: 'Bodhakatha', href: '/bodhakatha', icon: Lightbulb },
-    { label: 'Live', href: '/live', icon: Radio },
+    { label: 'Glossary', href: '/glossary', icon: BookA },
     { label: 'Audio', href: '/audio', icon: Music },
     { label: 'Inquiry', href: '/ask', icon: MessageCircleQuestion },
 ];
